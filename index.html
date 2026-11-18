@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eastlake High School — MATH&amp; 151 AP Calculus AB (Simon) | Section 3.2 Practice Quiz</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            wolves: {
+              crimson: '#8B1E24',
+              crimsonDark: '#6B141A',
+              crimsonLight: '#FDF2F3',
+              forest: '#1B4332',
+              forestLight: '#ECFDF5',
+              navy: '#0F172A',
+              slate: '#1E293B'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            serif: ['Merriweather', 'Georgia', 'serif']
+          }
+        }
+      }
+    };
+  </script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <!-- KaTeX CSS & JS via CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+  <style>
+    body {
+      background-color: #F8FAFC;
+      color: #0F172A;
+    }
+    .katex-display {
+      margin: 0.65em 0 !important;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 0.25rem 0;
+    }
+    .katex {
+      font-size: 1.06em;
+    }
+    .option-btn {
+      transition: all 0.18s ease-in-out;
+    }
+    .option-btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+    }
+    .solution-panel {
+      transition: max-height 0.35s ease, opacity 0.25s ease;
+    }
+    /* Custom subtle scrollbars for wide equations on mobile */
+    ::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F1F5F9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-wolves-crimson selection:text-white">
+
+  <!-- Academic Hero Header -->
+  <header class="bg-gradient-to-r from-wolves-navy via-wolves-slate to-wolves-navy text-white border-b-4 border-wolves-crimson shadow-lg">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-7 sm:py-9">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-wolves-crimson/90 text-xs font-bold tracking-wider uppercase text-white mb-3 shadow-sm">
+            <span>🐺 Eastlake Wolves</span>
+            <span class="opacity-60">•</span>
+            <span>AP Calculus AB Mastery</span>
+          </div>
+          <h1 class="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight text-white">
+            Eastlake High School — MATH&amp; 151 AP Calculus AB (Simon)
+          </h1>
+          <p class="mt-1.5 text-base sm:text-lg font-medium text-amber-200/95">
+            Section 3.2: Implicit Differentiation (Day 2) Practice Quiz
+          </p>
+          <p class="mt-1 text-xs sm:text-sm text-slate-300 max-w-3xl">
+            <strong>Goal:</strong> 20-Question Mastery Prep (Product Rule, Chain Rule, Tangent Lines, Horizontal/Vertical Tangents, and Second Derivatives)
+          </p>
+        </div>
+        <div class="flex-shrink-0">
+          <div class="bg-slate-800/80 border border-slate-700 rounded-xl p-3.5 text-xs text-slate-300 space-y-1 shadow-inner">
+            <div class="font-semibold text-white flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Two-Way Verification Mode
+            </div>
+            <p class="text-slate-400 leading-relaxed">
+              1. Pick a Multiple-Choice option &amp; click <span class="text-white font-medium">Check Answer</span>, <em>or</em><br>
+              2. Work on paper, open <span class="text-white font-medium">Step-by-Step Solution</span>, and self-grade!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Top Score & Progress Dashboard -->
+  <div class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3">
+      <!-- Top Row: Metrics & Reset -->
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex flex-wrap items-center gap-2 sm:gap-4">
+          <!-- Answered Pill -->
+          <div class="flex items-center gap-2 bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-lg">
+            <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+            <span class="text-xs sm:text-sm font-semibold text-slate-700" id="stat-answered">Answered: 0 / 20</span>
+          </div>
+          <!-- Score Pill -->
+          <div class="flex items-center gap-2 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-lg">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+            <span class="text-xs sm:text-sm font-semibold text-emerald-900" id="stat-correct">Correct: 0 / 20</span>
+          </div>
+          <!-- Percentage Pill -->
+          <div class="flex items-center gap-2 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-lg">
+            <span class="text-xs sm:text-sm font-bold text-amber-900" id="stat-percent">Score: 0%</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button id="btn-collapse-solutions" type="button" class="text-xs font-medium text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg transition">
+            Hide All Solutions
+          </button>
+          <button id="btn-reset" type="button" class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-white bg-wolves-crimson hover:bg-wolves-crimsonDark px-3.5 py-1.5 rounded-lg shadow-sm transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            Reset Quiz
+          </button>
+        </div>
+      </div>
+
+      <!-- Visual Progress Bar -->
+      <div class="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden mt-2.5 flex">
+        <div id="bar-correct" class="bg-emerald-600 h-full transition-all duration-300" style="width: 0%"></div>
+        <div id="bar-incorrect" class="bg-rose-500 h-full transition-all duration-300" style="width: 0%"></div>
+      </div>
+
+      <!-- Category Filter Tabs -->
+      <div class="flex items-center gap-1.5 overflow-x-auto pt-2.5 pb-0.5 no-scrollbar" id="category-tabs">
+        <button data-category="all" class="filter-tab active-tab whitespace-nowrap px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition bg-wolves-navy text-white shadow-sm">
+          All Questions (20)
+        </button>
+        <button data-category="part1" class="filter-tab whitespace-nowrap px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition bg-slate-100 text-slate-600 hover:bg-slate-200">
+          Product &amp; Chain Rule (6)
+        </button>
+        <button data-category="part2" class="filter-tab whitespace-nowrap px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition bg-slate-100 text-slate-600 hover:bg-slate-200">
+          Tangent Lines (4)
+        </button>
+        <button data-category="part3" class="filter-tab whitespace-nowrap px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition bg-slate-100 text-slate-600 hover:bg-slate-200">
+          Horiz/Vert Tangents (5)
+        </button>
+        <button data-category="part4" class="filter-tab whitespace-nowrap px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition bg-slate-100 text-slate-600 hover:bg-slate-200">
+          2nd Derivatives (5)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
+
+    <!-- Collapsible Quick Reference Formula Sheet -->
+    <section class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <button id="formula-toggle" type="button" class="w-full px-5 py-4 flex items-center justify-between bg-gradient-to-r from-slate-50 to-white hover:bg-slate-100/70 transition text-left">
+        <div class="flex items-center gap-3">
+          <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-wolves-forest text-white font-bold text-sm shadow-sm">
+            ∑
+          </span>
+          <div>
+            <h2 class="text-sm sm:text-base font-bold text-slate-900">
+              Quick Reference Formula Sheet — Implicit Differentiation (Section 3.2 Day 2)
+            </h2>
+            <p class="text-xs text-slate-500">
+              Click to expand/collapse essential AP Calculus AB rules &amp; exam tips
+            </p>
+          </div>
+        </div>
+        <span id="formula-chevron" class="text-slate-500 transition-transform duration-200">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </span>
+      </button>
+
+      <div id="formula-content" class="border-t border-slate-200 px-5 py-5 bg-slate-50/50">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+          <!-- Rule 1 -->
+          <div class="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-sm">
+            <div class="font-bold text-wolves-crimson text-xs uppercase tracking-wider mb-1">
+              1. Product Rule in Implicit Diff
+            </div>
+            <div class="text-slate-800">
+              $$\frac{d}{dx}[xy] = x\frac{dy}{dx} + y \quad \text{and} \quad \frac{d}{dx}[u(x)v(y)] = u\cdot v'(y)\frac{dy}{dx} + u'(x)\cdot v$$
+            </div>
+            <p class="text-xs text-slate-500 mt-1">
+              Watch negative signs in front of products like $-4xy$: wrap the entire product rule in parentheses!
+            </p>
+          </div>
+
+          <!-- Rule 2 -->
+          <div class="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-sm">
+            <div class="font-bold text-wolves-crimson text-xs uppercase tracking-wider mb-1">
+              2. Chain Rule in Implicit Diff
+            </div>
+            <div class="text-slate-800">
+              $$\frac{d}{dx}[f(y)] = f'(y)\cdot\frac{dy}{dx} \quad \text{and} \quad \frac{d}{dx}[\sin(xy)] = \cos(xy)\cdot\left(y + x\frac{dy}{dx}\right)$$
+            </div>
+            <p class="text-xs text-slate-500 mt-1">
+              Whenever you differentiate a term containing $y$ with respect to $x$, multiply by $\frac{dy}{dx}$ ($y'$).
+            </p>
+          </div>
+
+          <!-- Rule 3 -->
+          <div class="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-sm">
+            <div class="font-bold text-wolves-forest text-xs uppercase tracking-wider mb-1">
+              3. Horizontal Tangent Lines
+            </div>
+            <div class="text-slate-800">
+              $$\text{Numerator of } \frac{dy}{dx} = 0 \quad (\text{and Denominator } \neq 0)$$
+            </div>
+            <p class="text-xs text-slate-500 mt-1">
+              Substitute the relationship back into the <strong>original curve equation</strong> to verify real points exist.
+            </p>
+          </div>
+
+          <!-- Rule 4 -->
+          <div class="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-sm">
+            <div class="font-bold text-wolves-forest text-xs uppercase tracking-wider mb-1">
+              4. Vertical Tangent Lines
+            </div>
+            <div class="text-slate-800">
+              $$\text{Denominator of } \frac{dy}{dx} = 0 \quad (\text{and Numerator } \neq 0)$$
+            </div>
+            <p class="text-xs text-slate-500 mt-1">
+              If both numerator and denominator equal $0$ at a point, further analysis is needed!
+            </p>
+          </div>
+
+          <!-- Rule 5 -->
+          <div class="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-sm md:col-span-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <div class="font-bold text-amber-800 text-xs uppercase tracking-wider mb-1">
+                5. Second Derivative $\left(\frac{d^2y}{dx^2}\right)$ Pro-Tip for Point Evaluations
+              </div>
+              <p class="text-xs sm:text-sm text-slate-700">
+                Differentiate the implicit equation a second time (or use the Quotient Rule on $\frac{dy}{dx}$) and <strong>plug in your known $\left(x, y, \frac{dy}{dx}\right)$ values immediately</strong> before doing heavy algebra! Also recall: $\frac{d^2y}{dx^2} < 0 \Rightarrow$ Concave Down (tangent line is an <em>overestimate</em>); $\frac{d^2y}{dx^2} > 0 \Rightarrow$ Concave Up (tangent line is an <em>underestimate</em>).
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Questions Container -->
+    <div id="questions-container" class="space-y-6"></div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 mt-12 py-6">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-2">
+      <div>
+        <strong>Eastlake High School</strong> • MATH&amp; 151 AP Calculus AB (Simon) • Section 3.2 Day 2
+      </div>
+      <div>
+        Progress &amp; scores are saved automatically in your browser.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Reset Confirmation Modal -->
+  <div id="reset-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+      <div class="flex items-center gap-3 text-wolves-crimson mb-3">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+        <h3 class="text-lg font-bold text-slate-900">Reset All Quiz Progress?</h3>
+      </div>
+      <p class="text-sm text-slate-600 mb-6">
+        This will clear all 20 of your selected answers, self-grades, and score statistics from local storage so you can start fresh.
+      </p>
+      <div class="flex items-center justify-end gap-3">
+        <button id="modal-cancel" type="button" class="px-4 py-2 rounded-lg text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition">
+          Cancel
+        </button>
+        <button id="modal-confirm" type="button" class="px-4 py-2 rounded-lg text-sm font-semibold text-white bg-wolves-crimson hover:bg-wolves-crimsonDark transition">
+          Yes, Reset Everything
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Logic & Question Bank -->
+  <script>
+    const STORAGE_KEY = 'ehs_calc_ab_sec3_2_day2_v1';
+
+    const QUESTIONS = [
+      // ==================== PART 1: Product Rule & Chain Rule ====================
+      {
+        id: 1,
+        category: 'part1',
+        partLabel: 'Part 1: Product & Chain Rule',
+        title: 'Product Rule Basics',
+        prompt: String.raw`Find $\frac{dy}{dx}$ for the curve defined implicitly by $x^3 + 3x^2y - 2y^3 = 5$.`,
+        options: [
+          String.raw`$\frac{dy}{dx} = \frac{-x^2 - 2xy}{x^2 - 2y^2}$`,
+          String.raw`$\frac{dy}{dx} = \frac{-x^2}{x^2 - 2y^2}$`,
+          String.raw`$\frac{dy}{dx} = \frac{-x^2 - 2xy}{x^2 - 2y^3}$`,
+          String.raw`$\frac{dy}{dx} = \frac{x^2 - 2xy}{x^2 + 2y^2}$`
+        ],
+        correctIndex: 0,
+        steps: String.raw`
+          <p class="mb-2"><strong>Step 1: Differentiate both sides with respect to $x$.</strong> Apply the Product Rule to $3x^2y$ and the Chain Rule to $-2y^3$:</p>
+          $$\frac{d}{dx}[x^3] + \frac{d}{dx}[3x^2y] - \frac{d}{dx}[2y^3] = \frac{d}{dx}[5]$$
+          $$3x^2 + \left(6xy + 3x^2\frac{dy}{dx}\right) - 6y^2\frac{dy}{dx} = 0$$
+          <p class="mb-2"><strong>Step 2: Group all $\frac{dy}{dx}$ terms on the left and move non-$\frac{dy}{dx}$ terms to the right:</strong></p>
+          $$3x^2\frac{dy}{dx} - 6y^2\frac{dy}{dx} = -3x^2 - 6xy$$
+          <p class="mb-2"><strong>Step 3: Factor out $\frac{dy}{dx}$ and divide (then divide numerator and denominator by $3$):</strong></p>
+          $$\frac{dy}{dx}(3x^2 - 6y^2) = -3x^2 - 6xy \implies \frac{dy}{dx} = \frac{-3x^2 - 6xy}{3x^2 - 6y^2} = \mathbf{\frac{-x^2 - 2xy}{x^2 - 2y^2}} \quad \left(\text{or } \frac{x^2 + 2xy}{2y^2 - x^2}\right)$$
+        `
+      },
+      {
+        id: 2,
+        category: 'part1',
+        partLabel: 'Part 1: Product & Chain Rule',
+        title: 'Double Product Rule',
+        prompt: String.raw`Find $\frac{dy}{dx}$ for $x^2y^3 - 4xy = 10$.`,
+        options: [
+          String.raw`$\frac{dy}{dx} = \frac{-4y - 2xy^3}{3x^2y^2 + 4x}$`,
+          String.raw`$\frac{dy}{dx} = \frac{4y - 2xy^3}{3x^2y^2 - 4x}$`,
+          String.raw`$\frac{dy}{dx} = \frac{4 - 2xy^3}{3x^2y^2 - 4}$`,
+          String.raw`$\frac{dy}{dx} = \frac{4y + 2xy^3}{3x^2y^2 - 4x}$`
+        ],
+        correctIndex: 1,
+        steps: String.raw`
+          <p class="mb-2"><strong>Step 1: Apply the Product Rule to both $x^2y^3$ and $4xy$.</strong> Be careful to distribute the negative sign across the second product:</p>
+          $$\left(2xy^3 + x^2\cdot 3y^2\frac{dy}{dx}\right) - \left(4y + 4x\frac{dy}{dx}\right) = 0$$
+          $$2xy^3 + 3x^2y^2\frac{dy}{dx} - 4y - 4x\frac{dy}{dx} = 0$$
+          <p class="mb-2"><strong>Step 2: Isolate and factor out $\frac{dy}{dx}$:</strong></p>
+          $$\left(3x^2y^2 - 4x\right)\frac{dy}{dx} = 4y - 2xy^3$$
+          <p class="mb-2"><strong>Step 3: Solve for $\frac{dy}{dx}$:</strong></p>
+          $$\frac{dy}{dx} = \mathbf{\frac{4y - 2xy^3}{3x^2y^2 - 4x}}$$
+        `
+      },
+      {
+        id: 3,
+        category: 'part1',
+        partLabel: 'Part 1: Product & Chain Rule',
+        title: 'Chain Rule with Trig',
+        prompt: String.raw`Find $\frac{dy}{dx}$ for $\sin(xy) = x^2 - y$.`,
+        options: [
+          String.raw`$\frac{dy}{dx} = \frac{2x - y\cos(xy)}{x\cos(xy) + 1}$`,
+          String.raw`$\frac{dy}{dx} = \frac{2x - \cos(xy)}{1 + \cos(xy)}$`,
+          String.raw`$\frac{dy}{dx} = \frac{2x - y\cos(xy)}{x\cos(xy) - 1}$`,
+          String.raw`$\frac{dy}{dx} = \frac{2x + y\cos(xy)}{x\cos(xy) + 1}$`
+        ],
+        correctIndex: 0,
+        steps: String.raw`
+          <p class="mb-2"><strong>Step 1: Differentiate both sides with respect to $x$.</strong> On the left, apply the Chain Rule to $\sin(xy)$ multiplied by the Product Rule derivative of $(xy)$:</p>
+          $$\cos(xy)\cdot \frac{d}{dx}[xy] = 2x - \frac{dy}{dx}$$
+          $$\cos(xy)\cdot\left(y + x\frac{dy}{dx}\right) = 2x - \frac{dy}{dx}$$
+          <p class="mb-2"><strong>Step 2: Distribute $\cos(xy)$ and collect all $\frac{dy}{dx}$ terms on the left:</strong></p>
+          $$y\cos(xy) + x\cos(xy)\frac{dy}{dx} = 2x - \frac{dy}{dx}$$
+          $$x\cos(xy)\frac{dy}{dx} + \frac{dy}{dx} = 2x - y\cos(xy)$$
+          <p class="mb-2"><strong>Step 3: Factor out $\frac{dy}{dx}$ and divide:</strong></p>
+          $$\frac{dy}{dx}\left(x\cos(xy) + 1\right) = 2x - y\cos(xy) \implies \frac{dy}{dx} = \mathbf{\frac{2x - y\cos(xy)}{x\cos(xy) + 1}}$$
+        `
+      },
+      {
+        id: 4,
+        category: 'part1',
+        partLabel: 'Part 1: Product & Chain Rule',
+        title: 'Trig & Powers Chain Rule',
+        prompt: String.raw`Find $\frac{dy}{dx}$ for $x + \tan(xy) = 0$.`,
+        options: [
+          String.raw`$\frac{dy}{dx} = \frac{-1}{\sec^2(xy)}$`,
+          String.raw`$\frac{dy}{dx} = \frac{1 - y\sec^2(xy)}{x\sec^2(xy)}$`,
+          String.raw`$\frac{dy}{dx} = \frac{-1 - y\sec^2(xy)}{x\sec^2(xy)}$`,
+          String.raw`$\frac{dy}{dx} = \frac{-1 - x\sec^2(xy)}{y\sec^2(xy)}$`
+        ],
+        correctIndex: 2,
+        steps: String.raw`
+          <p class="mb-2"><strong>Step 1: Differentiate with respect to $x$.</strong> Recall $\frac{d}{du}[\tan u] = \sec^2(u)\cdot u'$:</p>
+          $$1 + \sec^2(xy)\cdot\left(y + x\frac{dy}{dx}\right) = 0$$
+          <p class="mb-2"><strong>Step 2: Expand and isolate the $\frac{dy}{dx}$ term:</strong></p>
+          $$1 + y\sec^2(xy) + x\sec^2(xy)\frac{dy}{dx} = 0$$
+          $$x\sec^2(xy)\frac{dy}{dx} = -1 - y\sec^2(xy)$$
+          <p class="mb-2"><strong>Step 3: Divide by $x\sec^2(xy)$:</strong></p>
+          $$\frac{dy}{dx} = \mathbf{\frac{-1 - y\sec^2(xy)}{x\sec^2(xy)}} \quad \left(\text{equivalently } -\frac{\cos^2(xy) + y}{x}\right)$$
+        `
+      },
+      {
+        id: 5,
+        category: 'part1',
+        partLabel: 'Part 1: Product & Chain Rule',
+        title: 'Composite Algebraic Chain Rule',
+        prompt: String.raw`Find $\frac{dy}{dx}$ for $\left(x^2 + y^2\right)^3 = 8x^2y^2$.`,
+        options: [
+          String.raw`$\frac{dy}{dx} = \frac{x\left(8y^2 - 3(x^2+y^2)^2\right)}{y\left(3(x^2+y^2)^2 - 8x^2\right)}$`,
+          String.raw`$\frac{dy}{dx} = \frac{16xy^2 - 3(x^2+y^2)^2}{16x^2y}$`,
+          String.raw`$\frac{dy}{dx} = \frac{x\left(8y^2 + 3(x^2+y^2)^2\right)}{y\left(3(x^2+y^2)^2 + 8x^2\right)}$`,
+          String.raw`$\frac{dy}{dx} = \frac{8xy^2 - 6x(x^2+y^2)^2}{6y(x^2+y^2)^2 - 8x^2y}$`
+        ],
+        correctIndex: 0,
+        steps: String.raw`
+          <p class="mb-2"><strong>Step 1: Differentiate both sides with respect to $x$.</strong> Use the Chain Rule on the left and the Product Rule on the right:</p>
+          $$3\left(x^2 + y^2\right)^2\cdot\left(2x + 2y\frac{dy}{dx}\right) = 16xy^2 + 16x^2y\frac{dy}{dx}$$
+          <p class="mb-2"><strong>Step 2: Expand the left side and group all $\frac{dy}{dx}$ terms together:</strong></p>
+          $$6x\left(x^2 + y^2\right)^2 + 6y\left(x^2 + y^2\right)^2\frac{dy}{dx} = 16xy^2 + 16x^2y\frac{dy}{dx}$$
+          $$\left[6y\left(x^2 + y^2\right)^2 - 16x^2y\right]\frac{dy}{dx} = 16xy^2 - 6x\left(x^2 + y^2\right)^2$$
+          <p class="mb-2"><strong>Step 3: Divide and factor out $2$ from numerator and denominator:</strong></p>
+          $$\frac{dy}{dx} = \frac{16xy^2 - 6x(x^2+y^2)^2}{6y(x^2+y^2)^2 - 16x^2y} = \mathbf{\frac{x\left(8y^2 - 3(x^2+y^2)^2\right)}{y\left(3(x^2+y^2)^2 - 8x^2\right)}}$$
+        `
+      },
+      {
+        id: 6,
+        category: 'part1',
+        partLabel: 'Part 1: Product & Chain Rule',
+        title: 'Trig Product & Chain Mix',
+        prompt: String.raw`Find $\frac{dy}{dx}$ for $y\cos(x) = x^2 + y^2$.`,
+        options: [
+          String.raw`$\frac{dy}{dx} = \frac{2x - y\sin(x)}{\cos(x) - 2y}$`,
+          String.raw`$\frac{dy}{dx} = \frac{2x + y\sin(x)}{\cos(x) - 2y}$`,
+          String.raw`$\frac{dy}{dx} = \frac{2x + y\sin(x)}{\cos(x) + 2y}$`,
+          String.raw`$\frac{dy}{dx} = \frac{2x}{-\sin(x) - 2y}$`
+        ],
+        correctIndex: 1,
+        steps: String.raw`
+          <p class="mb-2"><strong>Step 1: Apply the Product Rule to $y\cos(x)$ on the left side and the Chain Rule to $y^2$ on the right side:</strong></p>
+          $$\frac{dy}{dx}\cos(x) + y\left(-\sin(x)\right) = 2x + 2y\frac{dy}{dx}$$
+          $$\cos(x)\frac{dy}{dx} - y\sin(x) = 2x + 2y\frac{dy}{dx}$$
+          <p class="mb-2"><strong>Step 2: Collect $\frac{dy}{dx}$ terms on the left and move $-y\sin(x)$ to the right:</strong></p>
+          $$\cos(x)\frac{dy}{dx} - 2y\frac{dy}{dx} = 2x + y\sin(x)$$
+          <p class="mb-2"><strong>Step 3: Factor out $\frac{dy}{dx}$ and divide:</strong></p>
+          $$\frac{dy}{dx} = \mathbf{\frac{2x + y\sin(x)}{\cos(x) - 2y}}$$
+        `
+      },
+
+      // ==================== PART 2: Tangent Lines at a Given Point ====================
+      {
+        id: 7,
+        category: 'part2',
+        partLabel: 'Part 2: Tangent Lines',
+        title: 'Slope at a Point (Folium of Descartes)',
+        prompt: String.raw`Find the slope of the tangent line to $x^3 + y^3 - 6xy = 0$ at the point $(3, 3)$.`,
+        options: [
+          String.raw`$-1$`,
+          String.raw`$1$`,
+          String.raw`$0$`,
+          String.raw`$-\frac{3}{2}$`
+        ],
+        correctIndex: 0,
+        steps: String.raw`
+          <p class="mb-2"><strong>Step 1: Differentiate both sides with respect to $x$:</strong></p>
+          $$3x^2 + 3y^2\frac{dy}{dx} - \left(6y + 6x\frac{dy}{dx}\right) = 0$$
+          $$3x^2 + 3y^2\frac{dy}{dx} - 6y - 6x\frac{dy}{dx} = 0$$
+          <p class="mb-2"><strong>Step 2: Substitute $(x, y) = (3, 3)$ directly before solving for $\frac{dy}{dx}$:</strong></p>
+          $$3(3)^2 + 3(3)^2\frac{dy}{dx} - 6(3) - 6(3)\frac{dy}{dx} = 0$$
+          $$27 + 27\frac{dy}{dx} - 18 - 18\frac{dy}{dx} = 0$$
+          <p class="mb-2"><strong>Step 3: Combine like terms and solve for $\frac{dy}{dx}$:</strong></p>
+          $$9 + 9\frac{dy}{dx} = 0 \implies \frac{dy}{dx} = \mathbf{-1}$$
+        `
+      },
+      {
+        id: 8,
+        category: 'part2',
+        partLabel: 'Part 2: Tangent Lines',
+        title: 'Tangent Line Equation (Algebraic)',
+        prompt: String.raw`Write the equation of the tangent line to $x^2 - xy + y^2 = 7$ at the point $(-1, 2)$.`,
+        options: [
+          String.raw`$y - 2 = \frac{4}{3}(x + 1)$`,
+          String.raw`$y - 2 = -\frac{4}{5}(x + 1)$`,
+          String.raw`$y - 2 = \frac{4}{5}(x + 1)$`,
+          String.raw`$y - 2 = 0$`
+        ],
+        correctIndex: 2,
+        steps: String.raw`
+          <p class="mb-2"><strong>Step 1: Differentiate implicitly with respect to $x$.</strong> Be careful with the minus sign on $-xy$:</p>
+          $$2x - \left(y + x\frac{dy}{dx}\right) + 2y\frac{dy}{dx} = 0$$
+          $$2x - y - x\frac{dy}{dx} + 2y\frac{dy}{dx} = 0$$
+          <p class="mb-2"><strong>Step 2: Plug in the point $(-1, 2)$:</strong></p>
+          $$2(-1) - 2 - (-1)\frac{dy}{dx} + 2(2)\frac{dy}{dx} = 0$$
+          $$-4 + \frac{dy}{dx} + 4\frac{dy}{dx} = 0 \implies 5\frac{dy}{dx} = 4 \implies m = \frac{4}{5}$$
+          <p class="mb-2"><strong>Step 3: Write the tangent line in point-slope form at $(-1, 2)$:</strong></p>
+          $$\mathbf{y - 2 = \frac{4}{5}(x + 1)} \quad \left(\text{or } y = \frac{4}{5}x + \frac{14}{5}\right)$$
+        `
+      },
+      {
+        id: 9,
+        category: 'part2',
+        partLabel: 'Part 2: Tangent Lines',
+        title: 'Tangent Line Slope with Trig',
+        prompt: String.raw`Find the slope of the tangent line to $\sin(\pi x) + \cos(\pi y) = 2xy$ at the point $(1, 1)$.`,
+        options: [
+          String.raw`$-\frac{\pi + 2}{2}$`,
+          String.raw`$\frac{\pi - 2}{2}$`,
+          String.raw`$-\frac{\pi - 2}{2}$`,
+          String.raw`$-\frac{3}{2}$`
+        ],
+        correctIndex: 0,
+        steps: String.raw`
+          <p class="mb-2"><strong>Step 1: Differentiate both sides with respect to $x$.</strong> Don't forget the factor of $\pi$ from the Chain Rule on $\sin(\pi x)$ and $\cos(\pi y)$:</p>
+          $$\pi\cos(\pi x) - \pi\sin(\pi y)\frac{dy}{dx} = 2y + 2x\frac{dy}{dx}$$
+          <p class="mb-2"><strong>Step 2: Substitute $(x, y) = (1, 1)$, using $\cos(\pi) = -1$ and $\sin(\pi) = 0$:</strong></p>
+          $$\pi\cos(\pi) - \pi\sin(\pi)\frac{dy}{dx} = 2(1) + 2(1)\frac{dy}{dx}$$
+          $$\pi(-1) - \pi(0)\frac{dy}{dx} = 2 + 2\frac{dy}{dx}$$
+          <p class="mb-2"><strong>Step 3: Solve for $\frac{dy}{dx}$:</strong></p>
+          $$-\pi = 2 + 2\frac{dy}{dx} \implies 2\frac{dy}{dx} = -\pi - 2 \implies \frac{dy}{dx} = \mathbf{-\frac{\pi + 2}{2}}$$
+        `
+      },
+      {
+        id: 10,
+        category: 'part2',
+        partLabel: 'Part 2: Tangent Lines',
+        title: 'Tangent Line with Composite Powers',
+        prompt: String.raw`Find the equation of the tangent line to $(x + y)^3 = x^3 + y^3$ at the point $(-1, 1)$.`,
+        options: [
+          String.raw`$y - 1 = 1(x + 1)$`,
+          String.raw`$y - 1 = -1(x + 1)$`,
+          String.raw`$y - 1 = 0$`,
+          String.raw`$y - 1 = -3(x + 1)$`
+        ],
+        correctIndex: 1,
+        steps: String.raw`
+          <p class="mb-2"><strong>Step 1: Differentiate both sides with respect to $x$:</strong></p>
+          $$3(x + y)^2\left(1 + \frac{dy}{dx}\right) = 3x^2 + 3y^2\frac{dy}{dx}$$
+          <p class="mb-2"><strong>Step 2: Substitute $(x, y) = (-1, 1)$ directly:</strong></p>
+          $$3(-1 + 1)^2\left(1 + \frac{dy}{dx}\right) = 3(-1)^2 + 3(1)^2\frac{dy}{dx}$$
+          $$3(0)^2\left(1 + \frac{dy}{dx}\right) = 3 + 3\frac{dy}{dx}$$
+          $$0 = 3 + 3\frac{dy}{dx} \implies \frac{dy}{dx} = -1$$
+          <p class="mb-2"><strong>Step 3: Write the point-slope equation at $(-1, 1)$:</strong></p>
+          $$\mathbf{y - 1 = -1(x + 1)} \quad (\text{or } y = -x)$$
+        `
+      },
+
+      // ==================== PART 3: Horizontal & Vertical Tangent Lines ====================
+      {
+        id: 11,
+        category: 'part3',
+        partLabel: 'Part 3: Horiz/Vert Tangents',
+        title: 'Horizontal Tangents (Coordinates)',
+        prompt: String.raw`Find all points on the curve $x^2 + xy + y^2 = 27$ where the tangent line is horizontal.`,
+        options: [
+          String.raw`$(3, -6)$ and $(-3, 6)$`,
+          String.raw`$(6, -3)$ and $(-6, 3)$`,
+          String.raw`$(3, 6)$ and $(-3, -6)$`,
+          String.raw`$(0, 3\sqrt{3})$ and $(0, -3\sqrt{3})$`
+        ],
+        correctIndex: 0,
+        steps: String.raw`
+          <p class="mb-2"><strong>Step 1: Find $\frac{dy}{dx}$ by implicit differentiation:</strong></p>
+          $$2x + y + x\frac{dy}{dx} + 2y\frac{dy}{dx} = 0 \implies \frac{dy}{dx} = \frac{-2x - y}{x + 2y}$$
+          <p class="mb-2"><strong>Step 2: Set the numerator equal to $0$ for horizontal tangents:</strong></p>
+          $$-2x - y = 0 \implies y = -2x$$
+          <p class="mb-2"><strong>Step 3: Substitute $y = -2x$ into the original equation $x^2 + xy + y^2 = 27$:</strong></p>
+          $$x^2 + x(-2x) + (-2x)^2 = 27$$
+          $$x^2 - 2x^2 + 4x^2 = 27 \implies 3x^2 = 27 \implies x^2 = 9 \implies x = \pm 3$$
+          <p class="mb-2"><strong>Step 4: Find the corresponding $y$-coordinates using $y = -2x$ (and verify denominator $x+2y \neq 0$):</strong></p>
+          <ul>
+            <li>When $x = 3$, $y = -2(3) = -6 \implies (3, -6)$</li>
+            <li>When $x = -3$, $y = -2(-3) = 6 \implies (-3, 6)$</li>
+          </ul>
+          <p class="mt-2">Points: $\mathbf{(3, -6) \text{ and } (-3, 6)}$.</p>
+        `
+      },
+      {
+        id: 12,
+        category: 'part3',
+        partLabel: 'Part 3: Horiz/Vert Tangents',
+        title: 'Vertical Tangents (Coordinates)',
+        prompt: String.raw`Find all points on the curve $x^2 + xy + y^2 = 27$ where the tangent line is vertical.`,
+        options: [
+          String.raw`$(3, -6)$ and $(-3, 6)$`,
+          String.raw`$(-6, -3)$ and $(6, 3)$`,
+          String.raw`$(6, -3)$ and $(-6, 3)$`,
+          String.raw`$(3\sqrt{3}, 0)$ and $(-3\sqrt{3}, 0)$`
+        ],
+        correctIndex: 2,
+        steps: String.raw`
+          <p class="mb-2"><strong>Step 1: Use the derivative from the curve $x^2 + xy + y^2 = 27$:</strong></p>
+          $$\frac{dy}{dx} = \frac{-2x - y}{x + 2y}$$
+          <p class="mb-2"><strong>Step 2: Set the denominator equal to $0$ for vertical tangents:</strong></p>
+          $$x + 2y = 0 \implies x = -2y$$
+          <p class="mb-2"><strong>Step 3: Substitute $x = -2y$ into the original equation $x^2 + xy + y^2 = 27$:</strong></p>
+          $$(-2y)^2 + (-2y)y + y^2 = 27$$
+          $$4y^2 - 2y^2 + y^2 = 27 \implies 3y^2 = 27 \implies y^2 = 9 \implies y = \pm 3$$
+          <p class="mb-2"><strong>Step 4: Find the corresponding $x$-coordinates using $x = -2y$ (and verify numerator $-2x-y \neq 0$):</strong></p>
+          <ul>
+            <li>When $y = -3$, $x = -2(-3) = 6 \implies (6, -3)$</li>
+            <li>When $y = 3$, $x = -2(3) = -6 \implies (-6, 3)$</li>
+          </ul>
+          <p class="mt-2">Points: $\mathbf{(6, -3) \text{ and } (-6, 3)}$.</p>
+        `
+      },
+      {
+        id: 13,
+        category: 'part3',
+        partLabel: 'Part 3: Horiz/Vert Tangents',
+        title: 'Horizontal Tangents (Shifted Ellipse)',
+        prompt: String.raw`At what $x$-value(s) does the curve $x^2 + 4y^2 - 6x + 16y + 21 = 0$ have horizontal tangent lines?`,
+        options: [
+          String.raw`$x = 3$`,
+          String.raw`$x = -2$`,
+          String.raw`$x = 6$`,
+          String.raw`$x = -3$`
+        ],
+        correctIndex: 0,
+        steps: String.raw`
+          <p class="mb-2"><strong>Step 1: Differentiate implicitly with respect to $x$:</strong></p>
+          $$2x + 8y\frac{dy}{dx} - 6 + 16\frac{dy}{dx} = 0$$
+          $$(8y + 16)\frac{dy}{dx} = 6 - 2x \implies \frac{dy}{dx} = \frac{6 - 2x}{8y + 16}$$
+          <p class="mb-2"><strong>Step 2: Set the numerator equal to $0$:</strong></p>
+          $$6 - 2x = 0 \implies \mathbf{x = 3}$$
+          <p class="mb-2"><strong>Step 3: Verify that points exist on the curve at $x = 3$ with denominator $8y + 16 \neq 0$:</strong></p>
+          $$(3)^2 + 4y^2 - 6(3) + 16y + 21 = 0 \implies 4y^2 + 16y + 12 = 0 \implies 4(y + 1)(y + 3) = 0$$
+          <p>Since $y = -1$ and $y = -3$ are real and neither equals $-2$ (where $8y+16=0$), horizontal tangents occur at $\mathbf{x = 3}$.</p>
+        `
+      },
+      {
+        id: 14,
+        category: 'part3',
+        partLabel: 'Part 3: Horiz/Vert Tangents',
+        title: 'Vertical Tangents (Curve Analysis)',
+        prompt: String.raw`Find the $y$-coordinate(s) of all points where the curve $x^3 + y^2 - 4y = 5$ has a vertical tangent line.`,
+        options: [
+          String.raw`$y = 0$`,
+          String.raw`$y = 4$`,
+          String.raw`$y = 2$`,
+          String.raw`$y = \pm 2$`
+        ],
+        correctIndex: 2,
+        steps: String.raw`
+          <p class="mb-2"><strong>Step 1: Differentiate both sides with respect to $x$:</strong></p>
+          $$3x^2 + 2y\frac{dy}{dx} - 4\frac{dy}{dx} = 0 \implies (2y - 4)\frac{dy}{dx} = -3x^2 \implies \frac{dy}{dx} = \frac{-3x^2}{2y - 4}$$
+          <p class="mb-2"><strong>Step 2: Set the denominator equal to $0$ for vertical tangent lines:</strong></p>
+          $$2y - 4 = 0 \implies \mathbf{y = 2}$$
+          <p class="mb-2"><strong>Step 3: Check that the numerator $-3x^2 \neq 0$ when $y = 2$:</strong></p>
+          $$x^3 + (2)^2 - 4(2) = 5 \implies x^3 - 4 = 5 \implies x^3 = 9 \implies x = \sqrt[3]{9} \neq 0$$
+          <p>Since $x \neq 0$, the numerator is nonzero, confirming a vertical tangent at $\mathbf{y = 2}$.</p>
+        `
+      },
+      {
+        id: 15,
+        category: 'part3',
+        partLabel: 'Part 3: Horiz/Vert Tangents',
+        title: 'Extraneous Solution Trap (Horizontal Tangent Check)',
+        prompt: String.raw`Consider the curve $2y^3 + 6x^2y - 12x^2 + 6y = 1$. At what value(s) of $x$ does the curve have a horizontal tangent line?`,
+        options: [
+          String.raw`$x = 0$ only`,
+          String.raw`$x = 0$ and $x = 2$`,
+          String.raw`$y = 2$ (for all real $x$)`,
+          String.raw`No horizontal tangents exist`
+        ],
+        correctIndex: 0,
+        steps: String.raw`
+          <p class="mb-2"><strong>Step 1: Differentiate implicitly with respect to $x$:</strong></p>
+          $$6y^2\frac{dy}{dx} + 12xy + 6x^2\frac{dy}{dx} - 24x + 6\frac{dy}{dx} = 0$$
+          $$\left(6y^2 + 6x^2 + 6\right)\frac{dy}{dx} = 24x - 12xy \implies \frac{dy}{dx} = \frac{12x(2 - y)}{6(y^2 + x^2 + 1)} = \frac{2x(2 - y)}{y^2 + x^2 + 1}$$
+          <p class="mb-2"><strong>Step 2: Analyze the denominator and numerator:</strong></p>
+          <p class="mb-2">Notice that $y^2 + x^2 + 1 \ge 1 > 0$, so the denominator is never $0$. Setting the numerator to $0$ gives two candidates: $x = 0$ or $y = 2$.</p>
+          <p class="mb-2"><strong>Step 3: Test both candidates in the original curve equation $2y^3 + 6x^2y - 12x^2 + 6y = 1$:</strong></p>
+          <ul>
+            <li><strong>Test $y = 2$:</strong> $2(2)^3 + 6x^2(2) - 12x^2 + 6(2) = 1 \implies 16 + 12x^2 - 12x^2 + 12 = 1 \implies 28 = 1$ (Contradiction! $y = 2$ is not on the curve).</li>
+            <li><strong>Test $x = 0$:</strong> $2y^3 + 6y = 1$, which has a unique real root $y \approx 0.165$ (and $y \neq 2$).</li>
+          </ul>
+          <p class="mt-2">Therefore, the curve has a horizontal tangent line at $\mathbf{x = 0 \text{ only}}$.</p>
+        `
+      },
+
+      // ==================== PART 4: Second Derivatives ====================
+      {
+        id: 16,
+        category: 'part4',
+        partLabel: 'Part 4: 2nd Derivatives',
+        title: 'Second Derivative Formula (Hyperbola)',
+        prompt: String.raw`If $x^2 - y^2 = 16$, find $\frac{d^2y}{dx^2}$ in terms of $x$ and $y$ (simplified using the original equation).`,
+        options: [
+          String.raw`$\frac{d^2y}{dx^2} = -\frac{16}{y^3}$`,
+          String.raw`$\frac{d^2y}{dx^2} = \frac{16}{y^3}$`,
+          String.raw`$\frac{d^2y}{dx^2} = \frac{y - x}{y^2}$`,
+          String.raw`$\frac{d^2y}{dx^2} = -\frac{16}{y^2}$`
+        ],
+        correctIndex: 0,
+        steps: String.raw`
+          <p class="mb-2"><strong>Step 1: Find the first derivative $\frac{dy}{dx}$:</strong></p>
+          $$2x - 2y\frac{dy}{dx} = 0 \implies \frac{dy}{dx} = \frac{x}{y}$$
+          <p class="mb-2"><strong>Step 2: Differentiate $\frac{dy}{dx} = \frac{x}{y}$ with respect to $x$ using the Quotient Rule:</strong></p>
+          $$\frac{d^2y}{dx^2} = \frac{(1)(y) - (x)\left(\frac{dy}{dx}\right)}{y^2}$$
+          <p class="mb-2"><strong>Step 3: Substitute $\frac{dy}{dx} = \frac{x}{y}$ and simplify using $x^2 - y^2 = 16$:</strong></p>
+          $$\frac{d^2y}{dx^2} = \frac{y - x\left(\frac{x}{y}\right)}{y^2} = \frac{\frac{y^2 - x^2}{y}}{y^2} = \frac{y^2 - x^2}{y^3}$$
+          <p>Since $x^2 - y^2 = 16$, we have $y^2 - x^2 = -16$, so $\frac{d^2y}{dx^2} = \mathbf{-\frac{16}{y^3}}$.</p>
+        `
+      },
+      {
+        id: 17,
+        category: 'part4',
+        partLabel: 'Part 4: 2nd Derivatives',
+        title: 'Evaluating d²y/dx² at a Point',
+        prompt: String.raw`If $x^2 + 4y^2 = 20$, find the value of $\frac{d^2y}{dx^2}$ at the point $(2, 2)$.`,
+        options: [
+          String.raw`$-\frac{1}{8}$`,
+          String.raw`$-\frac{5}{32}$`,
+          String.raw`$-\frac{3}{32}$`,
+          String.raw`$\frac{5}{32}$`
+        ],
+        correctIndex: 1,
+        steps: String.raw`
+          <p class="mb-2"><strong>Step 1: Find $\frac{dy}{dx}$ and evaluate it at $(2, 2)$:</strong></p>
+          $$2x + 8y\frac{dy}{dx} = 0 \implies \frac{dy}{dx} = -\frac{x}{4y}$$
+          $$\left.\frac{dy}{dx}\right|_{(2,2)} = -\frac{2}{4(2)} = -\frac{1}{4}$$
+          <p class="mb-2"><strong>Step 2: Differentiate $\frac{dy}{dx} = -\frac{x}{4y}$ using the Quotient Rule:</strong></p>
+          $$\frac{d^2y}{dx^2} = -\frac{1}{4}\left(\frac{(1)(y) - (x)\frac{dy}{dx}}{y^2}\right)$$
+          <p class="mb-2"><strong>Step 3: Substitute $x = 2$, $y = 2$, and $\frac{dy}{dx} = -\frac{1}{4}$:</strong></p>
+          $$\left.\frac{d^2y}{dx^2}\right|_{(2,2)} = -\frac{1}{4}\left(\frac{2 - 2\left(-\frac{1}{4}\right)}{2^2}\right) = -\frac{1}{4}\left(\frac{2 + \frac{1}{2}}{4}\right) = -\frac{1}{16}\left(\frac{5}{2}\right) = \mathbf{-\frac{5}{32}}$$
+        `
+      },
+      {
+        id: 18,
+        category: 'part4',
+        partLabel: 'Part 4: 2nd Derivatives',
+        title: 'Evaluating d²y/dx² (Implicit Product Rule Shortcut)',
+        prompt: String.raw`Given $y^2 - 2x = 4y - 1$, find the value of $\frac{d^2y}{dx^2}$ at the point $(2, 3)$.`,
+        options: [
+          String.raw`$-1$`,
+          String.raw`$1$`,
+          String.raw`$-\frac{1}{2}$`,
+          String.raw`$0$`
+        ],
+        correctIndex: 0,
+        steps: String.raw`
+          <p class="mb-2"><strong>Step 1: Differentiate implicitly to find $\frac{dy}{dx}$ at $(2, 3)$:</strong></p>
+          $$2y\frac{dy}{dx} - 2 = 4\frac{dy}{dx} \implies (2y - 4)\frac{dy}{dx} = 2$$
+          <p class="mb-2">At $(2, 3)$: $\left(2(3) - 4\right)\frac{dy}{dx} = 2 \implies 2\frac{dy}{dx} = 2 \implies \frac{dy}{dx} = 1$.</p>
+          <p class="mb-2"><strong>Step 2: Differentiate $(2y - 4)\frac{dy}{dx} = 2$ implicitly with respect to $x$ using the Product Rule:</strong></p>
+          $$\left(2\frac{dy}{dx}\right)\cdot\frac{dy}{dx} + (2y - 4)\frac{d^2y}{dx^2} = 0$$
+          $$2\left(\frac{dy}{dx}\right)^2 + (2y - 4)\frac{d^2y}{dx^2} = 0$$
+          <p class="mb-2"><strong>Step 3: Substitute $y = 3$ and $\frac{dy}{dx} = 1$:</strong></p>
+          $$2(1)^2 + \left(2(3) - 4\right)\frac{d^2y}{dx^2} = 0 \implies 2 + 2\frac{d^2y}{dx^2} = 0 \implies \frac{d^2y}{dx^2} = \mathbf{-1}$$
+        `
+      },
+      {
+        id: 19,
+        category: 'part4',
+        partLabel: 'Part 4: 2nd Derivatives',
+        title: 'Second Derivative with Product Rule',
+        prompt: String.raw`Given $xy + y^2 = 6$, find the value of $\frac{d^2y}{dx^2}$ at the point $(1, 2)$.`,
+        options: [
+          String.raw`$-\frac{12}{125}$`,
+          String.raw`$\frac{2}{25}$`,
+          String.raw`$\frac{12}{125}$`,
+          String.raw`$\frac{6}{125}$`
+        ],
+        correctIndex: 2,
+        steps: String.raw`
+          <p class="mb-2"><strong>Step 1: Differentiate implicitly to find $\frac{dy}{dx}$ at $(1, 2)$:</strong></p>
+          $$y + x\frac{dy}{dx} + 2y\frac{dy}{dx} = 0 \implies y + (x + 2y)\frac{dy}{dx} = 0$$
+          <p class="mb-2">Substitute $(1, 2)$: $2 + (1 + 4)\frac{dy}{dx} = 0 \implies 5\frac{dy}{dx} = -2 \implies \frac{dy}{dx} = -\frac{2}{5}$.</p>
+          <p class="mb-2"><strong>Step 2: Differentiate $y + (x + 2y)y' = 0$ a second time with respect to $x$:</strong></p>
+          $$y' + \left(1 + 2y'\right)y' + (x + 2y)y'' = 0$$
+          <p class="mb-2"><strong>Step 3: Plug in $x = 1$, $y = 2$, and $y' = -\frac{2}{5}$:</strong></p>
+          $$-\frac{2}{5} + \left(1 + 2\left(-\frac{2}{5}\right)\right)\left(-\frac{2}{5}\right) + (1 + 4)y'' = 0$$
+          $$-\frac{2}{5} + \left(\frac{1}{5}\right)\left(-\frac{2}{5}\right) + 5y'' = 0$$
+          $$-\frac{10}{25} - \frac{2}{25} + 5y'' = 0 \implies 5y'' = \frac{12}{25} \implies y'' = \mathbf{\frac{12}{125}}$$
+        `
+      },
+      {
+        id: 20,
+        category: 'part4',
+        partLabel: 'Part 4: 2nd Derivatives',
+        title: 'Concavity & Tangent Line Approximation (AP FRQ Style)',
+        prompt: String.raw`Let $y = f(x)$ be the particular solution to $x^2 + y^3 - 3xy = 1$ such that $f(1) = 2$. Find $\frac{dy}{dx}$ and $\frac{d^2y}{dx^2}$ at $(1, 2)$, and determine whether the tangent line approximation at $x = 1$ is an overestimate or underestimate for $f(1.1)$.`,
+        options: [
+          String.raw`$\frac{dy}{dx} = \frac{4}{9},\; \frac{d^2y}{dx^2} = -\frac{46}{243} < 0$ (Concave Down $\Rightarrow$ Overestimate)`,
+          String.raw`$\frac{dy}{dx} = \frac{4}{9},\; \frac{d^2y}{dx^2} = -\frac{46}{243} < 0$ (Concave Down $\Rightarrow$ Underestimate)`,
+          String.raw`$\frac{dy}{dx} = \frac{4}{9},\; \frac{d^2y}{dx^2} = \frac{46}{243} > 0$ (Concave Up $\Rightarrow$ Underestimate)`,
+          String.raw`$\frac{dy}{dx} = -\frac{2}{9},\; \frac{d^2y}{dx^2} = -\frac{10}{243} < 0$ (Concave Down $\Rightarrow$ Overestimate)`
+        ],
+        correctIndex: 0,
+        steps: String.raw`
+          <p class="mb-2"><strong>Step 1: Find $\frac{dy}{dx}$ at $(1, 2)$:</strong></p>
+          $$2x + 3y^2y' - 3y - 3xy' = 0 \implies 2x - 3y + (3y^2 - 3x)y' = 0$$
+          <p class="mb-2">At $(1, 2)$: $2(1) - 3(2) + \left(3(2)^2 - 3(1)\right)y' = 0 \implies -4 + 9y' = 0 \implies y' = \mathbf{\frac{4}{9}}$.</p>
+          <p class="mb-2"><strong>Step 2: Differentiate $2x - 3y + (3y^2 - 3x)y' = 0$ implicitly with respect to $x$:</strong></p>
+          $$2 - 3y' + (6yy' - 3)y' + (3y^2 - 3x)y'' = 0$$
+          <p class="mb-2"><strong>Step 3: Substitute $x = 1$, $y = 2$, and $y' = \frac{4}{9}$:</strong></p>
+          $$2 - 3\left(\frac{4}{9}\right) + \left(6(2)\left(\frac{4}{9}\right) - 3\right)\left(\frac{4}{9}\right) + \left(3(2)^2 - 3(1)\right)y'' = 0$$
+          $$\frac{2}{3} + \left(\frac{16}{3} - \frac{9}{3}\right)\left(\frac{4}{9}\right) + 9y'' = 0$$
+          $$\frac{2}{3} + \left(\frac{7}{3}\right)\left(\frac{4}{9}\right) + 9y'' = 0 \implies \frac{18}{27} + \frac{28}{27} + 9y'' = 0 \implies \frac{46}{27} + 9y'' = 0 \implies y'' = \mathbf{-\frac{46}{243}}$$
+          <p class="mt-2"><strong>Step 4: Concavity Conclusion:</strong> Since $\frac{d^2y}{dx^2} = -\frac{46}{243} < 0$, the curve is <strong>concave down</strong> near $(1, 2)$, so the tangent line lies above the curve and provides an <strong>overestimate</strong> for $f(1.1)$.</p>
+        `
+      }
+    ];
+
+    // ==================== STATE MANAGEMENT ====================
+    // Each question state: { selectedIndex: number|null, checked: boolean, isCorrect: boolean|null, mode: 'mc'|'self'|null, solutionOpen: boolean }
+    let quizState = {
+      activeCategory: 'all',
+      formulaOpen: true,
+      questions: {}
+    };
+
+    function initDefaultState() {
+      const qState = {};
+      QUESTIONS.forEach(q => {
+        qState[q.id] = {
+          selectedIndex: null,
+          checked: false,
+          isCorrect: null,
+          mode: null,
+          solutionOpen: false
+        };
+      });
+      return {
+        activeCategory: 'all',
+        formulaOpen: true,
+        questions: qState
+      };
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) {
+          quizState = initDefaultState();
+          return;
+        }
+        const parsed = JSON.parse(raw);
+        const defaults = initDefaultState();
+        quizState.activeCategory = parsed.activeCategory || 'all';
+        quizState.formulaOpen = typeof parsed.formulaOpen === 'boolean' ? parsed.formulaOpen : true;
+        quizState.questions = defaults.questions;
+        if (parsed.questions) {
+          QUESTIONS.forEach(q => {
+            if (parsed.questions[q.id]) {
+              quizState.questions[q.id] = {
+                ...defaults.questions[q.id],
+                ...parsed.questions[q.id]
+              };
+            }
+          });
+        }
+      } catch (e) {
+        quizState = initDefaultState();
+      }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(quizState));
+      } catch (e) {
+        // Ignore storage quota errors
+      }
+    }
+
+    // ==================== MATH RENDERING HELPER ====================
+    function renderMath(element) {
+      if (window.renderMathInElement) {
+        window.renderMathInElement(element || document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false },
+            { left: '\\(', right: '\\)', display: false },
+            { left: '\\[', right: '\\]', display: true }
+          ],
+          throwOnError: false
+        });
+      }
+    }
+
+    // ==================== SCOREBOARD & FILTER RENDER ====================
+    function updateDashboard() {
+      let answered = 0;
+      let correct = 0;
+      let incorrect = 0;
+
+      QUESTIONS.forEach(q => {
+        const st = quizState.questions[q.id];
+        if (st && st.checked) {
+          answered++;
+          if (st.isCorrect) {
+            correct++;
+          } else {
+            incorrect++;
+          }
+        }
+      });
+
+      const pct = answered > 0 ? Math.round((correct / answered) * 100) : 0;
+
+      document.getElementById('stat-answered').textContent = `Answered: ${answered} / 20`;
+      document.getElementById('stat-correct').textContent = `Correct: ${correct} / 20`;
+      document.getElementById('stat-percent').textContent = `Score: ${pct}% (${correct}/${answered || 0})`;
+
+      const correctWidth = (correct / 20) * 100;
+      const incorrectWidth = (incorrect / 20) * 100;
+      document.getElementById('bar-correct').style.width = `${correctWidth}%`;
+      document.getElementById('bar-incorrect').style.width = `${incorrectWidth}%`;
+
+      // Update category tabs active state
+      document.querySelectorAll('.filter-tab').forEach(btn => {
+        const cat = btn.getAttribute('data-category');
+        if (cat === quizState.activeCategory) {
+          btn.className = 'filter-tab active-tab whitespace-nowrap px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition bg-wolves-navy text-white shadow-sm';
+        } else {
+          btn.className = 'filter-tab whitespace-nowrap px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition bg-slate-100 text-slate-600 hover:bg-slate-200';
+        }
+      });
+    }
+
+    // ==================== QUESTION CARD RENDERING ====================
+    function getLetters() {
+      return ['A', 'B', 'C', 'D'];
+    }
+
+    function renderQuestions() {
+      const container = document.getElementById('questions-container');
+      container.innerHTML = '';
+
+      const filtered = QUESTIONS.filter(q =>
+        quizState.activeCategory === 'all' ? true : q.category === quizState.activeCategory
+      );
+
+      filtered.forEach(q => {
+        const st = quizState.questions[q.id];
+        const letters = getLetters();
+
+        // Status badge
+        let statusBadgeHTML = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">Unanswered</span>`;
+        let cardBorderClass = 'border-slate-200';
+
+        if (st.checked) {
+          if (st.isCorrect) {
+            cardBorderClass = 'border-emerald-400 ring-1 ring-emerald-200';
+            const viaText = st.mode === 'self' ? 'Self-Graded Correct' : 'Correct';
+            statusBadgeHTML = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">✅ ${viaText}</span>`;
+          } else {
+            cardBorderClass = 'border-rose-300 ring-1 ring-rose-100';
+            const viaText = st.mode === 'self' ? 'Needs Review' : 'Incorrect';
+            statusBadgeHTML = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-800">❌ ${viaText}</span>`;
+          }
+        }
+
+        // Options HTML
+        const optionsHTML = q.options.map((optLatex, idx) => {
+          const isSelected = st.selectedIndex === idx;
+          let btnStyle = 'bg-white border-slate-200 hover:border-slate-300 text-slate-800';
+          let badgeStyle = 'bg-slate-100 text-slate-700 border-slate-200';
+          let iconHTML = '';
+
+          if (!st.checked && isSelected) {
+            btnStyle = 'bg-blue-50/70 border-blue-500 ring-2 ring-blue-500/20 text-slate-900';
+            badgeStyle = 'bg-blue-600 text-white border-blue-600';
+          } else if (st.checked) {
+            if (idx === q.correctIndex) {
+              btnStyle = 'bg-emerald-50 border-emerald-500 text-emerald-950 font-medium';
+              badgeStyle = 'bg-emerald-600 text-white border-emerald-600';
+              iconHTML = `<span class="ml-auto text-emerald-600 font-bold text-xs uppercase tracking-wider flex items-center gap-1">✓ Correct</span>`;
+            } else if (isSelected && idx !== q.correctIndex) {
+              btnStyle = 'bg-rose-50 border-rose-400 text-rose-950';
+              badgeStyle = 'bg-rose-600 text-white border-rose-600';
+              iconHTML = `<span class="ml-auto text-rose-600 font-bold text-xs uppercase tracking-wider flex items-center gap-1">✗ Your Choice</span>`;
+            } else {
+              btnStyle = 'bg-slate-50/60 border-slate-200 text-slate-500 opacity-75';
+            }
+          }
+
+          return `
+            <button
+              type="button"
+              data-action="select-option"
+              data-qid="${q.id}"
+              data-opt="${idx}"
+              class="option-btn w-full text-left p-3.5 rounded-xl border-2 flex items-center gap-3.5 ${btnStyle}"
+            >
+              <span class="w-7 h-7 rounded-lg border text-xs font-bold flex items-center justify-center flex-shrink-0 transition ${badgeStyle}">
+                ${letters[idx]}
+              </span>
+              <span class="text-sm sm:text-base overflow-x-auto py-0.5">${optLatex}</span>
+              ${iconHTML}
+            </button>
+          `;
+        }).join('');
+
+        // Feedback Banner after checking MC or self-grading
+        let feedbackBanner = '';
+        if (st.checked) {
+          if (st.isCorrect) {
+            feedbackBanner = `
+              <div class="mt-3 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs sm:text-sm flex items-center justify-between">
+                <span><strong>Great job!</strong> ${st.mode === 'self' ? 'You marked this question as mastered on paper.' : `Choice ${letters[q.correctIndex]} is correct.`}</span>
+                <button type="button" data-action="retry-question" data-qid="${q.id}" class="text-xs font-semibold underline hover:text-emerald-700 ml-3">Try Again</button>
+              </div>
+            `;
+          } else {
+            feedbackBanner = `
+              <div class="mt-3 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 text-xs sm:text-sm flex items-center justify-between">
+                <span><strong>Keep practicing!</strong> The correct answer is <strong>Choice ${letters[q.correctIndex]}</strong>. Review the step-by-step derivation below.</span>
+                <button type="button" data-action="retry-question" data-qid="${q.id}" class="text-xs font-semibold underline hover:text-rose-700 ml-3">Try Again</button>
+              </div>
+            `;
+          }
+        }
+
+        const checkDisabled = st.selectedIndex === null;
+
+        const card = document.createElement('article');
+        card.id = `question-card-${q.id}`;
+        card.className = `bg-white rounded-2xl border ${cardBorderClass} shadow-sm overflow-hidden transition-all`;
+        card.innerHTML = `
+          <!-- Card Header -->
+          <div class="px-5 py-4 bg-slate-50/80 border-b border-slate-200/80 flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5">
+              <span class="inline-flex items-center justify-center px-2.5 py-1 rounded-lg bg-wolves-navy text-white text-xs font-bold">
+                Q${q.id}
+              </span>
+              <span class="text-xs font-semibold uppercase tracking-wider text-wolves-crimson bg-wolves-crimsonLight px-2.5 py-0.5 rounded-md border border-wolves-crimson/20">
+                ${q.partLabel}
+              </span>
+              <h3 class="text-sm sm:text-base font-bold text-slate-900">
+                ${q.title}
+              </h3>
+            </div>
+            <div>
+              ${statusBadgeHTML}
+            </div>
+          </div>
+
+          <!-- Question Body -->
+          <div class="p-5 sm:p-6">
+            <div class="text-base sm:text-lg text-slate-900 font-medium leading-relaxed mb-5">
+              ${q.prompt}
+            </div>
+
+            <!-- Multiple Choice Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              ${optionsHTML}
+            </div>
+
+            ${feedbackBanner}
+
+            <!-- Action Bar: Check Answer & Show Step-by-Step Solution Toggle -->
+            <div class="mt-5 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+              <div class="flex items-center gap-2">
+                <button
+                  type="button"
+                  data-action="check-mc"
+                  data-qid="${q.id}"
+                  ${checkDisabled ? 'disabled' : ''}
+                  class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition shadow-xs ${
+                    checkDisabled
+                      ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                      : 'bg-wolves-navy hover:bg-slate-800 text-white cursor-pointer'
+                  }"
+                >
+                  Check Answer
+                </button>
+                ${
+                  st.selectedIndex !== null || st.checked
+                    ? `<button type="button" data-action="retry-question" data-qid="${q.id}" class="px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition">Clear</button>`
+                    : ''
+                }
+              </div>
+
+              <button
+                type="button"
+                data-action="toggle-solution"
+                data-qid="${q.id}"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition ${
+                  st.solutionOpen
+                    ? 'bg-amber-50 border-amber-300 text-amber-900'
+                    : 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700'
+                }"
+              >
+                <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                </svg>
+                <span>${st.solutionOpen ? 'Hide Step-by-Step Solution' : 'Show Step-by-Step Solution'}</span>
+              </button>
+            </div>
+
+            <!-- Hidden Full Step-by-Step Solution Drawer -->
+            <div class="${st.solutionOpen ? 'block' : 'hidden'} mt-4 rounded-xl bg-slate-50 border border-slate-200 p-4 sm:p-5">
+              <div class="flex items-center justify-between border-b border-slate-200 pb-2.5 mb-3">
+                <span class="text-xs font-bold uppercase tracking-wider text-wolves-forest flex items-center gap-1.5">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Full Step-by-Step AP Calculus Derivation
+                </span>
+                <span class="text-xs font-semibold text-slate-500">
+                  Correct Choice: <strong class="text-slate-800">${letters[q.correctIndex]}</strong>
+                </span>
+              </div>
+
+              <div class="text-sm text-slate-800 leading-relaxed space-y-2 overflow-x-auto">
+                ${q.steps}
+              </div>
+
+              <!-- Self-Grading Buttons for Paper FRQ Workflow -->
+              <div class="mt-4 pt-3.5 border-t border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <span class="text-xs font-medium text-slate-600">
+                  Worked this out on paper? Self-grade your work to update the top scoreboard:
+                </span>
+                <div class="flex items-center gap-2.5">
+                  <button
+                    type="button"
+                    data-action="self-grade"
+                    data-qid="${q.id}"
+                    data-grade="correct"
+                    class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition border ${
+                      st.checked && st.isCorrect
+                        ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
+                        : 'bg-white hover:bg-emerald-50 text-emerald-800 border-emerald-300'
+                    }"
+                  >
+                    I Got It Right ✅
+                  </button>
+                  <button
+                    type="button"
+                    data-action="self-grade"
+                    data-qid="${q.id}"
+                    data-grade="incorrect"
+                    class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition border ${
+                      st.checked && !st.isCorrect
+                        ? 'bg-rose-600 text-white border-rose-600 shadow-xs'
+                        : 'bg-white hover:bg-rose-50 text-rose-800 border-rose-300'
+                    }"
+                  >
+                    Needs Review ❌
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+
+      renderMath(container);
+    }
+
+    // ==================== EVENT HANDLERS ====================
+    function setupEvents() {
+      // Formula sheet collapsible toggle
+      const formulaToggle = document.getElementById('formula-toggle');
+      const formulaContent = document.getElementById('formula-content');
+      const formulaChevron = document.getElementById('formula-chevron');
+
+      function syncFormulaUI() {
+        if (quizState.formulaOpen) {
+          formulaContent.classList.remove('hidden');
+          formulaChevron.style.transform = 'rotate(0deg)';
+        } else {
+          formulaContent.classList.add('hidden');
+          formulaChevron.style.transform = 'rotate(-90deg)';
+        }
+      }
+
+      syncFormulaUI();
+
+      formulaToggle.addEventListener('click', () => {
+        quizState.formulaOpen = !quizState.formulaOpen;
+        syncFormulaUI();
+        saveState();
+      });
+
+      // Category filter tabs
+      document.getElementById('category-tabs').addEventListener('click', (e) => {
+        const btn = e.target.closest('.filter-tab');
+        if (!btn) return;
+        const cat = btn.getAttribute('data-category');
+        if (!cat) return;
+        quizState.activeCategory = cat;
+        saveState();
+        updateDashboard();
+        renderQuestions();
+      });
+
+      // Delegate clicks inside questions container
+      document.getElementById('questions-container').addEventListener('click', (e) => {
+        const target = e.target.closest('button[data-action]');
+        if (!target) return;
+
+        const action = target.getAttribute('data-action');
+        const qid = parseInt(target.getAttribute('data-qid'), 10);
+        const qObj = QUESTIONS.find(item => item.id === qid);
+        if (!qObj) return;
+        const st = quizState.questions[qid];
+
+        if (action === 'select-option') {
+          const optIdx = parseInt(target.getAttribute('data-opt'), 10);
+          // Allow changing option before checking, or re-selecting if already checked
+          st.selectedIndex = optIdx;
+          if (st.checked && st.mode === 'mc') {
+            // Re-grade immediately if already checked
+            st.isCorrect = (optIdx === qObj.correctIndex);
+          }
+          saveState();
+          updateDashboard();
+          renderQuestions();
+        } else if (action === 'check-mc') {
+          if (st.selectedIndex === null) return;
+          st.checked = true;
+          st.mode = 'mc';
+          st.isCorrect = (st.selectedIndex === qObj.correctIndex);
+          saveState();
+          updateDashboard();
+          renderQuestions();
+        } else if (action === 'toggle-solution') {
+          st.solutionOpen = !st.solutionOpen;
+          saveState();
+          renderQuestions();
+        } else if (action === 'self-grade') {
+          const grade = target.getAttribute('data-grade');
+          st.checked = true;
+          st.mode = 'self';
+          st.isCorrect = (grade === 'correct');
+          if (grade === 'correct' && st.selectedIndex === null) {
+            st.selectedIndex = qObj.correctIndex;
+          }
+          saveState();
+          updateDashboard();
+          renderQuestions();
+        } else if (action === 'retry-question') {
+          st.selectedIndex = null;
+          st.checked = false;
+          st.isCorrect = null;
+          st.mode = null;
+          saveState();
+          updateDashboard();
+          renderQuestions();
+        }
+      });
+
+      // Hide All Solutions button
+      document.getElementById('btn-collapse-solutions').addEventListener('click', () => {
+        QUESTIONS.forEach(q => {
+          quizState.questions[q.id].solutionOpen = false;
+        });
+        saveState();
+        renderQuestions();
+      });
+
+      // Reset Quiz Modal
+      const resetModal = document.getElementById('reset-modal');
+      document.getElementById('btn-reset').addEventListener('click', () => {
+        resetModal.classList.remove('hidden');
+        resetModal.classList.add('flex');
+      });
+
+      document.getElementById('modal-cancel').addEventListener('click', () => {
+        resetModal.classList.add('hidden');
+        resetModal.classList.remove('flex');
+      });
+
+      document.getElementById('modal-confirm').addEventListener('click', () => {
+        const currentCategory = quizState.activeCategory;
+        quizState = initDefaultState();
+        quizState.activeCategory = currentCategory;
+        saveState();
+        updateDashboard();
+        renderQuestions();
+        resetModal.classList.add('hidden');
+        resetModal.classList.remove('flex');
+      });
+
+      // Close modal on backdrop click
+      resetModal.addEventListener('click', (e) => {
+        if (e.target === resetModal) {
+          resetModal.classList.add('hidden');
+          resetModal.classList.remove('flex');
+        }
+      });
+    }
+
+    // ==================== INITIALIZATION ====================
+    document.addEventListener('DOMContentLoaded', () => {
+      loadState();
+      setupEvents();
+      updateDashboard();
+      renderQuestions();
+      // Ensure KaTeX renders static header/formula math once loaded
+      if (window.renderMathInElement) {
+        renderMath(document.body);
+      } else {
+        window.addEventListener('load', () => {
+          renderMath(document.body);
+          renderQuestions();
+        });
+      }
+    });
+  </script>
+</body>
+</html>
