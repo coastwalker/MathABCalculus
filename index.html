@@ -117,6 +117,82 @@
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-wolves-crimsonBright selection:text-white">
 
+  <!-- Authentication Gate (Dark Theme) -->
+  <div id="auth-gate" class="min-h-screen flex items-center justify-center px-4 py-10 bg-gradient-to-br from-[#090D16] via-[#0F172A] to-[#090D16]">
+    <div class="w-full max-w-md bg-slate-900/95 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden">
+      <div class="px-6 py-6 bg-gradient-to-r from-[#0B1120] via-[#131C31] to-[#0B1120] border-b-2 border-rose-600/80 text-center">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-950/90 border border-rose-500/40 text-xs font-bold tracking-wider uppercase text-rose-200 mb-3">
+          <span>🐺 Eastlake Wolves</span>
+          <span class="opacity-60">•</span>
+          <span>AP Calculus AB</span>
+        </div>
+        <h1 class="text-lg sm:text-xl font-extrabold text-white tracking-tight">
+          Eastlake High School — MATH&amp; 151
+        </h1>
+        <p class="mt-1 text-xs sm:text-sm font-medium text-amber-300">
+          Section 3.2: Implicit Differentiation (Day 2) Quiz
+        </p>
+      </div>
+
+      <form id="auth-form" class="p-6 space-y-4" autocomplete="off">
+        <p class="text-xs text-slate-400 text-center">
+          Please sign in with your student credentials to access the 20-question mastery practice quiz.
+        </p>
+
+        <div>
+          <label for="auth-user" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+            Username
+          </label>
+          <input
+            id="auth-user"
+            name="username"
+            type="text"
+            required
+            placeholder="Enter username"
+            class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-400/20 transition"
+          />
+        </div>
+
+        <div>
+          <label for="auth-pass" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+            Password
+          </label>
+          <div class="relative">
+            <input
+              id="auth-pass"
+              name="password"
+              type="password"
+              required
+              placeholder="Enter password"
+              class="w-full px-3.5 py-2.5 pr-16 rounded-xl bg-slate-950 border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-400/20 transition"
+            />
+            <button
+              id="toggle-pass"
+              type="button"
+              class="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs font-semibold text-slate-400 hover:text-white px-2 py-1 rounded-md"
+            >
+              Show
+            </button>
+          </div>
+        </div>
+
+        <div id="auth-error" class="hidden p-3 rounded-xl bg-rose-950/70 border border-rose-500/50 text-rose-200 text-xs font-medium text-center">
+          Invalid username or password. Please try again.
+        </div>
+
+        <button
+          id="auth-submit"
+          type="submit"
+          class="w-full py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-sm shadow-lg shadow-rose-950/50 transition cursor-pointer"
+        >
+          Sign In to Practice Quiz
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main Quiz App Shell (Hidden until authenticated) -->
+  <div id="app-shell" class="hidden min-h-screen flex flex-col">
   <!-- Academic Hero Header -->
   <header class="bg-gradient-to-r from-[#0B1120] via-[#131C31] to-[#0B1120] text-white border-b-2 border-wolves-crimsonBright/80 shadow-xl">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 py-7 sm:py-9">
@@ -182,6 +258,9 @@
           <button id="btn-reset" type="button" class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-white bg-rose-700 hover:bg-rose-600 px-3.5 py-1.5 rounded-lg shadow-sm transition">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
             Reset Quiz
+          </button>
+          <button id="btn-logout" type="button" class="text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 px-3 py-1.5 rounded-lg transition">
+            Sign Out
           </button>
         </div>
       </div>
@@ -342,26 +421,12 @@
     </div>
   </div>
 
-  <!-- Application Logic & Question Bank -->
-  <script>
-    const STORAGE_KEY = 'ehs_calc_ab_sec3_2_day2_v1';
+  
+  </div>
 
-    const QUESTIONS = [
-      // ==================== PART 1: Product Rule & Chain Rule ====================
-      {
-        id: 1,
-        category: 'part1',
-        partLabel: 'Part 1: Product & Chain Rule',
-        title: 'Product Rule Basics',
-        prompt: String.raw`Find $\dfrac{dy}{dx}$ for the curve defined implicitly by $x^3 + 3x^2y - 2y^3 = 5$.`,
-        options: [
-          String.raw`$\dfrac{dy}{dx} = \dfrac{-x^2 - 2xy}{x^2 - 2y^2}$`,
-          String.raw`$\dfrac{dy}{dx} = \dfrac{-x^2}{x^2 - 2y^2}$`,
-          String.raw`$\dfrac{dy}{dx} = \dfrac{-x^2 - 2xy}{x^2 - 2y^3}$`,
-          String.raw`$\dfrac{dy}{dx} = \dfrac{x^2 - 2xy}{x^2 + 2y^2}$`
-        ],
-        correctIndex: 0,
-        steps: String.raw`
+  <!-- Obfuscated Application Logic -->
+  <script>
+function a0_0x552a(_0x57fc3d,_0x413941){_0x57fc3d=_0x57fc3d-0x7f;const _0x238069=a0_0x2380();let _0x552aca=_0x238069[_0x57fc3d];if(a0_0x552a['EVoMsp']===undefined){var _0x1882d4=function(_0x10ad64){const _0x169242='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let _0x11abab='',_0xdd3d5a='';for(let _0x1c2e06=0x0,_0x1ba6c1,_0x48af6e,_0x405fcc=0x0;_0x48af6e=_0x10ad64['charAt'](_0x405fcc++);~_0x48af6e&&(_0x1ba6c1=_0x1c2e06%0x4?_0x1ba6c1*0x40+_0x48af6e:_0x48af6e,_0x1c2e06++%0x4)?_0x11abab+=String['fromCharCode'](0xff&_0x1ba6c1>>(-0x2*_0x1c2e06&0x6)):0x0){_0x48af6e=_0x169242['indexOf'](_0x48af6e);}for(let _0x585422=0x0,_0x2ee696=_0x11abab['length'];_0x585422<_0x2ee696;_0x585422++){_0xdd3d5a+='%'+('00'+_0x11abab['charCodeAt'](_0x585422)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(_0xdd3d5a);};const _0x4133be=function(_0x5f2b24,_0x40730f){let _0x68a13c=[],_0xf72dca=0x0,_0x3eea7a,_0x31eaf8='';_0x5f2b24=_0x1882d4(_0x5f2b24);let _0x346614;for(_0x346614=0x0;_0x346614<0x100;_0x346614++){_0x68a13c[_0x346614]=_0x346614;}for(_0x346614=0x0;_0x346614<0x100;_0x346614++){_0xf72dca=(_0xf72dca+_0x68a13c[_0x346614]+_0x40730f['charCodeAt'](_0x346614%_0x40730f['length']))%0x100,_0x3eea7a=_0x68a13c[_0x346614],_0x68a13c[_0x346614]=_0x68a13c[_0xf72dca],_0x68a13c[_0xf72dca]=_0x3eea7a;}_0x346614=0x0,_0xf72dca=0x0;for(let _0x5c6cae=0x0;_0x5c6cae<_0x5f2b24['length'];_0x5c6cae++){_0x346614=(_0x346614+0x1)%0x100,_0xf72dca=(_0xf72dca+_0x68a13c[_0x346614])%0x100,_0x3eea7a=_0x68a13c[_0x346614],_0x68a13c[_0x346614]=_0x68a13c[_0xf72dca],_0x68a13c[_0xf72dca]=_0x3eea7a,_0x31eaf8+=String['fromCharCode'](_0x5f2b24['charCodeAt'](_0x5c6cae)^_0x68a13c[(_0x68a13c[_0x346614]+_0x68a13c[_0xf72dca])%0x100]);}return _0x31eaf8;};a0_0x552a['SHDYPQ']=_0x4133be,a0_0x552a['DGSKUe']={},a0_0x552a['EVoMsp']=!![];}const _0x20bd93=_0x238069[0x0];a0_0x552a['CPdKbY']!==_0x20bd93&&(a0_0x552a['DGSKUe']={},a0_0x552a['CPdKbY']=_0x20bd93);const _0x2aafd1=a0_0x552a['DGSKUe'][_0x57fc3d];return _0x2aafd1===undefined?(a0_0x552a['iqFcdU']===undefined&&(a0_0x552a['iqFcdU']=!![]),_0x552aca=a0_0x552a['SHDYPQ'](_0x552aca,_0x413941),a0_0x552a['DGSKUe'][_0x57fc3d]=_0x552aca):_0x552aca=_0x2aafd1,_0x552aca;}(function(_0x50aa2c,_0x25e291){const _0x245d88=a0_0x552a,_0x2085d4=_0x50aa2c();while(!![]){try{const _0x586ca7=-parseInt(_0x245d88(0x6dc,'QHXz'))/0x1*(parseInt(_0x245d88(0xe0,'QHXz'))/0x2)+-parseInt(_0x245d88(0xf9,'U8a4'))/0x3*(-parseInt(_0x245d88(0x662,'m^]$'))/0x4)+-parseInt(_0x245d88(0x2f1,'LNHM'))/0x5*(-parseInt(_0x245d88(0x349,'&IUg'))/0x6)+parseInt(_0x245d88(0x7ff,'rLGt'))/0x7+-parseInt(_0x245d88(0x855,'uiBq'))/0x8*(-parseInt(_0x245d88(0x809,'Sq6a'))/0x9)+-parseInt(_0x245d88(0x52c,'BDRN'))/0xa*(-parseInt(_0x245d88(0x394,'BLiw'))/0xb)+-parseInt(_0x245d88(0x3b6,'uiBq'))/0xc*(parseInt(_0x245d88(0x660,'Sq6a'))/0xd);if(_0x586ca7===_0x25e291)break;else _0x2085d4['push'](_0x2085d4['shift']());}catch(_0x3c798e){_0x2085d4['push'](_0x2085d4['shift']());}}}(a0_0x2380,0xe7db8),(function(){const _0x11e096=a0_0x552a,_0x2dba2c={'sClJT':function(_0x4b46b0,_0x3e08f0){return _0x4b46b0>>>_0x3e08f0;},'ZEXaW':function(_0x77ce8e,_0x8a0d8f){return _0x77ce8e<<_0x8a0d8f;},'LhBLW':_0x11e096(0x415,'04Bs')+_0x11e096(0x41c,'RBUk'),'CKOHG':function(_0x252b0b){return _0x252b0b();},'aMoKk':'auth-gat'+'e','ietxq':_0x11e096(0x719,'U8a4'),'lmrSc':function(_0x191fcc,_0x2bc577){return _0x191fcc<_0x2bc577;},'rEQlI':function(_0x4dba40,_0x35563b){return _0x4dba40|_0x35563b;},'TiAop':function(_0x4667e8,_0x99cf6e,_0x31c831){return _0x4667e8(_0x99cf6e,_0x31c831);},'KgZjI':function(_0x28129d,_0x3ca235,_0x524549){return _0x28129d(_0x3ca235,_0x524549);},'ZMSVJ':_0x11e096(0x7e2,'N[ww')+_0x11e096(0x50d,'**1C')+_0x11e096(0x2b6,'q]&!')+_0x11e096(0xb3,'m%f&')+_0x11e096(0x844,'vhM0')+_0x11e096(0x3b7,'q]&!'),'jRhMM':_0x11e096(0x681,'iqmV')+'ose-500/'+_0x11e096(0x434,'(W06')+_0x11e096(0x86a,'BLiw')+_0x11e096(0x632,'&IUg')+'30','ZJvex':_0x11e096(0x235,'4]xv'),'oJnXE':_0x11e096(0x702,'RBUk')+_0x11e096(0x162,'&aKg'),'afwtr':_0x11e096(0x28d,'ry(^')+'t','EEFMo':function(_0x5b178d,_0xcf5f7b){return _0x5b178d(_0xcf5f7b);},'esXQN':'ujbNf','jkpYk':_0x11e096(0x3f1,'HGE)'),'DKVEq':_0x11e096(0x6a0,'(W06'),'kimqA':function(_0x275fb2,_0x5029f4){return _0x275fb2*_0x5029f4;},'vfOPk':function(_0x115820,_0x2bad83){return _0x115820<_0x2bad83;},'EDasc':function(_0x480af1,_0x5aaf3b){return _0x480af1|_0x5aaf3b;},'uXktO':function(_0x47a343,_0x4ed3aa){return _0x47a343|_0x4ed3aa;},'SOQiu':function(_0x4e389c,_0x5a33f4){return _0x4e389c/_0x5a33f4;},'yhqGO':function(_0x28d2b0,_0x59802){return _0x28d2b0-_0x59802;},'BJOOD':function(_0x2b6a34,_0x17c8dc){return _0x2b6a34%_0x17c8dc;},'cjWQy':function(_0x3e115e,_0x3651a5){return _0x3e115e<_0x3651a5;},'EgBri':function(_0x37ed87,_0x4e2bca){return _0x37ed87>>_0x4e2bca;},'ZQIZf':function(_0x3a650a,_0x22444f){return _0x3a650a<<_0x22444f;},'FjWaH':function(_0x15f5a0,_0x5eb6b1){return _0x15f5a0*_0x5eb6b1;},'AAbZT':function(_0x28d698,_0x4451d5){return _0x28d698%_0x4451d5;},'HpRZo':function(_0x48b8cf,_0x22f449){return _0x48b8cf|_0x22f449;},'eRdYq':function(_0x59ab1d,_0x1da115){return _0x59ab1d!==_0x1da115;},'ogVaZ':_0x11e096(0x1cb,'pODZ'),'klmMf':_0x11e096(0x1a2,'BLiw'),'gvZaS':function(_0x2422a8,_0x1e6a98){return _0x2422a8<_0x1e6a98;},'mcapE':function(_0x537c9e,_0x1f5219){return _0x537c9e===_0x1f5219;},'IWhEp':_0x11e096(0x56c,'5mW]'),'WyshZ':function(_0x14c3e6,_0x1b0658){return _0x14c3e6-_0x1b0658;},'EYkPa':function(_0xce62d8,_0x2bfa0a){return _0xce62d8+_0x2bfa0a;},'LzLtI':function(_0x131152,_0x1984c0){return _0x131152+_0x1984c0;},'ARkFT':function(_0x5d0fc1,_0x2f86f6){return _0x5d0fc1+_0x2f86f6;},'UUXRw':function(_0x13c034,_0x34cf9e){return _0x13c034^_0x34cf9e;},'IEsrU':function(_0x22113f,_0x4edcef){return _0x22113f&_0x4edcef;},'ugPlA':function(_0x8acac5,_0x38604d){return _0x8acac5|_0x38604d;},'TCmaf':function(_0x338f41,_0x77dcf5){return _0x338f41+_0x77dcf5;},'ycUNg':function(_0x3e76e9,_0x33aab2){return _0x3e76e9+_0x33aab2;},'fUSZr':function(_0x26089d,_0x5d6db6){return _0x26089d^_0x5d6db6;},'GjtvT':function(_0x4f1024,_0x43a54f){return _0x4f1024^_0x43a54f;},'znPPX':function(_0x33a81a,_0x3ac3f6){return _0x33a81a^_0x3ac3f6;},'ShQNi':function(_0x65dcb8,_0x1fb0f3,_0x403d8e){return _0x65dcb8(_0x1fb0f3,_0x403d8e);},'vGplF':function(_0x54d9b2,_0xa7691a){return _0x54d9b2^_0xa7691a;},'rAQHN':function(_0x428a3f,_0x3b1b6a){return _0x428a3f&_0x3b1b6a;},'ijcSD':function(_0x75cd3f,_0x28e5d9){return _0x75cd3f+_0x28e5d9;},'PmCeR':function(_0x2b0a8b,_0x1ead0b){return _0x2b0a8b+_0x1ead0b;},'dGcRJ':function(_0x484cf1,_0xb080c8){return _0x484cf1<_0xb080c8;},'bkQph':function(_0x1f2c27,_0xbf6ba1){return _0x1f2c27<_0xbf6ba1;},'AkYfO':function(_0x539462,_0x5f25bf){return _0x539462!==_0x5f25bf;},'vgUeX':'Krrdr','dTAEa':_0x11e096(0x467,'LNHM'),'PrrLI':function(_0x190dff,_0x2baeda){return _0x190dff>>_0x2baeda;},'wkBqk':function(_0x3a13de,_0x3ec4c2){return _0x3a13de+_0x3ec4c2;},'aDxwQ':function(_0x5d76cb,_0x362559){return _0x5d76cb(_0x362559);},'tcrNo':function(_0x58f529,_0x3d0a17){return _0x58f529||_0x3d0a17;},'zgwdV':function(_0x1e26bf,_0x260948){return _0x1e26bf+_0x260948;},'wWLlT':_0x11e096(0x448,'R0]m')+_0x11e096(0x431,'RBUk')+_0x11e096(0x3c3,'5jp8')+'0\x20border'+_0x11e096(0x5a2,'T7N6'),'HBjgD':_0x11e096(0x6d8,'fgHr')+_0x11e096(0x432,'VTMS'),'ZtZJB':function(_0x2ac37a,_0x42ec73){return _0x2ac37a===_0x42ec73;},'MYVfX':_0x11e096(0x42f,'8sJn')+_0x11e096(0x73e,'uiBq')+_0x11e096(0x36f,'&IUg')+_0x11e096(0x54c,'N[ww')+_0x11e096(0x52f,'5jp8')+_0x11e096(0x780,'8^SX')+'-lg\x20text'+_0x11e096(0x820,'&IUg')+_0x11e096(0x6c4,'E7eE')+'ont-semi'+_0x11e096(0x48e,'VTMS')+_0x11e096(0x11e,'0&x[')+_0x11e096(0x6e5,'8sJn')+_0x11e096(0xa4,'04Bs')+_0x11e096(0x14c,'][YR')+_0x11e096(0x9d,'8^SX'),'hUHjY':_0x11e096(0x44d,'4]xv')+_0x11e096(0x46c,'q]&!')+_0x11e096(0x579,'E7eE')+_0x11e096(0x2b2,'freO')+_0x11e096(0x75d,'w%VX')+_0x11e096(0x603,'8sJn')+_0x11e096(0x4e1,'rLGt')+_0x11e096(0x3a5,'bb@#')+_0x11e096(0x3e8,'fgHr')+_0x11e096(0x3e6,'5jp8')+_0x11e096(0x70b,'&s[F')+_0x11e096(0x4ae,'N[ww')+_0x11e096(0x2e8,'QHXz')+_0x11e096(0x6a7,'Sq6a')+_0x11e096(0x5d8,']0A5')+_0x11e096(0x7c7,'4]xv')+_0x11e096(0x5ae,'K)t$')+_0x11e096(0x4a0,'8sJn')+_0x11e096(0x51c,'I0iY')+_0x11e096(0x347,'][YR')+_0x11e096(0x4a2,'freO')+_0x11e096(0x7f9,'B&6q')+_0x11e096(0x7b1,'8^SX')+'00/80','ROdIq':_0x11e096(0x3f8,'BLiw'),'kEmHU':_0x11e096(0x652,'ry(^'),'oOhhE':_0x11e096(0x835,'&s[F'),'Ltlev':function(_0x4075cc,_0x4548e1){return _0x4075cc===_0x4548e1;},'RAnrJ':_0x11e096(0x1c4,'K)t$'),'pZglc':_0x11e096(0x454,'RBUk'),'sqxta':_0x11e096(0x83d,'BLiw'),'szFZi':_0x11e096(0xc0,'QHXz'),'iuXtN':function(_0x525d62){return _0x525d62();},'wvioB':function(_0x32b7bb,_0x4b737d){return _0x32b7bb!==_0x4b737d;},'kkWBs':_0x11e096(0x198,'5jp8'),'KVCTz':function(_0x452f7e,_0x32375c){return _0x452f7e===_0x32375c;},'enQyA':_0x11e096(0x3d6,'0&x['),'wFWZx':function(_0x23030f){return _0x23030f();},'VyBGg':_0x11e096(0x375,'**1C')+'l','WbDwy':_0x11e096(0x29b,'T7N6')+_0x11e096(0x5ed,'w%VX')+_0x11e096(0x16f,'C6GW'),'diTAC':function(_0x11abef,_0x311e36){return _0x11abef(_0x311e36);},'LgohU':function(_0x42f078,_0x5bd305){return _0x42f078===_0x5bd305;},'ZkfEW':_0x11e096(0x487,'w%VX'),'WEWKc':_0x11e096(0x827,'U8a4'),'vtVrp':_0x11e096(0x2ed,'w%VX'),'opCBK':function(_0x5f36cc,_0x410b62){return _0x5f36cc===_0x410b62;},'Dqste':function(_0x58fc79,_0x3593de){return _0x58fc79>_0x3593de;},'ABhil':_0x11e096(0x2fb,'LNHM')+'wered','adrjz':function(_0xafb169,_0x54419d){return _0xafb169||_0x54419d;},'lHSfB':_0x11e096(0x6fb,'04Bs')+_0x11e096(0x450,'m^]$'),'scwZb':_0x11e096(0x1fb,'&s[F')+_0x11e096(0x605,'rSuA'),'XOYZd':function(_0x187bcd,_0x3ae98b){return _0x187bcd*_0x3ae98b;},'jOoXE':_0x11e096(0x187,'N[ww')+_0x11e096(0x828,'vhM0'),'IIFAU':'Self-Gra'+_0x11e096(0x7bf,'vhM0')+_0x11e096(0x1f5,'21nv'),'ZCqhC':'Correct','juGbp':_0x11e096(0x4fa,'pODZ'),'BZHyF':_0x11e096(0x849,'5jp8')+_0x11e096(0x149,'&IUg')+_0x11e096(0x513,'&aKg')+_0x11e096(0x57c,'C6GW')+_0x11e096(0x3a6,'&aKg')+_0x11e096(0x68e,']0A5')+_0x11e096(0x17e,'m%f&')+_0x11e096(0x26b,'K)t$')+_0x11e096(0x7c2,'m%f&')+_0x11e096(0x473,'&IUg')+_0x11e096(0x7db,'T7N6')+'00','Nsyfs':_0x11e096(0x5f8,'oQ6j')+_0x11e096(0x3be,'m%f&')+_0x11e096(0x867,'][YR')+_0x11e096(0x560,'rLGt')+_0x11e096(0x1af,'K)t$')+_0x11e096(0x108,'&IUg'),'rlEDu':function(_0x40c818,_0x421207){return _0x40c818===_0x421207;},'wdfoA':_0x11e096(0x70a,'fgHr')+_0x11e096(0x30b,'8sJn')+_0x11e096(0x3f7,'U8a4')+_0x11e096(0x665,'q]&!')+_0x11e096(0x484,'VTMS')+'t-emeral'+_0x11e096(0x74e,'0&x[')+_0x11e096(0x78f,'iqmV')+_0x11e096(0x1aa,'rLGt')+_0x11e096(0x542,'pODZ')+_0x11e096(0x741,'**1C')+_0x11e096(0x565,'R0]m')+'0','BLVeM':_0x11e096(0x6f1,'m^]$')+_0x11e096(0x1f4,'RBUk')+_0x11e096(0x566,'0&x[')+_0x11e096(0x877,'uiBq')+_0x11e096(0x722,'m%f&')+_0x11e096(0x6b5,'N[ww'),'JvbiH':function(_0xe61c3b,_0x26c284){return _0xe61c3b!==_0x26c284;},'zcmnb':_0x11e096(0x196,'4]xv'),'isrEq':_0x11e096(0x2e0,'q]&!'),'euuJV':'bg-slate'+_0x11e096(0x451,'&IUg')+_0x11e096(0x352,'8^SX')+_0x11e096(0x1cf,'21nv')+_0x11e096(0x23f,'rSuA')+_0x11e096(0x63d,'pODZ'),'sLKbV':_0x11e096(0x1cd,'s59!')+_0x11e096(0xad,'BLiw')+_0x11e096(0x2f5,'rLGt')+_0x11e096(0x28a,'q]&!')+'er-slate'+_0x11e096(0x683,'VTMS'),'NKUfe':_0x11e096(0x219,'&aKg')+_0x11e096(0x6e3,'iqmV')+'d','aPjbc':function(_0xb63961){return _0xb63961();},'lvnNi':_0x11e096(0x7de,'U8a4')+_0x11e096(0x193,'R0]m'),'NkoIW':function(_0x4f917c,_0x5702a9){return _0x4f917c!==_0x5702a9;},'PTvHy':_0x11e096(0x5c2,'HGE)'),'anxsQ':function(_0x32e34e,_0x20e22d){return _0x32e34e===_0x20e22d;},'gbEDe':_0x11e096(0x6a8,'04Bs')+'ed\x20this\x20'+_0x11e096(0x29b,'T7N6')+_0x11e096(0x8b,'04Bs')+_0x11e096(0x87,'vhM0')+'paper.','ysbGa':_0x11e096(0x221,'][YR'),'LdouT':'bg-slate'+_0x11e096(0x186,'ry(^')+_0x11e096(0x46d,'HGE)')+_0x11e096(0x3d3,'BU&6')+_0x11e096(0x1d2,'VTMS')+_0x11e096(0x655,'m%f&')+_0x11e096(0x39a,'w%VX')+_0x11e096(0x1fd,'RBUk')+_0x11e096(0x72e,'**1C'),'bOyrc':_0x11e096(0x224,'q]&!')+_0x11e096(0x1ac,'8^SX')+_0x11e096(0x16c,'HGE)')+'400\x20text'+_0x11e096(0xd1,'(7kx')+_0x11e096(0xaa,'m%f&')+_0x11e096(0x4bc,'U8a4')+'r','GySTJ':_0x11e096(0x69e,'5mW]')+_0x11e096(0x336,'w%VX')+_0x11e096(0x88e,'RBUk')+_0x11e096(0x2e4,'8^SX')+_0x11e096(0x635,'q]&!')+_0x11e096(0x3f6,'w%VX')+'00','QoGPr':'bg-slate'+_0x11e096(0x735,'N[ww')+'er:bg-sl'+_0x11e096(0x41f,'0&x[')+_0x11e096(0x2ef,'Sq6a')+_0x11e096(0x369,'freO')+_0x11e096(0x770,'0&x[')+_0x11e096(0x69c,'&aKg'),'qCxDC':'Show\x20Ste'+_0x11e096(0x425,'Sq6a')+_0x11e096(0x833,'vhM0')+'on','QyIvF':'bg-slate'+_0x11e096(0x7fa,'&s[F')+_0x11e096(0x48f,'s59!')+'erald-95'+_0x11e096(0x447,'m^]$')+_0x11e096(0x822,'5jp8')+_0x11e096(0x179,'**1C')+_0x11e096(0x62e,'freO')+_0x11e096(0x16d,'m^]$'),'kYfYL':_0x11e096(0x427,'E7eE')+_0x11e096(0x859,'pODZ')+_0x11e096(0x5ba,'oQ6j')+_0x11e096(0x1c3,'K)t$')+'se-400\x20s'+_0x11e096(0x4c5,'oQ6j'),'TjqRw':_0x11e096(0x2e8,'QHXz')+_0x11e096(0x47c,'BU&6')+'er:bg-ro'+_0x11e096(0x28c,'&s[F')+_0x11e096(0x302,'**1C')+_0x11e096(0x465,'rLGt')+_0x11e096(0x28b,'rLGt')+_0x11e096(0x408,'BLiw'),'csHqo':_0x11e096(0x390,']0A5'),'kPWZL':_0x11e096(0x5c7,'8sJn'),'DGijM':function(_0xefa8f9,_0x25780b){return _0xefa8f9(_0x25780b);},'FzvhB':'rotate(0'+'deg)','gJJbL':_0x11e096(0x615,'**1C')+'90deg)','zwMMA':_0x11e096(0x87c,'&aKg')+'3','cyzuL':_0x11e096(0x7a0,'fgHr')+'or','hjZcQ':function(_0x3e3131,_0x3cbae5){return _0x3e3131(_0x3cbae5);},'caiaY':function(_0x36500d){return _0x36500d();},'aHiAr':function(_0x5599ec,_0x58c6ea,_0x10d872){return _0x5599ec(_0x58c6ea,_0x10d872);},'lFhIz':_0x11e096(0x3f2,'BU&6'),'xSUob':function(_0x100ca0,_0x41e1a0){return _0x100ca0===_0x41e1a0;},'VqnFn':function(_0x521dfb,_0x4f5bd8){return _0x521dfb!==_0x4f5bd8;},'BcDMB':_0x11e096(0x58c,'5jp8'),'FEKWP':function(_0x1d5d5e,_0x5183b8){return _0x1d5d5e(_0x5183b8);},'rWJmm':'toggle-s'+_0x11e096(0x812,'q]&!'),'xpnGq':_0x11e096(0x6e7,'4]xv')+'de','kUpkN':function(_0x7a6951,_0x2d292f){return _0x7a6951===_0x2d292f;},'eUNfE':_0x11e096(0x2d2,'LNHM'),'lPTFZ':function(_0x4c57ec){return _0x4c57ec();},'hfFyJ':function(_0x439a32){return _0x439a32();},'TfkFN':function(_0x4e4147,_0x1e05c0){return _0x4e4147(_0x1e05c0);},'HwIPL':_0x11e096(0x34b,'&IUg'),'xHrZX':function(_0x3c21cf,_0x265284){return _0x3c21cf|_0x265284;},'tdjIT':_0x11e096(0x6e1,'HGE)'),'MhyVx':function(_0x4a8f40,_0x1b114d){return _0x4a8f40!==_0x1b114d;},'stuhV':'hYiPa','WQGzE':_0x11e096(0x5df,'T7N6'),'KAuXG':_0x11e096(0x218,'oQ6j')+'toggle','BAsmz':_0x11e096(0x50f,'21nv')+_0x11e096(0xc5,'QHXz'),'tGFCL':'formula-'+_0x11e096(0x602,'BLiw'),'mABhe':_0x11e096(0x7c1,'rLGt'),'dpTRD':_0x11e096(0x3fa,'QHXz')+'apse-sol'+_0x11e096(0x1f6,'(7kx'),'twPdE':_0x11e096(0x517,'RBUk')+_0x11e096(0x47b,'E7eE'),'pMSwi':_0x11e096(0x1e5,'&IUg')+_0x11e096(0x6da,'8sJn'),'DZPQn':'btn-logo'+'ut','oLUoy':function(_0xfee99c){return _0xfee99c();},'bmtcm':_0x11e096(0x404,'(7kx'),'lEgnv':function(_0xaae590){return _0xaae590();},'hmUxu':_0x11e096(0x409,'Sq6a'),'CaopX':_0x11e096(0x824,'K)t$'),'LNNvV':function(_0x3eeb88,_0xb53cbb,_0x2c80aa){return _0x3eeb88(_0xb53cbb,_0x2c80aa);},'SaveB':_0x11e096(0xdd,'bb@#')+'m','CkeLw':'auth-use'+'r','KSHdj':_0x11e096(0x893,'&IUg')+'s','VbPzo':_0x11e096(0x505,'0&x[')+_0x11e096(0x140,'iqmV'),'izLVu':_0x11e096(0x180,'N[ww'),'JeoDb':function(_0x51a792){return _0x51a792();},'XyEeC':function(_0x5f0db3){return _0x5f0db3();},'YdlWf':_0x11e096(0x67b,'8^SX'),'jcGLt':_0x11e096(0x673,'C6GW')+_0x11e096(0x47f,'vhM0')+_0x11e096(0x87e,'rSuA'),'CDXEH':_0x11e096(0x3a8,'5mW]')+_0x11e096(0x45c,'8^SX')+_0x11e096(0x23a,'QHXz'),'AyKiH':_0x11e096(0x32f,'bb@#')+_0x11e096(0x6f0,'VTMS')+'000cfeba'+_0x11e096(0x4db,'K)t$')+_0x11e096(0x31b,'m%f&')+_0x11e096(0xf2,'m%f&')+_0x11e096(0x862,'5mW]')+_0x11e096(0x6fa,'R0]m'),'cWqKN':_0x11e096(0x77c,'freO'),'yCYXI':_0x11e096(0x851,'bb@#')+_0x11e096(0x54a,'B&6q')+_0x11e096(0x548,'fgHr')+_0x11e096(0x7d3,'LNHM'),'AMlqD':_0x11e096(0x3c9,'N[ww')+_0x11e096(0x65f,'rSuA')+_0x11e096(0x13a,'BLiw'),'KmgpP':_0x11e096(0x1c0,'04Bs')+_0x11e096(0x75f,'8sJn')+_0x11e096(0x73b,'HGE)'),'BeKIJ':_0x11e096(0x664,'B&6q')+_0x11e096(0x320,']0A5')+_0x11e096(0x7a1,'21nv'),'rNfOz':_0x11e096(0x7bb,'BLiw')+_0x11e096(0x3ac,'5jp8')+_0x11e096(0x43d,'BLiw')+_0x11e096(0x469,'N[ww'),'wmwlB':_0x11e096(0x71b,'w%VX')+_0x11e096(0x1bc,'bb@#')+_0x11e096(0x56f,'rLGt'),'oWFcT':_0x11e096(0x1e8,'21nv')+_0x11e096(0x6ec,'C6GW')+'Lines','ctuMQ':_0x11e096(0x1ff,'5mW]')+_0x11e096(0xe6,'BDRN')+_0x11e096(0x1b4,'E7eE')+_0x11e096(0x4c6,'8^SX')+'artes)','EMPRA':_0x11e096(0x2b7,'fgHr'),'ZbsvE':_0x11e096(0x63b,'LNHM')+_0x11e096(0x453,'&aKg')+_0x11e096(0x3e9,'&aKg')+_0x11e096(0x378,'&s[F')+'rs','gOUbo':'part3','lOaSW':_0x11e096(0x2b1,'s59!')+_0x11e096(0x3e3,'VTMS')+_0x11e096(0x874,'BU&6')+'nts','SbRMS':_0x11e096(0x50b,'**1C')+_0x11e096(0x368,'04Bs')+_0x11e096(0x346,'U8a4')+_0x11e096(0x195,']0A5'),'UqIfU':_0x11e096(0x789,'rLGt')+_0x11e096(0x847,'C6GW')+_0x11e096(0xd2,'4]xv')+_0x11e096(0x88a,'5mW]')+'s)','FMxeM':_0x11e096(0x695,'&IUg')+'us\x20Solut'+'ion\x20Trap'+_0x11e096(0x598,'04Bs')+'ntal\x20Tan'+'gent\x20Che'+_0x11e096(0x6db,'N[ww'),'QcErh':_0x11e096(0x25a,'][YR'),'PqKpB':_0x11e096(0x174,'&aKg')+_0x11e096(0x325,'4]xv')+_0x11e096(0x45d,'E7eE')+_0x11e096(0x806,'5mW]')+_0x11e096(0x20e,'VTMS'),'dXzVX':_0x11e096(0x686,'C6GW')+_0x11e096(0xfd,'U8a4')+_0x11e096(0x79c,'fgHr'),'dGNXo':_0x11e096(0x659,'s59!')+_0x11e096(0x380,'BU&6')+_0x11e096(0x442,'BLiw')+_0x11e096(0x7c9,'5jp8')+'duct\x20Rul'+_0x11e096(0x155,'04Bs')+_0x11e096(0x4ab,'q]&!'),'ZMrFb':'Second\x20D'+_0x11e096(0x398,'fgHr')+_0x11e096(0xe1,'HGE)')+_0x11e096(0x2fa,'E7eE')+_0x11e096(0x258,'T7N6'),'ohSzO':_0x11e096(0x1ef,'uiBq')+_0x11e096(0x85d,'HGE)')},_0x485530=_0x11e096(0x3c5,'fgHr')+_0x11e096(0x242,'B&6q')+_0x11e096(0x727,'rSuA')+'v1',_0x6976d=_0x2dba2c[_0x11e096(0x2a1,'Sq6a')],_0x34bc84=_0x2dba2c[_0x11e096(0x35e,'ry(^')],_0x400384=_0x2dba2c[_0x11e096(0x6d5,'8sJn')];function _0x312fce(_0xccbd2c){const _0x3d377f=_0x11e096,_0x31a471={'KIQGI':function(_0x4b6986,_0x51dd9f){const _0x179b28=a0_0x552a;return _0x2dba2c[_0x179b28(0x22c,'m^]$')](_0x4b6986,_0x51dd9f);},'quaqg':function(_0x4d4b4a,_0xc79fc8){const _0x223ea4=a0_0x552a;return _0x2dba2c[_0x223ea4(0x745,'bb@#')](_0x4d4b4a,_0xc79fc8);},'KWClI':function(_0x31f2ac,_0x574eca){return _0x31f2ac*_0x574eca;},'gGfRb':function(_0xf56af4,_0x4378a1,_0x757ecf){const _0x248d0c=a0_0x552a;return _0x2dba2c[_0x248d0c(0xcc,'(W06')](_0xf56af4,_0x4378a1,_0x757ecf);},'pEzfb':function(_0x267196,_0x4c6006){const _0x21df19=a0_0x552a;return _0x2dba2c[_0x21df19(0x1d8,'4]xv')](_0x267196,_0x4c6006);},'hGxYd':function(_0x1c671a,_0x99b36,_0x5ec02e){const _0x258675=a0_0x552a;return _0x2dba2c[_0x258675(0x2c3,'QHXz')](_0x1c671a,_0x99b36,_0x5ec02e);},'rlldn':_0x2dba2c[_0x3d377f(0x6cb,'B&6q')],'uJmFK':function(_0x327951,_0x51f9cc){return _0x327951===_0x51f9cc;},'RvCie':_0x3d377f(0x703,'04Bs')+_0x3d377f(0x704,'Sq6a')+_0x3d377f(0x7da,'(7kx'),'wRJmy':_0x2dba2c[_0x3d377f(0xa6,'**1C')],'McSiH':_0x2dba2c[_0x3d377f(0x724,'R0]m')],'Mlzme':_0x2dba2c[_0x3d377f(0x445,'4]xv')],'pjRKv':_0x2dba2c['afwtr'],'jCNil':function(_0x4f6978){return _0x4f6978();},'HAQsp':function(_0x50806e,_0x2a5058){const _0x40d3d4=_0x3d377f;return _0x2dba2c[_0x40d3d4(0x3c7,'I0iY')](_0x50806e,_0x2a5058);}};if(_0x2dba2c[_0x3d377f(0x103,'rLGt')]!==_0x2dba2c[_0x3d377f(0x11b,'21nv')]){function _0x79651d(_0x463a9a,_0x3e425d){const _0x17e057=_0x3d377f;return _0x2dba2c[_0x17e057(0x63f,'oQ6j')](_0x463a9a,_0x3e425d)|_0x2dba2c[_0x17e057(0x56e,'Sq6a')](_0x463a9a,0x20-_0x3e425d);}const _0x95f87d=Math['pow'],_0x4e28bc=_0x95f87d(0x2,0x20),_0x502a83=_0x2dba2c[_0x3d377f(0x796,'fgHr')];let _0x312b33,_0x5a5297,_0x24ef40='';const _0x141195=[],_0x15f5fa=_0x2dba2c[_0x3d377f(0x752,'uiBq')](_0xccbd2c[_0x502a83],0x8);let _0x19157c=_0x312fce['h']=_0x312fce['h']||[];const _0x1fd719=_0x312fce['k']=_0x312fce['k']||[];let _0x158354=_0x1fd719[_0x502a83];const _0x4cf8b8={};for(let _0x382276=0x2;_0x2dba2c['lmrSc'](_0x158354,0x40);_0x382276++){if(!_0x4cf8b8[_0x382276]){for(_0x312b33=0x0;_0x2dba2c[_0x3d377f(0x7c6,'U8a4')](_0x312b33,0x139);_0x312b33+=_0x382276){_0x4cf8b8[_0x312b33]=_0x382276;}_0x19157c[_0x158354]=_0x2dba2c['EDasc'](_0x95f87d(_0x382276,0.5)*_0x4e28bc,0x0),_0x1fd719[_0x158354++]=_0x2dba2c[_0x3d377f(0x2b9,'q]&!')](_0x2dba2c[_0x3d377f(0x76d,'iqmV')](_0x95f87d,_0x382276,_0x2dba2c[_0x3d377f(0x77e,']0A5')](0x1,0x3))*_0x4e28bc,0x0);}}_0xccbd2c+='\x80';while(_0x2dba2c[_0x3d377f(0x5c0,'oQ6j')](_0x2dba2c['BJOOD'](_0xccbd2c[_0x502a83],0x40),0x38))_0xccbd2c+='\x00';for(_0x312b33=0x0;_0x2dba2c[_0x3d377f(0x839,'rSuA')](_0x312b33,_0xccbd2c[_0x502a83]);_0x312b33++){_0x5a5297=_0xccbd2c[_0x3d377f(0x5cf,'oQ6j')+'At'](_0x312b33);if(_0x5a5297>>0x8)return'';_0x141195[_0x2dba2c[_0x3d377f(0x63a,'vhM0')](_0x312b33,0x2)]|=_0x2dba2c[_0x3d377f(0x64c,'RBUk')](_0x5a5297,_0x2dba2c[_0x3d377f(0x2b0,'ry(^')](_0x2dba2c[_0x3d377f(0x389,'U8a4')](_0x2dba2c[_0x3d377f(0x86c,'ry(^')](0x3,_0x312b33),0x4),0x8));}_0x141195[_0x141195[_0x502a83]]=_0x2dba2c['HpRZo'](_0x2dba2c[_0x3d377f(0x2d7,'q]&!')](_0x15f5fa,_0x4e28bc),0x0),_0x141195[_0x141195[_0x502a83]]=_0x15f5fa;for(_0x5a5297=0x0;_0x2dba2c[_0x3d377f(0x19f,'BDRN')](_0x5a5297,_0x141195[_0x502a83]);){if(_0x2dba2c[_0x3d377f(0x6bb,'rLGt')](_0x2dba2c[_0x3d377f(0x3d5,'4]xv')],_0x2dba2c[_0x3d377f(0x60e,'VTMS')])){const _0x583485=_0x141195[_0x3d377f(0x49b,'8^SX')](_0x5a5297,_0x5a5297+=0x10),_0x125edf=_0x19157c;_0x19157c=_0x19157c[_0x3d377f(0x51f,'21nv')](0x0,0x8);for(_0x312b33=0x0;_0x2dba2c[_0x3d377f(0x661,'iqmV')](_0x312b33,0x40);_0x312b33++){if(_0x2dba2c[_0x3d377f(0x428,'4]xv')](_0x3d377f(0x43b,'8^SX'),_0x2dba2c[_0x3d377f(0x1ad,'uiBq')])){const _0x1eada3=_0x583485[_0x2dba2c[_0x3d377f(0x801,'pODZ')](_0x312b33,0xf)],_0x24adb6=_0x583485[_0x312b33-0x2],_0xd20a2a=_0x19157c[0x0],_0x18fe28=_0x19157c[0x4],_0x1b6b98=_0x2dba2c[_0x3d377f(0x29d,'ry(^')](_0x2dba2c['LzLtI'](_0x2dba2c[_0x3d377f(0x7e3,'C6GW')](_0x19157c[0x7],_0x2dba2c[_0x3d377f(0x2e1,'5jp8')](_0x2dba2c[_0x3d377f(0x130,'BDRN')](_0x2dba2c[_0x3d377f(0xc7,'m^]$')](_0x79651d,_0x18fe28,0x6),_0x2dba2c[_0x3d377f(0x78c,']0A5')](_0x79651d,_0x18fe28,0xb)),_0x2dba2c[_0x3d377f(0x22f,'rLGt')](_0x79651d,_0x18fe28,0x19))),_0x2dba2c[_0x3d377f(0x65d,'HGE)')](_0x18fe28,_0x19157c[0x5])^~_0x18fe28&_0x19157c[0x6])+_0x1fd719[_0x312b33],_0x583485[_0x312b33]=_0x2dba2c[_0x3d377f(0x410,'5mW]')](_0x312b33,0x10)?_0x583485[_0x312b33]:_0x2dba2c[_0x3d377f(0x3ef,'w%VX')](_0x2dba2c[_0x3d377f(0x274,'BLiw')](_0x2dba2c[_0x3d377f(0x236,'BLiw')](_0x2dba2c[_0x3d377f(0x7b6,'uiBq')](_0x583485[_0x2dba2c[_0x3d377f(0x42d,'w%VX')](_0x312b33,0x10)],_0x2dba2c[_0x3d377f(0x386,'I0iY')](_0x2dba2c[_0x3d377f(0x18b,'ry(^')](_0x79651d(_0x1eada3,0x7),_0x2dba2c[_0x3d377f(0x7c4,'8sJn')](_0x79651d,_0x1eada3,0x12)),_0x2dba2c[_0x3d377f(0x2fe,'w%VX')](_0x1eada3,0x3))),_0x583485[_0x2dba2c[_0x3d377f(0x298,'(7kx')](_0x312b33,0x7)]),_0x2dba2c[_0x3d377f(0x474,'BDRN')](_0x2dba2c[_0x3d377f(0x6cc,'&aKg')](_0x79651d,_0x24adb6,0x11)^_0x2dba2c[_0x3d377f(0xb9,'**1C')](_0x79651d,_0x24adb6,0x13),_0x24adb6>>>0xa)),0x0)),_0x323d0b=_0x2dba2c[_0x3d377f(0x4d6,'iqmV')](_0x2dba2c['GjtvT'](_0x2dba2c[_0x3d377f(0x3c6,'T7N6')](_0x2dba2c['TiAop'](_0x79651d,_0xd20a2a,0x2),_0x2dba2c['ShQNi'](_0x79651d,_0xd20a2a,0xd)),_0x2dba2c['TiAop'](_0x79651d,_0xd20a2a,0x16)),_0x2dba2c[_0x3d377f(0x4df,'VTMS')](_0x2dba2c[_0x3d377f(0x439,'N[ww')](_0xd20a2a,_0x19157c[0x1]),_0x2dba2c[_0x3d377f(0x23b,'BU&6')](_0xd20a2a,_0x19157c[0x2]))^_0x19157c[0x1]&_0x19157c[0x2]);_0x19157c=[_0x2dba2c[_0x3d377f(0x3ef,'w%VX')](_0x2dba2c[_0x3d377f(0x435,'uiBq')](_0x1b6b98,_0x323d0b),0x0)][_0x3d377f(0x350,'m%f&')](_0x19157c),_0x19157c[0x4]=_0x2dba2c[_0x3d377f(0x567,'8sJn')](_0x2dba2c[_0x3d377f(0x492,'N[ww')](_0x19157c[0x4],_0x1b6b98),0x0);}else{const _0x118b35=_0x2dba2c[_0x3d377f(0x6ae,'&s[F')][_0x3d377f(0x77b,'5mW]')]('|');let _0x3807ae=0x0;while(!![]){switch(_0x118b35[_0x3807ae++]){case'0':!_0x330a7&&(_0x1b9941=!![],_0x2dba2c[_0x3d377f(0x267,'(W06')](_0x4ee4da),_0x2dba2c[_0x3d377f(0x7e1,']0A5')](_0x11c906));continue;case'1':_0x163305();continue;case'2':_0x4d55a9();continue;case'3':_0x4dd9d3[_0x3d377f(0x443,']0A5')+_0x3d377f(0x763,'bb@#')]('app-shel'+'l')[_0x3d377f(0x637,'(W06')+'t'][_0x3d377f(0xa1,'freO')](_0x3d377f(0x1be,'B&6q'));continue;case'4':_0x1307be[_0x3d377f(0x312,'m%f&')+_0x3d377f(0xd6,'5jp8')]();continue;case'5':_0x24f28d[_0x3d377f(0x757,'R0]m')+_0x3d377f(0x55c,'R0]m')](_0x2dba2c[_0x3d377f(0x537,'ry(^')])[_0x3d377f(0x3bd,'B&6q')+'t'][_0x3d377f(0x2dc,'][YR')](_0x2dba2c[_0x3d377f(0x4c0,'I0iY')]);continue;}break;}}}for(_0x312b33=0x0;_0x2dba2c[_0x3d377f(0x561,'Sq6a')](_0x312b33,0x8);_0x312b33++){_0x19157c[_0x312b33]=_0x19157c[_0x312b33]+_0x125edf[_0x312b33]|0x0;}}else _0x2dba2c[_0x3d377f(0xde,'4]xv')](_0x3f9166)&&_0x4f7e49[_0x3d377f(0x37c,'T7N6')+_0x3d377f(0x2c4,'5mW]')]();}for(_0x312b33=0x0;_0x2dba2c[_0x3d377f(0x17b,'VTMS')](_0x312b33,0x8);_0x312b33++){if(_0x2dba2c[_0x3d377f(0xfe,'ry(^')](_0x2dba2c[_0x3d377f(0x821,'BDRN')],_0x3d377f(0x7e4,'**1C')))for(_0x5a5297=0x3;_0x5a5297+0x1;_0x5a5297--){if(_0x2dba2c['mcapE'](_0x2dba2c[_0x3d377f(0x2b8,'s59!')],_0x2dba2c['dTAEa'])){const _0x28cf09=_0x2dba2c[_0x3d377f(0xe8,'R0]m')](_0x19157c[_0x312b33],_0x5a5297*0x8)&0xff;_0x24ef40+=_0x2dba2c['wkBqk'](_0x2dba2c[_0x3d377f(0x2f4,'rSuA')](_0x28cf09,0x10)?0x0:'',_0x28cf09[_0x3d377f(0x533,'oQ6j')](0x10));}else{if(!_0x26a098[_0x5bd431]){for(_0x41141a=0x0;_0x31a471[_0x3d377f(0x645,'rSuA')](_0xd9b15c,0x139);_0x22fdef+=_0x50b219){_0xe0b74c[_0x32fb06]=_0x3e1510;}_0x17b7b0[_0x67d67]=_0x31a471[_0x3d377f(0x411,'freO')](_0x31a471[_0x3d377f(0x5f0,'QHXz')](_0x31a471[_0x3d377f(0x6c9,'BDRN')](_0x2e424e,_0x4e3e3f,0.5),_0x1deb4b),0x0),_0x562b2b[_0x38db09++]=_0x31a471[_0x3d377f(0x379,'&IUg')](_0x31a471[_0x3d377f(0x40c,'bb@#')](_0x31a471[_0x3d377f(0xcd,'5mW]')](_0xf4458f,_0xd90a2e,0x1/0x3),_0x434e23),0x0);}}}else{if(_0x2ad859[_0x3d377f(0x7ec,'q]&!')+'t']){_0x1010e0=_0x31a471[_0x3d377f(0x459,'&aKg')];const _0x4e76dc=_0x31a471[_0x3d377f(0x3af,'RBUk')](_0xbe0346[_0x3d377f(0x370,'s59!')],_0x3d377f(0x559,'R0]m'))?_0x31a471[_0x3d377f(0xf1,'C6GW')]:_0x3d377f(0x628,'R0]m');_0x45aaa3=(_0x3d377f(0x416,'N[ww')+_0x3d377f(0x514,'B&6q')+_0x3d377f(0x36e,'LNHM')+_0x3d377f(0x879,'LNHM')+_0x3d377f(0x5b4,'RBUk')+_0x3d377f(0x816,'04Bs')+_0x3d377f(0x10a,'&aKg')+_0x3d377f(0x154,'pODZ')+_0x3d377f(0x1d7,'w%VX')+_0x3d377f(0x2e7,'LNHM')+_0x3d377f(0x618,'0&x[')+_0x3d377f(0x6f9,'&s[F')+_0x3d377f(0x3b9,'pODZ')+_0x3d377f(0x1a4,'(7kx')+_0x3d377f(0x667,'N[ww')+_0x3d377f(0x112,']0A5')+_0x3d377f(0x452,'&IUg')+_0x3d377f(0x294,'(W06')+_0x3d377f(0x813,'T7N6')+_0x3d377f(0x4ac,'4]xv'))['concat'](_0x4e76dc,_0x3d377f(0x202,'bb@#'));}else{_0x2d3b5c=_0x31a471[_0x3d377f(0x422,'iqmV')];const _0x4183c5=_0x31a471[_0x3d377f(0x63e,'uiBq')](_0x2f3c6b['mode'],_0x31a471[_0x3d377f(0x506,'R0]m')])?_0x31a471[_0x3d377f(0x5d3,'B&6q')]:_0x31a471[_0x3d377f(0x1d9,'fgHr')];_0x4a11f4=(_0x3d377f(0x583,'K)t$')+_0x3d377f(0x545,'0&x[')+_0x3d377f(0x5b2,'freO')+'\x20items-c'+'enter\x20ga'+_0x3d377f(0x420,'BU&6')+_0x3d377f(0x5e4,'21nv')+_0x3d377f(0x693,'bb@#')+'d-full\x20t'+_0x3d377f(0x300,'QHXz')+_0x3d377f(0x618,'0&x[')+_0x3d377f(0x676,'vhM0')+_0x3d377f(0x6ad,'&IUg')+_0x3d377f(0x46e,'QHXz')+_0x3d377f(0x206,'B&6q')+_0x3d377f(0x1df,'R0]m')+_0x3d377f(0x21b,'Sq6a')+_0x3d377f(0x5bf,'&aKg')+_0x3d377f(0x501,'BLiw'))['concat'](_0x4183c5,_0x3d377f(0x437,'ry(^'));}}}return _0x24ef40;}else _0x8da256[_0x3d377f(0x105,'N[ww')+_0x3d377f(0x716,'BU&6')]=!_0x47d427[_0x3d377f(0x3bb,'BU&6')+_0x3d377f(0x2bf,'m%f&')],_0x31a471['jCNil'](_0x2bcd1b),_0x31a471[_0x3d377f(0x8f,'iqmV')](_0x4329e4,_0x58e1ff);}function _0x4ff0f1(_0x4715f2,_0x4bbcaf){const _0x3b150c=_0x11e096,_0x55ad29=_0x2dba2c[_0x3b150c(0x2b4,'&s[F')](_0x2dba2c[_0x3b150c(0x33a,'ry(^')](String,_0x2dba2c[_0x3b150c(0x414,'21nv')](_0x4715f2,''))[_0x3b150c(0x5bb,'QHXz')]()['toLowerC'+_0x3b150c(0x7ac,'4]xv')](),':')+String(_0x2dba2c[_0x3b150c(0xe4,'rSuA')](_0x4bbcaf,''))['trim']();return _0x2dba2c[_0x3b150c(0x87b,'Sq6a')](_0x312fce,_0x2dba2c[_0x3b150c(0xbe,'21nv')](_0x34bc84,_0x55ad29))===_0x400384;}function _0x913955(){const _0x46da59=_0x11e096;if(_0x2dba2c[_0x46da59(0x2c6,'RBUk')](_0x2dba2c[_0x46da59(0x388,'LNHM')],_0x2dba2c[_0x46da59(0x54f,'**1C')]))try{if(_0x2dba2c[_0x46da59(0x310,'iqmV')](_0x46da59(0x6b3,'**1C'),_0x2dba2c[_0x46da59(0x191,'s59!')]))return _0x2dba2c[_0x46da59(0x7d8,'&s[F')](sessionStorage[_0x46da59(0x7dd,'04Bs')](_0x6976d),_0x400384);else _0x1a84e9=_0x46da59(0x107,'RBUk')+_0x46da59(0x5d4,'LNHM')+_0x46da59(0x810,'RBUk')+_0x46da59(0x85f,'(W06')+_0x46da59(0x2cc,'s59!')+'-sky-400'+_0x46da59(0x864,'s59!')+_0x46da59(0x165,'iqmV'),_0x345bcd=_0x2dba2c[_0x46da59(0x395,'8sJn')];}catch(_0x1113b7){return![];}else{const _0x35ef1c=_0xc78bce['getAttri'+_0x46da59(0x70e,'rLGt')](_0x2dba2c[_0x46da59(0x740,'VTMS')]);_0x2dba2c[_0x46da59(0x1b5,'m^]$')](_0x35ef1c,_0xd0a09a[_0x46da59(0xeb,'LNHM')+_0x46da59(0x3dd,'ry(^')])?_0x5f28c1['classNam'+'e']=_0x2dba2c[_0x46da59(0x4e0,'BDRN')]:_0x3a0a16[_0x46da59(0x12f,'BU&6')+'e']=_0x2dba2c[_0x46da59(0x857,'fgHr')];}}function _0x30b257(_0x4d9e10){const _0x490ae7=_0x11e096;if(_0x2dba2c[_0x490ae7(0x4b4,'8sJn')]===_0x490ae7(0x710,'&IUg'))_0x26f7a3[_0x490ae7(0x32e,']0A5')](_0x51c04e,_0x140f20);else try{_0x4d9e10?sessionStorage[_0x490ae7(0x509,'s59!')](_0x6976d,_0x400384):sessionStorage[_0x490ae7(0x1ca,'U8a4')+'em'](_0x6976d);}catch(_0x4877a7){}}const _0x1f068c=[{'id':0x1,'category':_0x2dba2c[_0x11e096(0x133,'freO')],'partLabel':_0x2dba2c[_0x11e096(0x21d,'m%f&')],'title':_0x11e096(0xc8,'(W06')+_0x11e096(0x2fd,'vhM0')+_0x11e096(0x99,'4]xv'),'prompt':String[_0x11e096(0x6e8,'m^]$')]`Find $\dfrac{dy}{dx}$ for the curve defined implicitly by $x^3 + 3x^2y - 2y^3 = 5$.`,'options':[String[_0x11e096(0x74a,'rLGt')]`$\dfrac{dy}{dx} = \dfrac{-x^2 - 2xy}{x^2 - 2y^2}$`,String[_0x11e096(0x12e,'(W06')]`$\dfrac{dy}{dx} = \dfrac{-x^2}{x^2 - 2y^2}$`,String[_0x11e096(0x671,'Sq6a')]`$\dfrac{dy}{dx} = \dfrac{-x^2 - 2xy}{x^2 - 2y^3}$`,String[_0x11e096(0x31d,'**1C')]`$\dfrac{dy}{dx} = \dfrac{x^2 - 2xy}{x^2 + 2y^2}$`],'correctIndex':0x0,'steps':String[_0x11e096(0x9e,'iqmV')]`
           <p class="mb-2"><strong class="text-sky-300">Step 1: Differentiate both sides with respect to $x$.</strong> Apply the Product Rule to $3x^2y$ and the Chain Rule to $-2y^3$:</p>
           $$\frac{d}{dx}[x^3] + \frac{d}{dx}[3x^2y] - \frac{d}{dx}[2y^3] = \frac{d}{dx}[5]$$
           $$3x^2 + \left(6xy + 3x^2\frac{dy}{dx}\right) - 6y^2\frac{dy}{dx} = 0$$
@@ -369,22 +434,7 @@
           $$3x^2\frac{dy}{dx} - 6y^2\frac{dy}{dx} = -3x^2 - 6xy$$
           <p class="mb-2"><strong class="text-sky-300">Step 3: Factor out $\dfrac{dy}{dx}$ and divide (then divide numerator and denominator by $3$):</strong></p>
           $$\frac{dy}{dx}(3x^2 - 6y^2) = -3x^2 - 6xy \implies \frac{dy}{dx} = \frac{-3x^2 - 6xy}{3x^2 - 6y^2} = \frac{-x^2 - 2xy}{x^2 - 2y^2} \quad \left(\text{or } \frac{x^2 + 2xy}{2y^2 - x^2}\right)$$
-        `
-      },
-      {
-        id: 2,
-        category: 'part1',
-        partLabel: 'Part 1: Product & Chain Rule',
-        title: 'Double Product Rule',
-        prompt: String.raw`Find $\dfrac{dy}{dx}$ for $x^2y^3 - 4xy = 10$.`,
-        options: [
-          String.raw`$\dfrac{dy}{dx} = \dfrac{-4y - 2xy^3}{3x^2y^2 + 4x}$`,
-          String.raw`$\dfrac{dy}{dx} = \dfrac{4y - 2xy^3}{3x^2y^2 - 4x}$`,
-          String.raw`$\dfrac{dy}{dx} = \dfrac{4 - 2xy^3}{3x^2y^2 - 4}$`,
-          String.raw`$\dfrac{dy}{dx} = \dfrac{4y + 2xy^3}{3x^2y^2 - 4x}$`
-        ],
-        correctIndex: 1,
-        steps: String.raw`
+        `},{'id':0x2,'category':_0x2dba2c[_0x11e096(0x764,'4]xv')],'partLabel':_0x2dba2c[_0x11e096(0x61f,'**1C')],'title':_0x2dba2c['AMlqD'],'prompt':String[_0x11e096(0x68a,']0A5')]`Find $\dfrac{dy}{dx}$ for $x^2y^3 - 4xy = 10$.`,'options':[String[_0x11e096(0x84b,'8^SX')]`$\dfrac{dy}{dx} = \dfrac{-4y - 2xy^3}{3x^2y^2 + 4x}$`,String['raw']`$\dfrac{dy}{dx} = \dfrac{4y - 2xy^3}{3x^2y^2 - 4x}$`,String['raw']`$\dfrac{dy}{dx} = \dfrac{4 - 2xy^3}{3x^2y^2 - 4}$`,String[_0x11e096(0x2b3,'RBUk')]`$\dfrac{dy}{dx} = \dfrac{4y + 2xy^3}{3x^2y^2 - 4x}$`],'correctIndex':0x1,'steps':String[_0x11e096(0x95,'B&6q')]`
           <p class="mb-2"><strong class="text-sky-300">Step 1: Apply the Product Rule to both $x^2y^3$ and $4xy$.</strong> Be careful to distribute the negative sign across the second product:</p>
           $$\left(2xy^3 + x^2\cdot 3y^2\frac{dy}{dx}\right) - \left(4y + 4x\frac{dy}{dx}\right) = 0$$
           $$2xy^3 + 3x^2y^2\frac{dy}{dx} - 4y - 4x\frac{dy}{dx} = 0$$
@@ -392,22 +442,7 @@
           $$\left(3x^2y^2 - 4x\right)\frac{dy}{dx} = 4y - 2xy^3$$
           <p class="mb-2"><strong class="text-sky-300">Step 3: Solve for $\dfrac{dy}{dx}$:</strong></p>
           $$\frac{dy}{dx} = \frac{4y - 2xy^3}{3x^2y^2 - 4x}$$
-        `
-      },
-      {
-        id: 3,
-        category: 'part1',
-        partLabel: 'Part 1: Product & Chain Rule',
-        title: 'Chain Rule with Trig',
-        prompt: String.raw`Find $\dfrac{dy}{dx}$ for $\sin(xy) = x^2 - y$.`,
-        options: [
-          String.raw`$\dfrac{dy}{dx} = \dfrac{2x - y\cos(xy)}{x\cos(xy) + 1}$`,
-          String.raw`$\dfrac{dy}{dx} = \dfrac{2x - \cos(xy)}{1 + \cos(xy)}$`,
-          String.raw`$\dfrac{dy}{dx} = \dfrac{2x - y\cos(xy)}{x\cos(xy) - 1}$`,
-          String.raw`$\dfrac{dy}{dx} = \dfrac{2x + y\cos(xy)}{x\cos(xy) + 1}$`
-        ],
-        correctIndex: 0,
-        steps: String.raw`
+        `},{'id':0x3,'category':_0x2dba2c[_0x11e096(0x1bb,'5jp8')],'partLabel':_0x2dba2c[_0x11e096(0x6e9,'N[ww')],'title':_0x2dba2c[_0x11e096(0x153,'5mW]')],'prompt':String[_0x11e096(0x363,'BDRN')]`Find $\dfrac{dy}{dx}$ for $\sin(xy) = x^2 - y$.`,'options':[String[_0x11e096(0x6ef,'uiBq')]`$\dfrac{dy}{dx} = \dfrac{2x - y\cos(xy)}{x\cos(xy) + 1}$`,String['raw']`$\dfrac{dy}{dx} = \dfrac{2x - \cos(xy)}{1 + \cos(xy)}$`,String[_0x11e096(0x74a,'rLGt')]`$\dfrac{dy}{dx} = \dfrac{2x - y\cos(xy)}{x\cos(xy) - 1}$`,String[_0x11e096(0x68a,']0A5')]`$\dfrac{dy}{dx} = \dfrac{2x + y\cos(xy)}{x\cos(xy) + 1}$`],'correctIndex':0x0,'steps':String[_0x11e096(0x6e8,'m^]$')]`
           <p class="mb-2"><strong class="text-sky-300">Step 1: Differentiate both sides with respect to $x$.</strong> On the left, apply the Chain Rule to $\sin(xy)$ multiplied by the Product Rule derivative of $(xy)$:</p>
           $$\cos(xy)\cdot \frac{d}{dx}[xy] = 2x - \frac{dy}{dx}$$
           $$\cos(xy)\cdot\left(y + x\frac{dy}{dx}\right) = 2x - \frac{dy}{dx}$$
@@ -416,22 +451,7 @@
           $$x\cos(xy)\frac{dy}{dx} + \frac{dy}{dx} = 2x - y\cos(xy)$$
           <p class="mb-2"><strong class="text-sky-300">Step 3: Factor out $\dfrac{dy}{dx}$ and divide:</strong></p>
           $$\frac{dy}{dx}\left(x\cos(xy) + 1\right) = 2x - y\cos(xy) \implies \frac{dy}{dx} = \frac{2x - y\cos(xy)}{x\cos(xy) + 1}$$
-        `
-      },
-      {
-        id: 4,
-        category: 'part1',
-        partLabel: 'Part 1: Product & Chain Rule',
-        title: 'Trig & Powers Chain Rule',
-        prompt: String.raw`Find $\dfrac{dy}{dx}$ for $x + \tan(xy) = 0$.`,
-        options: [
-          String.raw`$\dfrac{dy}{dx} = \dfrac{-1}{\sec^2(xy)}$`,
-          String.raw`$\dfrac{dy}{dx} = \dfrac{1 - y\sec^2(xy)}{x\sec^2(xy)}$`,
-          String.raw`$\dfrac{dy}{dx} = \dfrac{-1 - y\sec^2(xy)}{x\sec^2(xy)}$`,
-          String.raw`$\dfrac{dy}{dx} = \dfrac{-1 - x\sec^2(xy)}{y\sec^2(xy)}$`
-        ],
-        correctIndex: 2,
-        steps: String.raw`
+        `},{'id':0x4,'category':_0x2dba2c[_0x11e096(0x171,'8sJn')],'partLabel':'Part\x201:\x20'+_0x11e096(0x214,'vhM0')+_0x11e096(0x290,'0&x[')+_0x11e096(0x33c,'BLiw'),'title':_0x2dba2c[_0x11e096(0x651,'s59!')],'prompt':String[_0x11e096(0x6ef,'uiBq')]`Find $\dfrac{dy}{dx}$ for $x + \tan(xy) = 0$.`,'options':[String[_0x11e096(0x6ef,'uiBq')]`$\dfrac{dy}{dx} = \dfrac{-1}{\sec^2(xy)}$`,String[_0x11e096(0x9e,'iqmV')]`$\dfrac{dy}{dx} = \dfrac{1 - y\sec^2(xy)}{x\sec^2(xy)}$`,String[_0x11e096(0x6f7,'freO')]`$\dfrac{dy}{dx} = \dfrac{-1 - y\sec^2(xy)}{x\sec^2(xy)}$`,String[_0x11e096(0x363,'BDRN')]`$\dfrac{dy}{dx} = \dfrac{-1 - x\sec^2(xy)}{y\sec^2(xy)}$`],'correctIndex':0x2,'steps':String[_0x11e096(0x865,'5mW]')]`
           <p class="mb-2"><strong class="text-sky-300">Step 1: Differentiate with respect to $x$.</strong> Recall $\dfrac{d}{du}[\tan u] = \sec^2(u)\cdot u'$:</p>
           $$1 + \sec^2(xy)\cdot\left(y + x\frac{dy}{dx}\right) = 0$$
           <p class="mb-2"><strong class="text-sky-300">Step 2: Expand and isolate the $\dfrac{dy}{dx}$ term:</strong></p>
@@ -439,22 +459,7 @@
           $$x\sec^2(xy)\frac{dy}{dx} = -1 - y\sec^2(xy)$$
           <p class="mb-2"><strong class="text-sky-300">Step 3: Divide by $x\sec^2(xy)$:</strong></p>
           $$\frac{dy}{dx} = \frac{-1 - y\sec^2(xy)}{x\sec^2(xy)} \quad \left(\text{equivalently } -\frac{\cos^2(xy) + y}{x}\right)$$
-        `
-      },
-      {
-        id: 5,
-        category: 'part1',
-        partLabel: 'Part 1: Product & Chain Rule',
-        title: 'Composite Algebraic Chain Rule',
-        prompt: String.raw`Find $\dfrac{dy}{dx}$ for $\left(x^2 + y^2\right)^3 = 8x^2y^2$.`,
-        options: [
-          String.raw`$\dfrac{dy}{dx} = \dfrac{x\left(8y^2 - 3(x^2+y^2)^2\right)}{y\left(3(x^2+y^2)^2 - 8x^2\right)}$`,
-          String.raw`$\dfrac{dy}{dx} = \dfrac{16xy^2 - 3(x^2+y^2)^2}{16x^2y}$`,
-          String.raw`$\dfrac{dy}{dx} = \dfrac{x\left(8y^2 + 3(x^2+y^2)^2\right)}{y\left(3(x^2+y^2)^2 + 8x^2\right)}$`,
-          String.raw`$\dfrac{dy}{dx} = \dfrac{8xy^2 - 6x(x^2+y^2)^2}{6y(x^2+y^2)^2 - 8x^2y}$`
-        ],
-        correctIndex: 0,
-        steps: String.raw`
+        `},{'id':0x5,'category':_0x2dba2c[_0x11e096(0x200,'bb@#')],'partLabel':_0x2dba2c['yCYXI'],'title':_0x2dba2c['rNfOz'],'prompt':String[_0x11e096(0x74a,'rLGt')]`Find $\dfrac{dy}{dx}$ for $\left(x^2 + y^2\right)^3 = 8x^2y^2$.`,'options':[String[_0x11e096(0x387,'BLiw')]`$\dfrac{dy}{dx} = \dfrac{x\left(8y^2 - 3(x^2+y^2)^2\right)}{y\left(3(x^2+y^2)^2 - 8x^2\right)}$`,String[_0x11e096(0x872,'8sJn')]`$\dfrac{dy}{dx} = \dfrac{16xy^2 - 3(x^2+y^2)^2}{16x^2y}$`,String[_0x11e096(0x72d,'C6GW')]`$\dfrac{dy}{dx} = \dfrac{x\left(8y^2 + 3(x^2+y^2)^2\right)}{y\left(3(x^2+y^2)^2 + 8x^2\right)}$`,String[_0x11e096(0xf3,'R0]m')]`$\dfrac{dy}{dx} = \dfrac{8xy^2 - 6x(x^2+y^2)^2}{6y(x^2+y^2)^2 - 8x^2y}$`],'correctIndex':0x0,'steps':String['raw']`
           <p class="mb-2"><strong class="text-sky-300">Step 1: Differentiate both sides with respect to $x$.</strong> Use the Chain Rule on the left and the Product Rule on the right:</p>
           $$3\left(x^2 + y^2\right)^2\cdot\left(2x + 2y\frac{dy}{dx}\right) = 16xy^2 + 16x^2y\frac{dy}{dx}$$
           <p class="mb-2"><strong class="text-sky-300">Step 2: Expand the left side and group all $\dfrac{dy}{dx}$ terms together:</strong></p>
@@ -462,22 +467,7 @@
           $$\left[6y\left(x^2 + y^2\right)^2 - 16x^2y\right]\frac{dy}{dx} = 16xy^2 - 6x\left(x^2 + y^2\right)^2$$
           <p class="mb-2"><strong class="text-sky-300">Step 3: Divide and factor out $2$ from numerator and denominator:</strong></p>
           $$\frac{dy}{dx} = \frac{16xy^2 - 6x(x^2+y^2)^2}{6y(x^2+y^2)^2 - 16x^2y} = \frac{x\left(8y^2 - 3(x^2+y^2)^2\right)}{y\left(3(x^2+y^2)^2 - 8x^2\right)}$$
-        `
-      },
-      {
-        id: 6,
-        category: 'part1',
-        partLabel: 'Part 1: Product & Chain Rule',
-        title: 'Trig Product & Chain Mix',
-        prompt: String.raw`Find $\dfrac{dy}{dx}$ for $y\cos(x) = x^2 + y^2$.`,
-        options: [
-          String.raw`$\dfrac{dy}{dx} = \dfrac{2x - y\sin(x)}{\cos(x) - 2y}$`,
-          String.raw`$\dfrac{dy}{dx} = \dfrac{2x + y\sin(x)}{\cos(x) - 2y}$`,
-          String.raw`$\dfrac{dy}{dx} = \dfrac{2x + y\sin(x)}{\cos(x) + 2y}$`,
-          String.raw`$\dfrac{dy}{dx} = \dfrac{2x}{-\sin(x) - 2y}$`
-        ],
-        correctIndex: 1,
-        steps: String.raw`
+        `},{'id':0x6,'category':_0x2dba2c[_0x11e096(0x82c,'VTMS')],'partLabel':_0x11e096(0x2e5,'5mW]')+_0x11e096(0x28e,'bb@#')+'&\x20Chain\x20'+_0x11e096(0x90,'E7eE'),'title':_0x2dba2c[_0x11e096(0x14a,'5jp8')],'prompt':String['raw']`Find $\dfrac{dy}{dx}$ for $y\cos(x) = x^2 + y^2$.`,'options':[String['raw']`$\dfrac{dy}{dx} = \dfrac{2x - y\sin(x)}{\cos(x) - 2y}$`,String['raw']`$\dfrac{dy}{dx} = \dfrac{2x + y\sin(x)}{\cos(x) - 2y}$`,String[_0x11e096(0x3b8,'21nv')]`$\dfrac{dy}{dx} = \dfrac{2x + y\sin(x)}{\cos(x) + 2y}$`,String[_0x11e096(0x2b3,'RBUk')]`$\dfrac{dy}{dx} = \dfrac{2x}{-\sin(x) - 2y}$`],'correctIndex':0x1,'steps':String[_0x11e096(0x24a,'04Bs')]`
           <p class="mb-2"><strong class="text-sky-300">Step 1: Apply the Product Rule to $y\cos(x)$ on the left side and the Chain Rule to $y^2$ on the right side:</strong></p>
           $$\frac{dy}{dx}\cos(x) + y\left(-\sin(x)\right) = 2x + 2y\frac{dy}{dx}$$
           $$\cos(x)\frac{dy}{dx} - y\sin(x) = 2x + 2y\frac{dy}{dx}$$
@@ -485,24 +475,7 @@
           $$\cos(x)\frac{dy}{dx} - 2y\frac{dy}{dx} = 2x + y\sin(x)$$
           <p class="mb-2"><strong class="text-sky-300">Step 3: Factor out $\dfrac{dy}{dx}$ and divide:</strong></p>
           $$\frac{dy}{dx} = \frac{2x + y\sin(x)}{\cos(x) - 2y}$$
-        `
-      },
-
-      // ==================== PART 2: Tangent Lines at a Given Point ====================
-      {
-        id: 7,
-        category: 'part2',
-        partLabel: 'Part 2: Tangent Lines',
-        title: 'Slope at a Point (Folium of Descartes)',
-        prompt: String.raw`Find the slope of the tangent line to $x^3 + y^3 - 6xy = 0$ at the point $(3, 3)$.`,
-        options: [
-          String.raw`$-1$`,
-          String.raw`$1$`,
-          String.raw`$0$`,
-          String.raw`$-\dfrac{3}{2}$`
-        ],
-        correctIndex: 0,
-        steps: String.raw`
+        `},{'id':0x7,'category':_0x11e096(0x262,'bb@#'),'partLabel':_0x2dba2c[_0x11e096(0x60b,'E7eE')],'title':_0x2dba2c[_0x11e096(0x1bf,'BDRN')],'prompt':String[_0x11e096(0x4f6,'&s[F')]`Find the slope of the tangent line to $x^3 + y^3 - 6xy = 0$ at the point $(3, 3)$.`,'options':[String[_0x11e096(0x4f5,'QHXz')]`$-1$`,String[_0x11e096(0x6ef,'uiBq')]`$1$`,String[_0x11e096(0x4ce,'N[ww')]`$0$`,String[_0x11e096(0x95,'B&6q')]`$-\dfrac{3}{2}$`],'correctIndex':0x0,'steps':String['raw']`
           <p class="mb-2"><strong class="text-sky-300">Step 1: Differentiate both sides with respect to $x$:</strong></p>
           $$3x^2 + 3y^2\frac{dy}{dx} - \left(6y + 6x\frac{dy}{dx}\right) = 0$$
           $$3x^2 + 3y^2\frac{dy}{dx} - 6y - 6x\frac{dy}{dx} = 0$$
@@ -511,22 +484,7 @@
           $$27 + 27\frac{dy}{dx} - 18 - 18\frac{dy}{dx} = 0$$
           <p class="mb-2"><strong class="text-sky-300">Step 3: Combine like terms and solve for $\dfrac{dy}{dx}$:</strong></p>
           $$9 + 9\frac{dy}{dx} = 0 \implies \frac{dy}{dx} = -1$$
-        `
-      },
-      {
-        id: 8,
-        category: 'part2',
-        partLabel: 'Part 2: Tangent Lines',
-        title: 'Tangent Line Equation (Algebraic)',
-        prompt: String.raw`Write the equation of the tangent line to $x^2 - xy + y^2 = 7$ at the point $(-1, 2)$.`,
-        options: [
-          String.raw`$y - 2 = \dfrac{4}{3}(x + 1)$`,
-          String.raw`$y - 2 = -\dfrac{4}{5}(x + 1)$`,
-          String.raw`$y - 2 = \dfrac{4}{5}(x + 1)$`,
-          String.raw`$y - 2 = 0$`
-        ],
-        correctIndex: 2,
-        steps: String.raw`
+        `},{'id':0x8,'category':_0x11e096(0x4e5,'rLGt'),'partLabel':_0x11e096(0x6b0,'8sJn')+'Tangent\x20'+_0x11e096(0x2cf,'U8a4'),'title':_0x11e096(0x3ec,'**1C')+'Line\x20Equ'+_0x11e096(0x7ba,'8sJn')+_0x11e096(0x114,'N[ww')+')','prompt':String[_0x11e096(0x245,'w%VX')]`Write the equation of the tangent line to $x^2 - xy + y^2 = 7$ at the point $(-1, 2)$.`,'options':[String[_0x11e096(0x705,'LNHM')]`$y - 2 = \dfrac{4}{3}(x + 1)$`,String[_0x11e096(0x4f5,'QHXz')]`$y - 2 = -\dfrac{4}{5}(x + 1)$`,String[_0x11e096(0x31d,'**1C')]`$y - 2 = \dfrac{4}{5}(x + 1)$`,String['raw']`$y - 2 = 0$`],'correctIndex':0x2,'steps':String[_0x11e096(0x4f5,'QHXz')]`
           <p class="mb-2"><strong class="text-sky-300">Step 1: Differentiate implicitly with respect to $x$.</strong> Be careful with the minus sign on $-xy$:</p>
           $$2x - \left(y + x\frac{dy}{dx}\right) + 2y\frac{dy}{dx} = 0$$
           $$2x - y - x\frac{dy}{dx} + 2y\frac{dy}{dx} = 0$$
@@ -535,22 +493,7 @@
           $$-4 + \frac{dy}{dx} + 4\frac{dy}{dx} = 0 \implies 5\frac{dy}{dx} = 4 \implies m = \frac{4}{5}$$
           <p class="mb-2"><strong class="text-sky-300">Step 3: Write the tangent line in point-slope form at $(-1, 2)$:</strong></p>
           $$y - 2 = \frac{4}{5}(x + 1) \quad \left(\text{or } y = \frac{4}{5}x + \frac{14}{5}\right)$$
-        `
-      },
-      {
-        id: 9,
-        category: 'part2',
-        partLabel: 'Part 2: Tangent Lines',
-        title: 'Tangent Line Slope with Trig',
-        prompt: String.raw`Find the slope of the tangent line to $\sin(\pi x) + \cos(\pi y) = 2xy$ at the point $(1, 1)$.`,
-        options: [
-          String.raw`$-\dfrac{\pi + 2}{2}$`,
-          String.raw`$\dfrac{\pi - 2}{2}$`,
-          String.raw`$-\dfrac{\pi - 2}{2}$`,
-          String.raw`$-\dfrac{3}{2}$`
-        ],
-        correctIndex: 0,
-        steps: String.raw`
+        `},{'id':0x9,'category':_0x2dba2c[_0x11e096(0x2c9,'BDRN')],'partLabel':_0x2dba2c['oWFcT'],'title':_0x11e096(0x3ec,'**1C')+_0x11e096(0x15c,'m^]$')+_0x11e096(0x19d,'bb@#')+_0x11e096(0x4d7,'E7eE'),'prompt':String['raw']`Find the slope of the tangent line to $\sin(\pi x) + \cos(\pi y) = 2xy$ at the point $(1, 1)$.`,'options':[String[_0x11e096(0x25d,'HGE)')]`$-\dfrac{\pi + 2}{2}$`,String[_0x11e096(0x9e,'iqmV')]`$\dfrac{\pi - 2}{2}$`,String[_0x11e096(0x95,'B&6q')]`$-\dfrac{\pi - 2}{2}$`,String[_0x11e096(0x93,'s59!')]`$-\dfrac{3}{2}$`],'correctIndex':0x0,'steps':String[_0x11e096(0x4f5,'QHXz')]`
           <p class="mb-2"><strong class="text-sky-300">Step 1: Differentiate both sides with respect to $x$.</strong> Don't forget the factor of $\pi$ from the Chain Rule on $\sin(\pi x)$ and $\cos(\pi y)$:</p>
           $$\pi\cos(\pi x) - \pi\sin(\pi y)\frac{dy}{dx} = 2y + 2x\frac{dy}{dx}$$
           <p class="mb-2"><strong class="text-sky-300">Step 2: Substitute $(x, y) = (1, 1)$, using $\cos(\pi) = -1$ and $\sin(\pi) = 0$:</strong></p>
@@ -558,22 +501,7 @@
           $$\pi(-1) - \pi(0)\frac{dy}{dx} = 2 + 2\frac{dy}{dx}$$
           <p class="mb-2"><strong class="text-sky-300">Step 3: Solve for $\dfrac{dy}{dx}$:</strong></p>
           $$-\pi = 2 + 2\frac{dy}{dx} \implies 2\frac{dy}{dx} = -\pi - 2 \implies \frac{dy}{dx} = -\frac{\pi + 2}{2}$$
-        `
-      },
-      {
-        id: 10,
-        category: 'part2',
-        partLabel: 'Part 2: Tangent Lines',
-        title: 'Tangent Line with Composite Powers',
-        prompt: String.raw`Find the equation of the tangent line to $(x + y)^3 = x^3 + y^3$ at the point $(-1, 1)$.`,
-        options: [
-          String.raw`$y - 1 = 1(x + 1)$`,
-          String.raw`$y - 1 = -1(x + 1)$`,
-          String.raw`$y - 1 = 0$`,
-          String.raw`$y - 1 = -3(x + 1)$`
-        ],
-        correctIndex: 1,
-        steps: String.raw`
+        `},{'id':0xa,'category':_0x2dba2c[_0x11e096(0x788,'m%f&')],'partLabel':_0x2dba2c[_0x11e096(0x657,'bb@#')],'title':_0x2dba2c[_0x11e096(0x656,'bb@#')],'prompt':String[_0x11e096(0x237,'E7eE')]`Find the equation of the tangent line to $(x + y)^3 = x^3 + y^3$ at the point $(-1, 1)$.`,'options':[String[_0x11e096(0x31d,'**1C')]`$y - 1 = 1(x + 1)$`,String['raw']`$y - 1 = -1(x + 1)$`,String[_0x11e096(0x6ef,'uiBq')]`$y - 1 = 0$`,String[_0x11e096(0x2b3,'RBUk')]`$y - 1 = -3(x + 1)$`],'correctIndex':0x1,'steps':String[_0x11e096(0x72d,'C6GW')]`
           <p class="mb-2"><strong class="text-sky-300">Step 1: Differentiate both sides with respect to $x$:</strong></p>
           $$3(x + y)^2\left(1 + \frac{dy}{dx}\right) = 3x^2 + 3y^2\frac{dy}{dx}$$
           <p class="mb-2"><strong class="text-sky-300">Step 2: Substitute $(x, y) = (-1, 1)$ directly:</strong></p>
@@ -582,24 +510,7 @@
           $$0 = 3 + 3\frac{dy}{dx} \implies \frac{dy}{dx} = -1$$
           <p class="mb-2"><strong class="text-sky-300">Step 3: Write the point-slope equation at $(-1, 1)$:</strong></p>
           $$y - 1 = -1(x + 1) \quad (\text{or } y = -x)$$
-        `
-      },
-
-      // ==================== PART 3: Horizontal & Vertical Tangent Lines ====================
-      {
-        id: 11,
-        category: 'part3',
-        partLabel: 'Part 3: Horiz/Vert Tangents',
-        title: 'Horizontal Tangents (Coordinates)',
-        prompt: String.raw`Find all points on the curve $x^2 + xy + y^2 = 27$ where the tangent line is horizontal.`,
-        options: [
-          String.raw`$(3, -6)$ and $(-3, 6)$`,
-          String.raw`$(6, -3)$ and $(-6, 3)$`,
-          String.raw`$(3, 6)$ and $(-3, -6)$`,
-          String.raw`$(0, 3\sqrt{3})$ and $(0, -3\sqrt{3})$`
-        ],
-        correctIndex: 0,
-        steps: String.raw`
+        `},{'id':0xb,'category':_0x2dba2c[_0x11e096(0x35c,'T7N6')],'partLabel':_0x2dba2c[_0x11e096(0x512,'uiBq')],'title':'Horizont'+'al\x20Tange'+_0x11e096(0x468,'HGE)')+_0x11e096(0x43e,'8^SX')+')','prompt':String[_0x11e096(0x72d,'C6GW')]`Find all points on the curve $x^2 + xy + y^2 = 27$ where the tangent line is horizontal.`,'options':[String[_0x11e096(0x84b,'8^SX')]`$(3, -6)$ and $(-3, 6)$`,String[_0x11e096(0x31d,'**1C')]`$(6, -3)$ and $(-6, 3)$`,String[_0x11e096(0x4f1,'&IUg')]`$(3, 6)$ and $(-3, -6)$`,String[_0x11e096(0x872,'8sJn')]`$(0, 3\sqrt{3})$ and $(0, -3\sqrt{3})$`],'correctIndex':0x0,'steps':String[_0x11e096(0x14b,'BU&6')]`
           <p class="mb-2"><strong class="text-sky-300">Step 1: Find $\dfrac{dy}{dx}$ by implicit differentiation:</strong></p>
           $$2x + y + x\frac{dy}{dx} + 2y\frac{dy}{dx} = 0 \implies \frac{dy}{dx} = \frac{-2x - y}{x + 2y}$$
           <p class="mb-2"><strong class="text-sky-300">Step 2: Set the numerator equal to $0$ for horizontal tangents:</strong></p>
@@ -613,22 +524,7 @@
             <li>When $x = -3$, $y = -2(-3) = 6 \implies (-3, 6)$</li>
           </ul>
           <p class="mt-2 font-semibold text-emerald-300">Final Answer: $(3, -6)$ and $(-3, 6)$.</p>
-        `
-      },
-      {
-        id: 12,
-        category: 'part3',
-        partLabel: 'Part 3: Horiz/Vert Tangents',
-        title: 'Vertical Tangents (Coordinates)',
-        prompt: String.raw`Find all points on the curve $x^2 + xy + y^2 = 27$ where the tangent line is vertical.`,
-        options: [
-          String.raw`$(3, -6)$ and $(-3, 6)$`,
-          String.raw`$(-6, -3)$ and $(6, 3)$`,
-          String.raw`$(6, -3)$ and $(-6, 3)$`,
-          String.raw`$(3\sqrt{3}, 0)$ and $(-3\sqrt{3}, 0)$`
-        ],
-        correctIndex: 2,
-        steps: String.raw`
+        `},{'id':0xc,'category':_0x11e096(0x626,'iqmV'),'partLabel':_0x2dba2c[_0x11e096(0xba,'pODZ')],'title':_0x2dba2c['SbRMS'],'prompt':String[_0x11e096(0x872,'8sJn')]`Find all points on the curve $x^2 + xy + y^2 = 27$ where the tangent line is vertical.`,'options':[String[_0x11e096(0x5e0,'vhM0')]`$(3, -6)$ and $(-3, 6)$`,String['raw']`$(-6, -3)$ and $(6, 3)$`,String[_0x11e096(0x237,'E7eE')]`$(6, -3)$ and $(-6, 3)$`,String['raw']`$(3\sqrt{3}, 0)$ and $(-3\sqrt{3}, 0)$`],'correctIndex':0x2,'steps':String[_0x11e096(0x58f,'ry(^')]`
           <p class="mb-2"><strong class="text-sky-300">Step 1: Use the derivative from the curve $x^2 + xy + y^2 = 27$:</strong></p>
           $$\frac{dy}{dx} = \frac{-2x - y}{x + 2y}$$
           <p class="mb-2"><strong class="text-sky-300">Step 2: Set the denominator equal to $0$ for vertical tangents:</strong></p>
@@ -642,22 +538,7 @@
             <li>When $y = 3$, $x = -2(3) = -6 \implies (-6, 3)$</li>
           </ul>
           <p class="mt-2 font-semibold text-emerald-300">Final Answer: $(6, -3)$ and $(-6, 3)$.</p>
-        `
-      },
-      {
-        id: 13,
-        category: 'part3',
-        partLabel: 'Part 3: Horiz/Vert Tangents',
-        title: 'Horizontal Tangents (Shifted Ellipse)',
-        prompt: String.raw`At what $x$-value(s) does the curve $x^2 + 4y^2 - 6x + 16y + 21 = 0$ have horizontal tangent lines?`,
-        options: [
-          String.raw`$x = 3$`,
-          String.raw`$x = -2$`,
-          String.raw`$x = 6$`,
-          String.raw`$x = -3$`
-        ],
-        correctIndex: 0,
-        steps: String.raw`
+        `},{'id':0xd,'category':_0x2dba2c[_0x11e096(0x526,'q]&!')],'partLabel':_0x2dba2c['lOaSW'],'title':_0x11e096(0x110,'vhM0')+_0x11e096(0x777,'(7kx')+'nts\x20(Shi'+_0x11e096(0x27a,'BDRN')+_0x11e096(0x759,'rLGt'),'prompt':String['raw']`At what $x$-value(s) does the curve $x^2 + 4y^2 - 6x + 16y + 21 = 0$ have horizontal tangent lines?`,'options':[String[_0x11e096(0x84b,'8^SX')]`$x = 3$`,String[_0x11e096(0x57d,'U8a4')]`$x = -2$`,String[_0x11e096(0x74a,'rLGt')]`$x = 6$`,String[_0x11e096(0x64d,'oQ6j')]`$x = -3$`],'correctIndex':0x0,'steps':String[_0x11e096(0x865,'5mW]')]`
           <p class="mb-2"><strong class="text-sky-300">Step 1: Differentiate implicitly with respect to $x$:</strong></p>
           $$2x + 8y\frac{dy}{dx} - 6 + 16\frac{dy}{dx} = 0$$
           $$(8y + 16)\frac{dy}{dx} = 6 - 2x \implies \frac{dy}{dx} = \frac{6 - 2x}{8y + 16}$$
@@ -666,22 +547,7 @@
           <p class="mb-2"><strong class="text-sky-300">Step 3: Verify that points exist on the curve at $x = 3$ with denominator $8y + 16 \neq 0$:</strong></p>
           $$(3)^2 + 4y^2 - 6(3) + 16y + 21 = 0 \implies 4y^2 + 16y + 12 = 0 \implies 4(y + 1)(y + 3) = 0$$
           <p class="text-slate-200">Since $y = -1$ and $y = -3$ are real and neither equals $-2$ (where $8y+16=0$), horizontal tangents occur at <strong class="text-emerald-300">$x = 3$</strong>.</p>
-        `
-      },
-      {
-        id: 14,
-        category: 'part3',
-        partLabel: 'Part 3: Horiz/Vert Tangents',
-        title: 'Vertical Tangents (Curve Analysis)',
-        prompt: String.raw`Find the $y$-coordinate(s) of all points where the curve $x^3 + y^2 - 4y = 5$ has a vertical tangent line.`,
-        options: [
-          String.raw`$y = 0$`,
-          String.raw`$y = 4$`,
-          String.raw`$y = 2$`,
-          String.raw`$y = \pm 2$`
-        ],
-        correctIndex: 2,
-        steps: String.raw`
+        `},{'id':0xe,'category':_0x11e096(0x77d,'m^]$'),'partLabel':_0x2dba2c[_0x11e096(0x27f,'RBUk')],'title':_0x2dba2c[_0x11e096(0x6cd,'K)t$')],'prompt':String[_0x11e096(0x3cd,'][YR')]`Find the $y$-coordinate(s) of all points where the curve $x^3 + y^2 - 4y = 5$ has a vertical tangent line.`,'options':[String[_0x11e096(0x5fe,'4]xv')]`$y = 0$`,String[_0x11e096(0x4f5,'QHXz')]`$y = 4$`,String[_0x11e096(0x33f,'q]&!')]`$y = 2$`,String['raw']`$y = \pm 2$`],'correctIndex':0x2,'steps':String[_0x11e096(0x93,'s59!')]`
           <p class="mb-2"><strong class="text-sky-300">Step 1: Differentiate both sides with respect to $x$:</strong></p>
           $$3x^2 + 2y\frac{dy}{dx} - 4\frac{dy}{dx} = 0 \implies (2y - 4)\frac{dy}{dx} = -3x^2 \implies \frac{dy}{dx} = \frac{-3x^2}{2y - 4}$$
           <p class="mb-2"><strong class="text-sky-300">Step 2: Set the denominator equal to $0$ for vertical tangent lines:</strong></p>
@@ -689,22 +555,7 @@
           <p class="mb-2"><strong class="text-sky-300">Step 3: Check that the numerator $-3x^2 \neq 0$ when $y = 2$:</strong></p>
           $$x^3 + (2)^2 - 4(2) = 5 \implies x^3 - 4 = 5 \implies x^3 = 9 \implies x = \sqrt[3]{9} \neq 0$$
           <p class="text-slate-200">Since $x \neq 0$, the numerator is nonzero, confirming a vertical tangent at <strong class="text-emerald-300">$y = 2$</strong>.</p>
-        `
-      },
-      {
-        id: 15,
-        category: 'part3',
-        partLabel: 'Part 3: Horiz/Vert Tangents',
-        title: 'Extraneous Solution Trap (Horizontal Tangent Check)',
-        prompt: String.raw`Consider the curve $2y^3 + 6x^2y - 12x^2 + 6y = 1$. At what value(s) of $x$ does the curve have a horizontal tangent line?`,
-        options: [
-          String.raw`$x = 0$ only`,
-          String.raw`$x = 0$ and $x = 2$`,
-          String.raw`$y = 2$ (for all real $x$)`,
-          String.raw`No horizontal tangents exist`
-        ],
-        correctIndex: 0,
-        steps: String.raw`
+        `},{'id':0xf,'category':_0x2dba2c[_0x11e096(0x122,'&IUg')],'partLabel':_0x11e096(0x2b1,'s59!')+_0x11e096(0x7f7,'fgHr')+_0x11e096(0x750,'**1C')+_0x11e096(0x504,'Sq6a'),'title':_0x2dba2c['FMxeM'],'prompt':String[_0x11e096(0x568,'I0iY')]`Consider the curve $2y^3 + 6x^2y - 12x^2 + 6y = 1$. At what value(s) of $x$ does the curve have a horizontal tangent line?`,'options':[String['raw']`$x = 0$ only`,String[_0x11e096(0x363,'BDRN')]`$x = 0$ and $x = 2$`,String[_0x11e096(0x671,'Sq6a')]`$y = 2$ (for all real $x$)`,String[_0x11e096(0x14b,'BU&6')]`No horizontal tangents exist`],'correctIndex':0x0,'steps':String['raw']`
           <p class="mb-2"><strong class="text-sky-300">Step 1: Differentiate implicitly with respect to $x$:</strong></p>
           $$6y^2\frac{dy}{dx} + 12xy + 6x^2\frac{dy}{dx} - 24x + 6\frac{dy}{dx} = 0$$
           $$\left(6y^2 + 6x^2 + 6\right)\frac{dy}{dx} = 24x - 12xy \implies \frac{dy}{dx} = \frac{12x(2 - y)}{6(y^2 + x^2 + 1)} = \frac{2x(2 - y)}{y^2 + x^2 + 1}$$
@@ -716,24 +567,7 @@
             <li><strong class="text-emerald-300">Test $x = 0$:</strong> $2y^3 + 6y = 1$, which has a unique real root $y \approx 0.165$ (and $y \neq 2$).</li>
           </ul>
           <p class="mt-2 font-semibold text-emerald-300">Final Answer: The curve has a horizontal tangent line at $x = 0$ only.</p>
-        `
-      },
-
-      // ==================== PART 4: Second Derivatives ====================
-      {
-        id: 16,
-        category: 'part4',
-        partLabel: 'Part 4: 2nd Derivatives',
-        title: 'Second Derivative Formula (Hyperbola)',
-        prompt: String.raw`If $x^2 - y^2 = 16$, find $\dfrac{d^2y}{dx^2}$ in terms of $x$ and $y$ (simplified using the original equation).`,
-        options: [
-          String.raw`$\dfrac{d^2y}{dx^2} = -\dfrac{16}{y^3}$`,
-          String.raw`$\dfrac{d^2y}{dx^2} = \dfrac{16}{y^3}$`,
-          String.raw`$\dfrac{d^2y}{dx^2} = \dfrac{y - x}{y^2}$`,
-          String.raw`$\dfrac{d^2y}{dx^2} = -\dfrac{16}{y^2}$`
-        ],
-        correctIndex: 0,
-        steps: String.raw`
+        `},{'id':0x10,'category':_0x2dba2c['QcErh'],'partLabel':_0x11e096(0x106,'I0iY')+_0x11e096(0x61e,'5jp8')+_0x11e096(0x293,'ry(^'),'title':_0x2dba2c[_0x11e096(0x617,'oQ6j')],'prompt':String[_0x11e096(0x2d5,'bb@#')]`If $x^2 - y^2 = 16$, find $\dfrac{d^2y}{dx^2}$ in terms of $x$ and $y$ (simplified using the original equation).`,'options':[String[_0x11e096(0x24a,'04Bs')]`$\dfrac{d^2y}{dx^2} = -\dfrac{16}{y^3}$`,String[_0x11e096(0x568,'I0iY')]`$\dfrac{d^2y}{dx^2} = \dfrac{16}{y^3}$`,String[_0x11e096(0x765,'K)t$')]`$\dfrac{d^2y}{dx^2} = \dfrac{y - x}{y^2}$`,String['raw']`$\dfrac{d^2y}{dx^2} = -\dfrac{16}{y^2}$`],'correctIndex':0x0,'steps':String[_0x11e096(0x4a5,'(7kx')]`
           <p class="mb-2"><strong class="text-sky-300">Step 1: Find the first derivative $\dfrac{dy}{dx}$:</strong></p>
           $$2x - 2y\frac{dy}{dx} = 0 \implies \frac{dy}{dx} = \frac{x}{y}$$
           <p class="mb-2"><strong class="text-sky-300">Step 2: Differentiate $\dfrac{dy}{dx} = \dfrac{x}{y}$ with respect to $x$ using the Quotient Rule:</strong></p>
@@ -741,22 +575,7 @@
           <p class="mb-2"><strong class="text-sky-300">Step 3: Substitute $\dfrac{dy}{dx} = \dfrac{x}{y}$ and simplify using $x^2 - y^2 = 16$:</strong></p>
           $$\frac{d^2y}{dx^2} = \frac{y - x\left(\frac{x}{y}\right)}{y^2} = \frac{\frac{y^2 - x^2}{y}}{y^2} = \frac{y^2 - x^2}{y^3}$$
           <p class="text-slate-200">Since $x^2 - y^2 = 16$, we have $y^2 - x^2 = -16$, so <strong class="text-emerald-300">$\dfrac{d^2y}{dx^2} = -\dfrac{16}{y^3}$</strong>.</p>
-        `
-      },
-      {
-        id: 17,
-        category: 'part4',
-        partLabel: 'Part 4: 2nd Derivatives',
-        title: 'Evaluating d²y/dx² at a Point',
-        prompt: String.raw`If $x^2 + 4y^2 = 20$, find the value of $\dfrac{d^2y}{dx^2}$ at the point $(2, 2)$.`,
-        options: [
-          String.raw`$-\dfrac{1}{8}$`,
-          String.raw`$-\dfrac{5}{32}$`,
-          String.raw`$-\dfrac{3}{32}$`,
-          String.raw`$\dfrac{5}{32}$`
-        ],
-        correctIndex: 1,
-        steps: String.raw`
+        `},{'id':0x11,'category':_0x2dba2c[_0x11e096(0x181,'RBUk')],'partLabel':_0x2dba2c[_0x11e096(0x36c,'(7kx')],'title':_0x11e096(0x576,'w%VX')+_0x11e096(0x7f1,'04Bs')+_0x11e096(0x594,'Sq6a')+_0x11e096(0x57b,'B&6q'),'prompt':String[_0x11e096(0x84b,'8^SX')]`If $x^2 + 4y^2 = 20$, find the value of $\dfrac{d^2y}{dx^2}$ at the point $(2, 2)$.`,'options':[String[_0x11e096(0x6e8,'m^]$')]`$-\dfrac{1}{8}$`,String[_0x11e096(0x74b,'pODZ')]`$-\dfrac{5}{32}$`,String['raw']`$-\dfrac{3}{32}$`,String[_0x11e096(0x4ce,'N[ww')]`$\dfrac{5}{32}$`],'correctIndex':0x1,'steps':String[_0x11e096(0x95,'B&6q')]`
           <p class="mb-2"><strong class="text-sky-300">Step 1: Find $\dfrac{dy}{dx}$ and evaluate it at $(2, 2)$:</strong></p>
           $$2x + 8y\frac{dy}{dx} = 0 \implies \frac{dy}{dx} = -\frac{x}{4y}$$
           $$\left.\frac{dy}{dx}\right|_{(2,2)} = -\frac{2}{4(2)} = -\frac{1}{4}$$
@@ -764,22 +583,7 @@
           $$\frac{d^2y}{dx^2} = -\frac{1}{4}\left(\frac{(1)(y) - (x)\frac{dy}{dx}}{y^2}\right)$$
           <p class="mb-2"><strong class="text-sky-300">Step 3: Substitute $x = 2$, $y = 2$, and $\dfrac{dy}{dx} = -\dfrac{1}{4}$:</strong></p>
           $$\left.\frac{d^2y}{dx^2}\right|_{(2,2)} = -\frac{1}{4}\left(\frac{2 - 2\left(-\frac{1}{4}\right)}{2^2}\right) = -\frac{1}{4}\left(\frac{2 + \frac{1}{2}}{4}\right) = -\frac{1}{16}\left(\frac{5}{2}\right) = -\frac{5}{32}$$
-        `
-      },
-      {
-        id: 18,
-        category: 'part4',
-        partLabel: 'Part 4: 2nd Derivatives',
-        title: 'Evaluating d²y/dx² (Implicit Product Rule Shortcut)',
-        prompt: String.raw`Given $y^2 - 2x = 4y - 1$, find the value of $\dfrac{d^2y}{dx^2}$ at the point $(2, 3)$.`,
-        options: [
-          String.raw`$-1$`,
-          String.raw`$1$`,
-          String.raw`$-\dfrac{1}{2}$`,
-          String.raw`$0$`
-        ],
-        correctIndex: 0,
-        steps: String.raw`
+        `},{'id':0x12,'category':_0x11e096(0x58d,'N[ww'),'partLabel':_0x2dba2c[_0x11e096(0x83e,'I0iY')],'title':_0x2dba2c[_0x11e096(0x2f6,'Sq6a')],'prompt':String[_0x11e096(0x4f6,'&s[F')]`Given $y^2 - 2x = 4y - 1$, find the value of $\dfrac{d^2y}{dx^2}$ at the point $(2, 3)$.`,'options':[String[_0x11e096(0x363,'BDRN')]`$-1$`,String[_0x11e096(0x444,'VTMS')]`$1$`,String[_0x11e096(0x25d,'HGE)')]`$-\dfrac{1}{2}$`,String[_0x11e096(0x64d,'oQ6j')]`$0$`],'correctIndex':0x0,'steps':String[_0x11e096(0x33f,'q]&!')]`
           <p class="mb-2"><strong class="text-sky-300">Step 1: Differentiate implicitly to find $\dfrac{dy}{dx}$ at $(2, 3)$:</strong></p>
           $$2y\frac{dy}{dx} - 2 = 4\frac{dy}{dx} \implies (2y - 4)\frac{dy}{dx} = 2$$
           <p class="mb-2 text-slate-200">At $(2, 3)$: $\left(2(3) - 4\right)\dfrac{dy}{dx} = 2 \implies 2\dfrac{dy}{dx} = 2 \implies \dfrac{dy}{dx} = 1$.</p>
@@ -788,22 +592,7 @@
           $$2\left(\frac{dy}{dx}\right)^2 + (2y - 4)\frac{d^2y}{dx^2} = 0$$
           <p class="mb-2"><strong class="text-sky-300">Step 3: Substitute $y = 3$ and $\dfrac{dy}{dx} = 1$:</strong></p>
           $$2(1)^2 + \left(2(3) - 4\right)\frac{d^2y}{dx^2} = 0 \implies 2 + 2\frac{d^2y}{dx^2} = 0 \implies \frac{d^2y}{dx^2} = -1$$
-        `
-      },
-      {
-        id: 19,
-        category: 'part4',
-        partLabel: 'Part 4: 2nd Derivatives',
-        title: 'Second Derivative with Product Rule',
-        prompt: String.raw`Given $xy + y^2 = 6$, find the value of $\dfrac{d^2y}{dx^2}$ at the point $(1, 2)$.`,
-        options: [
-          String.raw`$-\dfrac{12}{125}$`,
-          String.raw`$\dfrac{2}{25}$`,
-          String.raw`$\dfrac{12}{125}$`,
-          String.raw`$\dfrac{6}{125}$`
-        ],
-        correctIndex: 2,
-        steps: String.raw`
+        `},{'id':0x13,'category':_0x2dba2c[_0x11e096(0x3cb,'K)t$')],'partLabel':_0x2dba2c[_0x11e096(0x55a,'RBUk')],'title':_0x2dba2c[_0x11e096(0x192,'I0iY')],'prompt':String[_0x11e096(0x58f,'ry(^')]`Given $xy + y^2 = 6$, find the value of $\dfrac{d^2y}{dx^2}$ at the point $(1, 2)$.`,'options':[String[_0x11e096(0x872,'8sJn')]`$-\dfrac{12}{125}$`,String[_0x11e096(0x209,'&aKg')]`$\dfrac{2}{25}$`,String[_0x11e096(0x444,'VTMS')]`$\dfrac{12}{125}$`,String[_0x11e096(0x209,'&aKg')]`$\dfrac{6}{125}$`],'correctIndex':0x2,'steps':String[_0x11e096(0x57d,'U8a4')]`
           <p class="mb-2"><strong class="text-sky-300">Step 1: Differentiate implicitly to find $\dfrac{dy}{dx}$ at $(1, 2)$:</strong></p>
           $$y + x\frac{dy}{dx} + 2y\frac{dy}{dx} = 0 \implies y + (x + 2y)\frac{dy}{dx} = 0$$
           <p class="mb-2 text-slate-200">Substitute $(1, 2)$: $2 + (1 + 4)\dfrac{dy}{dx} = 0 \implies 5\dfrac{dy}{dx} = -2 \implies \dfrac{dy}{dx} = -\dfrac{2}{5}$.</p>
@@ -813,22 +602,7 @@
           $$-\frac{2}{5} + \left(1 + 2\left(-\frac{2}{5}\right)\right)\left(-\frac{2}{5}\right) + (1 + 4)y'' = 0$$
           $$-\frac{2}{5} + \left(\frac{1}{5}\right)\left(-\frac{2}{5}\right) + 5y'' = 0$$
           $$-\frac{10}{25} - \frac{2}{25} + 5y'' = 0 \implies 5y'' = \frac{12}{25} \implies y'' = \frac{12}{125}$$
-        `
-      },
-      {
-        id: 20,
-        category: 'part4',
-        partLabel: 'Part 4: 2nd Derivatives',
-        title: 'Concavity & Tangent Line Approximation (AP FRQ Style)',
-        prompt: String.raw`Let $y = f(x)$ be the particular solution to $x^2 + y^3 - 3xy = 1$ such that $f(1) = 2$. Find $\dfrac{dy}{dx}$ and $\dfrac{d^2y}{dx^2}$ at $(1, 2)$, and determine whether the tangent line approximation at $x = 1$ is an overestimate or underestimate for $f(1.1)$.`,
-        options: [
-          String.raw`$\dfrac{dy}{dx} = \dfrac{4}{9},\; \dfrac{d^2y}{dx^2} = -\dfrac{46}{243} < 0$ (Concave Down $\Rightarrow$ Overestimate)`,
-          String.raw`$\dfrac{dy}{dx} = \dfrac{4}{9},\; \dfrac{d^2y}{dx^2} = -\dfrac{46}{243} < 0$ (Concave Down $\Rightarrow$ Underestimate)`,
-          String.raw`$\dfrac{dy}{dx} = \dfrac{4}{9},\; \dfrac{d^2y}{dx^2} = \dfrac{46}{243} > 0$ (Concave Up $\Rightarrow$ Underestimate)`,
-          String.raw`$\dfrac{dy}{dx} = -\dfrac{2}{9},\; \dfrac{d^2y}{dx^2} = -\dfrac{10}{243} < 0$ (Concave Down $\Rightarrow$ Overestimate)`
-        ],
-        correctIndex: 0,
-        steps: String.raw`
+        `},{'id':0x14,'category':_0x2dba2c[_0x11e096(0x4af,'ry(^')],'partLabel':_0x2dba2c[_0x11e096(0x5e9,'R0]m')],'title':_0x11e096(0x4e2,'C6GW')+'y\x20&\x20Tang'+_0x11e096(0x794,'fgHr')+_0x11e096(0x4e7,'R0]m')+_0x11e096(0x116,'QHXz')+_0x11e096(0x634,'8^SX')+_0x11e096(0x83b,']0A5'),'prompt':String[_0x11e096(0x4f6,'&s[F')]`Let $y = f(x)$ be the particular solution to $x^2 + y^3 - 3xy = 1$ such that $f(1) = 2$. Find $\dfrac{dy}{dx}$ and $\dfrac{d^2y}{dx^2}$ at $(1, 2)$, and determine whether the tangent line approximation at $x = 1$ is an overestimate or underestimate for $f(1.1)$.`,'options':[String['raw']`$\dfrac{dy}{dx} = \dfrac{4}{9},\; \dfrac{d^2y}{dx^2} = -\dfrac{46}{243} < 0$ (Concave Down $\Rightarrow$ Overestimate)`,String[_0x11e096(0x58f,'ry(^')]`$\dfrac{dy}{dx} = \dfrac{4}{9},\; \dfrac{d^2y}{dx^2} = -\dfrac{46}{243} < 0$ (Concave Down $\Rightarrow$ Underestimate)`,String[_0x11e096(0x2b3,'RBUk')]`$\dfrac{dy}{dx} = \dfrac{4}{9},\; \dfrac{d^2y}{dx^2} = \dfrac{46}{243} > 0$ (Concave Up $\Rightarrow$ Underestimate)`,String[_0x11e096(0x444,'VTMS')]`$\dfrac{dy}{dx} = -\dfrac{2}{9},\; \dfrac{d^2y}{dx^2} = -\dfrac{10}{243} < 0$ (Concave Down $\Rightarrow$ Overestimate)`],'correctIndex':0x0,'steps':String[_0x11e096(0x865,'5mW]')]`
           <p class="mb-2"><strong class="text-sky-300">Step 1: Find $\dfrac{dy}{dx}$ at $(1, 2)$:</strong></p>
           $$2x + 3y^2y' - 3y - 3xy' = 0 \implies 2x - 3y + (3y^2 - 3x)y' = 0$$
           <p class="mb-2 text-slate-200">At $(1, 2)$: $2(1) - 3(2) + \left(3(2)^2 - 3(1)\right)y' = 0 \implies -4 + 9y' = 0 \implies y' = \dfrac{4}{9}$.</p>
@@ -839,527 +613,7 @@
           $$\frac{2}{3} + \left(\frac{16}{3} - \frac{9}{3}\right)\left(\frac{4}{9}\right) + 9y'' = 0$$
           $$\frac{2}{3} + \left(\frac{7}{3}\right)\left(\frac{4}{9}\right) + 9y'' = 0 \implies \frac{18}{27} + \frac{28}{27} + 9y'' = 0 \implies \frac{46}{27} + 9y'' = 0 \implies y'' = -\frac{46}{243}$$
           <p class="mt-2 text-slate-200"><strong class="text-emerald-300">Step 4: Concavity Conclusion:</strong> Since $\dfrac{d^2y}{dx^2} = -\dfrac{46}{243} < 0$, the curve is <strong class="text-white">concave down</strong> near $(1, 2)$, so the tangent line lies above the curve and provides an <strong class="text-amber-300">overestimate</strong> for $f(1.1)$.</p>
-        `
-      }
-    ];
-
-    // ==================== STATE MANAGEMENT ====================
-    let quizState = {
-      activeCategory: 'all',
-      formulaOpen: true,
-      questions: {}
-    };
-
-    function initDefaultState() {
-      const qState = {};
-      QUESTIONS.forEach(q => {
-        qState[q.id] = {
-          selectedIndex: null,
-          checked: false,
-          isCorrect: null,
-          mode: null,
-          solutionOpen: false
-        };
-      });
-      return {
-        activeCategory: 'all',
-        formulaOpen: true,
-        questions: qState
-      };
-    }
-
-    function loadState() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) {
-          quizState = initDefaultState();
-          return;
-        }
-        const parsed = JSON.parse(raw);
-        const defaults = initDefaultState();
-        quizState.activeCategory = parsed.activeCategory || 'all';
-        quizState.formulaOpen = typeof parsed.formulaOpen === 'boolean' ? parsed.formulaOpen : true;
-        quizState.questions = defaults.questions;
-        if (parsed.questions) {
-          QUESTIONS.forEach(q => {
-            if (parsed.questions[q.id]) {
-              quizState.questions[q.id] = {
-                ...defaults.questions[q.id],
-                ...parsed.questions[q.id]
-              };
-            }
-          });
-        }
-      } catch (e) {
-        quizState = initDefaultState();
-      }
-    }
-
-    function saveState() {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(quizState));
-      } catch (e) {
-        // Ignore storage quota errors
-      }
-    }
-
-    // ==================== MATH RENDERING HELPER ====================
-    function renderMath(element) {
-      if (typeof window.renderMathInElement === 'function') {
-        window.renderMathInElement(element || document.body, {
-          delimiters: [
-            { left: '$$', right: '$$', display: true },
-            { left: '$', right: '$', display: false },
-            { left: '\\(', right: '\\)', display: false },
-            { left: '\\[', right: '\\]', display: true }
-          ],
-          throwOnError: false
-        });
-      }
-    }
-
-    // Called automatically when deferred auto-render.min.js finishes loading
-    window.onKatexReady = function () {
-      const formulaSec = document.getElementById('formula-section');
-      const questionsEl = document.getElementById('questions-container');
-      if (formulaSec) renderMath(formulaSec);
-      if (questionsEl) renderMath(questionsEl);
-    };
-
-    // ==================== SCOREBOARD & FILTER RENDER ====================
-    function updateDashboard() {
-      let answered = 0;
-      let correct = 0;
-      let incorrect = 0;
-
-      QUESTIONS.forEach(q => {
-        const st = quizState.questions[q.id];
-        if (st && st.checked) {
-          answered++;
-          if (st.isCorrect) {
-            correct++;
-          } else {
-            incorrect++;
-          }
-        }
-      });
-
-      const pct = answered > 0 ? Math.round((correct / answered) * 100) : 0;
-
-      document.getElementById('stat-answered').textContent = `Answered: ${answered} / 20`;
-      document.getElementById('stat-correct').textContent = `Correct: ${correct} / 20`;
-      document.getElementById('stat-percent').textContent = `Score: ${pct}% (${correct}/${answered || 0})`;
-
-      const correctWidth = (correct / 20) * 100;
-      const incorrectWidth = (incorrect / 20) * 100;
-      document.getElementById('bar-correct').style.width = `${correctWidth}%`;
-      document.getElementById('bar-incorrect').style.width = `${incorrectWidth}%`;
-
-      document.querySelectorAll('.filter-tab').forEach(btn => {
-        const cat = btn.getAttribute('data-category');
-        if (cat === quizState.activeCategory) {
-          btn.className = 'filter-tab whitespace-nowrap px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition bg-rose-600 text-white shadow-sm';
-        } else {
-          btn.className = 'filter-tab whitespace-nowrap px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition bg-slate-800/90 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700/80';
-        }
-      });
-    }
-
-    // ==================== QUESTION CARD RENDERING ====================
-    function getLetters() {
-      return ['A', 'B', 'C', 'D'];
-    }
-
-    function buildQuestionCard(q) {
-      const st = quizState.questions[q.id];
-      const letters = getLetters();
-
-      // Status badge & card border
-      let statusBadgeHTML = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-800 text-slate-300 border border-slate-700">Unanswered</span>`;
-      let cardBorderClass = 'border-slate-800';
-
-      if (st.checked) {
-        if (st.isCorrect) {
-          cardBorderClass = 'border-emerald-500/70 ring-1 ring-emerald-500/30';
-          const viaText = st.mode === 'self' ? 'Self-Graded Correct' : 'Correct';
-          statusBadgeHTML = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-950/90 text-emerald-300 border border-emerald-500/50">✅ ${viaText}</span>`;
-        } else {
-          cardBorderClass = 'border-rose-500/70 ring-1 ring-rose-500/30';
-          const viaText = st.mode === 'self' ? 'Needs Review' : 'Incorrect';
-          statusBadgeHTML = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-950/90 text-rose-300 border border-rose-500/50">❌ ${viaText}</span>`;
-        }
-      }
-
-      // Options HTML
-      const optionsHTML = q.options.map((optLatex, idx) => {
-        const isSelected = st.selectedIndex === idx;
-        let btnStyle = 'bg-slate-800/75 border-slate-700 hover:border-sky-400/70 hover:bg-slate-800 text-slate-100';
-        let badgeStyle = 'bg-slate-900 text-slate-200 border-slate-600';
-        let stateClass = '';
-        let iconHTML = '';
-
-        if (!st.checked && isSelected) {
-          btnStyle = 'bg-sky-950/70 border-sky-400 ring-2 ring-sky-400/25 text-white';
-          badgeStyle = 'bg-sky-500 text-slate-950 border-sky-400';
-        } else if (st.checked) {
-          if (idx === q.correctIndex) {
-            btnStyle = 'bg-emerald-950/75 border-emerald-400 text-emerald-100 font-medium shadow-md shadow-emerald-950/50';
-            badgeStyle = 'bg-emerald-500 text-slate-950 border-emerald-400';
-            stateClass = 'option-btn-correct';
-            iconHTML = `<span class="ml-auto flex-shrink-0 text-emerald-300 font-bold text-xs uppercase tracking-wider flex items-center gap-1 bg-emerald-900/70 px-2 py-0.5 rounded-md border border-emerald-500/40">✓ Correct</span>`;
-          } else if (isSelected && idx !== q.correctIndex) {
-            btnStyle = 'bg-rose-950/75 border-rose-400 text-rose-100 shadow-md shadow-rose-950/50';
-            badgeStyle = 'bg-rose-500 text-white border-rose-400';
-            stateClass = 'option-btn-wrong';
-            iconHTML = `<span class="ml-auto flex-shrink-0 text-rose-300 font-bold text-xs uppercase tracking-wider flex items-center gap-1 bg-rose-900/70 px-2 py-0.5 rounded-md border border-rose-500/40">✗ Your Choice</span>`;
-          } else {
-            btnStyle = 'bg-slate-900/70 border-slate-800 text-slate-300';
-            badgeStyle = 'bg-slate-800 text-slate-400 border-slate-700';
-            stateClass = 'option-btn-dimmed';
-          }
-        }
-
-        return `
-          <button
-            type="button"
-            data-action="select-option"
-            data-qid="${q.id}"
-            data-opt="${idx}"
-            class="option-btn ${stateClass} w-full text-left px-4 py-4 rounded-xl border-2 flex items-center gap-3.5 ${btnStyle}"
-          >
-            <span class="w-8 h-8 rounded-lg border text-xs font-extrabold flex items-center justify-center flex-shrink-0 transition ${badgeStyle}">
-              ${letters[idx]}
-            </span>
-            <span class="option-math flex-1 min-w-0 overflow-x-auto py-1 text-base">${optLatex}</span>
-            ${iconHTML}
-          </button>
-        `;
-      }).join('');
-
-      // Feedback Banner after checking MC or self-grading
-      let feedbackBanner = '';
-      if (st.checked) {
-        if (st.isCorrect) {
-          feedbackBanner = `
-            <div class="mt-4 p-3.5 rounded-xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-200 text-xs sm:text-sm flex items-center justify-between">
-              <span><strong class="text-emerald-100">Great job!</strong> ${st.mode === 'self' ? 'You marked this question as mastered on paper.' : `Choice ${letters[q.correctIndex]} is correct.`}</span>
-              <button type="button" data-action="retry-question" data-qid="${q.id}" class="text-xs font-semibold text-emerald-300 underline hover:text-white ml-3 flex-shrink-0">Try Again</button>
-            </div>
-          `;
-        } else {
-          feedbackBanner = `
-            <div class="mt-4 p-3.5 rounded-xl bg-rose-950/60 border border-rose-500/40 text-rose-200 text-xs sm:text-sm flex items-center justify-between">
-              <span><strong class="text-rose-100">Keep practicing!</strong> The correct answer is <strong class="text-white">Choice ${letters[q.correctIndex]}</strong>. Review the step-by-step derivation below.</span>
-              <button type="button" data-action="retry-question" data-qid="${q.id}" class="text-xs font-semibold text-rose-300 underline hover:text-white ml-3 flex-shrink-0">Try Again</button>
-            </div>
-          `;
-        }
-      }
-
-      const checkDisabled = st.selectedIndex === null;
-
-      const card = document.createElement('article');
-      card.id = `question-card-${q.id}`;
-      card.className = `bg-slate-900 rounded-2xl border ${cardBorderClass} shadow-lg overflow-hidden transition-all`;
-      card.innerHTML = `
-        <!-- Card Header -->
-        <div class="px-5 py-4 bg-slate-950/70 border-b border-slate-800 flex flex-wrap items-center justify-between gap-2">
-          <div class="flex flex-wrap items-center gap-2.5">
-            <span class="inline-flex items-center justify-center px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-white text-xs font-bold">
-              Q${q.id}
-            </span>
-            <span class="text-xs font-semibold uppercase tracking-wider text-rose-300 bg-rose-950/80 px-2.5 py-0.5 rounded-md border border-rose-500/30">
-              ${q.partLabel}
-            </span>
-            <h3 class="text-sm sm:text-base font-bold text-white">
-              ${q.title}
-            </h3>
-          </div>
-          <div>
-            ${statusBadgeHTML}
-          </div>
-        </div>
-
-        <!-- Question Body -->
-        <div class="p-5 sm:p-6">
-          <div class="prompt-math text-base sm:text-lg text-slate-100 font-medium leading-relaxed mb-5">
-            ${q.prompt}
-          </div>
-
-          <!-- Multiple Choice Grid -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-            ${optionsHTML}
-          </div>
-
-          ${feedbackBanner}
-
-          <!-- Action Bar: Check Answer & Show Step-by-Step Solution Toggle -->
-          <div class="mt-5 pt-4 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3">
-            <div class="flex items-center gap-2">
-              <button
-                type="button"
-                data-action="check-mc"
-                data-qid="${q.id}"
-                ${checkDisabled ? 'disabled' : ''}
-                class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition shadow-sm ${
-                  checkDisabled
-                    ? 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed'
-                    : 'bg-sky-500 hover:bg-sky-400 text-slate-950 cursor-pointer'
-                }"
-              >
-                Check Answer
-              </button>
-              ${
-                st.selectedIndex !== null || st.checked
-                  ? `<button type="button" data-action="retry-question" data-qid="${q.id}" class="px-3 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition">Clear</button>`
-                  : ''
-              }
-            </div>
-
-            <button
-              type="button"
-              data-action="toggle-solution"
-              data-qid="${q.id}"
-              class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition ${
-                st.solutionOpen
-                  ? 'bg-amber-950/70 border-amber-500/60 text-amber-200'
-                  : 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-200'
-              }"
-            >
-              <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-              </svg>
-              <span>${st.solutionOpen ? 'Hide Step-by-Step Solution' : 'Show Step-by-Step Solution'}</span>
-            </button>
-          </div>
-
-          <!-- Hidden Full Step-by-Step Solution Drawer -->
-          <div class="${st.solutionOpen ? 'block' : 'hidden'} mt-4 rounded-xl bg-[#0B1120] border border-slate-700/80 border-l-4 border-l-emerald-500 p-4 sm:p-5">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-2.5 mb-3.5">
-              <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                Full Step-by-Step AP Calculus Derivation
-              </span>
-              <span class="text-xs font-semibold text-slate-300 bg-slate-800 px-2.5 py-0.5 rounded-md border border-slate-700">
-                Correct Choice: <strong class="text-emerald-300">${letters[q.correctIndex]}</strong>
-              </span>
-            </div>
-
-            <div class="solution-body text-sm sm:text-base text-slate-200 leading-relaxed space-y-2 overflow-x-auto">
-              ${q.steps}
-            </div>
-
-            <!-- Self-Grading Buttons for Paper FRQ Workflow -->
-            <div class="mt-5 pt-3.5 border-t border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <span class="text-xs font-medium text-slate-400">
-                Worked this out on paper? Self-grade your work to update the top scoreboard:
-              </span>
-              <div class="flex items-center gap-2.5">
-                <button
-                  type="button"
-                  data-action="self-grade"
-                  data-qid="${q.id}"
-                  data-grade="correct"
-                  class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition border ${
-                    st.checked && st.isCorrect
-                      ? 'bg-emerald-500 text-slate-950 border-emerald-400 shadow-sm'
-                      : 'bg-slate-800 hover:bg-emerald-950 text-emerald-300 border-emerald-600/60'
-                  }"
-                >
-                  I Got It Right ✅
-                </button>
-                <button
-                  type="button"
-                  data-action="self-grade"
-                  data-qid="${q.id}"
-                  data-grade="incorrect"
-                  class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition border ${
-                    st.checked && !st.isCorrect
-                      ? 'bg-rose-500 text-white border-rose-400 shadow-sm'
-                      : 'bg-slate-800 hover:bg-rose-950 text-rose-300 border-rose-600/60'
-                  }"
-                >
-                  Needs Review ❌
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
-      return card;
-    }
-
-    function renderQuestions() {
-      const container = document.getElementById('questions-container');
-      container.innerHTML = '';
-
-      const filtered = QUESTIONS.filter(q =>
-        quizState.activeCategory === 'all' ? true : q.category === quizState.activeCategory
-      );
-
-      filtered.forEach(q => {
-        container.appendChild(buildQuestionCard(q));
-      });
-
-      renderMath(container);
-    }
-
-    function renderSingleCard(qid) {
-      const q = QUESTIONS.find(item => item.id === qid);
-      const existing = document.getElementById(`question-card-${qid}`);
-      if (!q || !existing || !existing.parentNode) {
-        renderQuestions();
-        return;
-      }
-      const freshCard = buildQuestionCard(q);
-      existing.parentNode.replaceChild(freshCard, existing);
-      renderMath(freshCard);
-    }
-
-    // ==================== EVENT HANDLERS ====================
-    function setupEvents() {
-      const formulaToggle = document.getElementById('formula-toggle');
-      const formulaContent = document.getElementById('formula-content');
-      const formulaChevron = document.getElementById('formula-chevron');
-
-      function syncFormulaUI() {
-        if (quizState.formulaOpen) {
-          formulaContent.classList.remove('hidden');
-          formulaChevron.style.transform = 'rotate(0deg)';
-        } else {
-          formulaContent.classList.add('hidden');
-          formulaChevron.style.transform = 'rotate(-90deg)';
-        }
-      }
-
-      syncFormulaUI();
-
-      formulaToggle.addEventListener('click', () => {
-        quizState.formulaOpen = !quizState.formulaOpen;
-        syncFormulaUI();
-        saveState();
-      });
-
-      // Category filter tabs
-      document.getElementById('category-tabs').addEventListener('click', (e) => {
-        const btn = e.target.closest('.filter-tab');
-        if (!btn) return;
-        const cat = btn.getAttribute('data-category');
-        if (!cat) return;
-        quizState.activeCategory = cat;
-        saveState();
-        updateDashboard();
-        renderQuestions();
-      });
-
-      // Delegate clicks inside questions container
-      document.getElementById('questions-container').addEventListener('click', (e) => {
-        const target = e.target.closest('button[data-action]');
-        if (!target) return;
-
-        const action = target.getAttribute('data-action');
-        const qid = parseInt(target.getAttribute('data-qid'), 10);
-        const qObj = QUESTIONS.find(item => item.id === qid);
-        if (!qObj) return;
-        const st = quizState.questions[qid];
-
-        if (action === 'select-option') {
-          const optIdx = parseInt(target.getAttribute('data-opt'), 10);
-          st.selectedIndex = optIdx;
-          if (st.checked && st.mode === 'mc') {
-            st.isCorrect = (optIdx === qObj.correctIndex);
-          }
-          saveState();
-          updateDashboard();
-          renderSingleCard(qid);
-        } else if (action === 'check-mc') {
-          if (st.selectedIndex === null) return;
-          st.checked = true;
-          st.mode = 'mc';
-          st.isCorrect = (st.selectedIndex === qObj.correctIndex);
-          saveState();
-          updateDashboard();
-          renderSingleCard(qid);
-        } else if (action === 'toggle-solution') {
-          st.solutionOpen = !st.solutionOpen;
-          saveState();
-          renderSingleCard(qid);
-        } else if (action === 'self-grade') {
-          const grade = target.getAttribute('data-grade');
-          st.checked = true;
-          st.mode = 'self';
-          st.isCorrect = (grade === 'correct');
-          if (grade === 'correct' && st.selectedIndex === null) {
-            st.selectedIndex = qObj.correctIndex;
-          }
-          saveState();
-          updateDashboard();
-          renderSingleCard(qid);
-        } else if (action === 'retry-question') {
-          st.selectedIndex = null;
-          st.checked = false;
-          st.isCorrect = null;
-          st.mode = null;
-          saveState();
-          updateDashboard();
-          renderSingleCard(qid);
-        }
-      });
-
-      // Hide All Solutions button
-      document.getElementById('btn-collapse-solutions').addEventListener('click', () => {
-        QUESTIONS.forEach(q => {
-          quizState.questions[q.id].solutionOpen = false;
-        });
-        saveState();
-        renderQuestions();
-      });
-
-      // Reset Quiz Modal
-      const resetModal = document.getElementById('reset-modal');
-      document.getElementById('btn-reset').addEventListener('click', () => {
-        resetModal.classList.remove('hidden');
-        resetModal.classList.add('flex');
-      });
-
-      document.getElementById('modal-cancel').addEventListener('click', () => {
-        resetModal.classList.add('hidden');
-        resetModal.classList.remove('flex');
-      });
-
-      document.getElementById('modal-confirm').addEventListener('click', () => {
-        const currentCategory = quizState.activeCategory;
-        quizState = initDefaultState();
-        quizState.activeCategory = currentCategory;
-        saveState();
-        updateDashboard();
-        renderQuestions();
-        resetModal.classList.add('hidden');
-        resetModal.classList.remove('flex');
-      });
-
-      resetModal.addEventListener('click', (e) => {
-        if (e.target === resetModal) {
-          resetModal.classList.add('hidden');
-          resetModal.classList.remove('flex');
-        }
-      });
-    }
-
-    // ==================== INITIALIZATION ====================
-    document.addEventListener('DOMContentLoaded', () => {
-      loadState();
-      setupEvents();
-      updateDashboard();
-      renderQuestions();
-      if (typeof window.renderMathInElement === 'function') {
-        window.onKatexReady();
-      } else {
-        window.addEventListener('load', () => {
-          window.onKatexReady();
-        });
-      }
-    });
+        `}];let _0x432d16={'activeCategory':_0x2dba2c[_0x11e096(0x624,'0&x[')],'formulaOpen':!![],'questions':{}},_0xbde933=![];function _0x2f5f2b(){const _0x32feea=_0x11e096;if(_0x2dba2c[_0x32feea(0x72a,'iqmV')](_0x32feea(0x6cf,'BU&6'),_0x2dba2c[_0x32feea(0x6ed,'rSuA')]))_0x2dba2c['mcapE'](typeof _0x1b2c69[_0x32feea(0x56b,'&IUg')+'thInElem'+_0x32feea(0x478,'uiBq')],_0x2dba2c[_0x32feea(0x341,'5jp8')])&&_0x177c4e['renderMa'+_0x32feea(0x291,']0A5')+_0x32feea(0x25b,'bb@#')](_0x4dd2c0||_0x36d361[_0x32feea(0x74c,'QHXz')],{'delimiters':[{'left':'$$','right':'$$','display':!![]},{'left':'$','right':'$','display':![]},{'left':'\x5c(','right':'\x5c)','display':![]},{'left':'\x5c[','right':'\x5c]','display':!![]}],'throwOnError':![]});else{const _0x5def5d={};return _0x1f068c[_0x32feea(0x6ba,'w%VX')](_0x47bb0b=>{_0x5def5d[_0x47bb0b['id']]={'selectedIndex':null,'checked':![],'isCorrect':null,'mode':null,'solutionOpen':![]};}),{'activeCategory':_0x2dba2c[_0x32feea(0x549,'I0iY')],'formulaOpen':!![],'questions':_0x5def5d};}}function _0x3bdc3b(){const _0x11a810=_0x11e096,_0x413cfe={'LyzIF':function(_0x120189){const _0x50b1ed=a0_0x552a;return _0x2dba2c[_0x50b1ed(0x173,'K)t$')](_0x120189);},'bGQXz':function(_0x5e0f9f,_0x5c8004){const _0x4764f3=a0_0x552a;return _0x2dba2c[_0x4764f3(0x365,'QHXz')](_0x5e0f9f,_0x5c8004);},'rSpAa':_0x11a810(0x124,'**1C')};try{const _0x247375=localStorage[_0x11a810(0x367,'5mW]')](_0x485530);if(!_0x247375){if(_0x2dba2c[_0x11a810(0x528,'8^SX')](_0x2dba2c['kkWBs'],_0x2dba2c[_0x11a810(0x846,'**1C')]))_0x47e1aa[_0x11a810(0x625,'K)t$')+'t'][_0x11a810(0x758,'][YR')](_0x2dba2c[_0x11a810(0x96,'BDRN')]),_0x3f6fdf[_0x11a810(0x120,'s59!')]='',_0x1b302a[_0x11a810(0x597,'5jp8')]();else{_0x432d16=_0x2dba2c[_0x11a810(0x400,'BLiw')](_0x2f5f2b);return;}}const _0x27f3d2=JSON[_0x11a810(0x16a,'BLiw')](_0x247375),_0x25c19b=_0x2dba2c[_0x11a810(0x43c,'ry(^')](_0x2f5f2b);_0x432d16['activeCa'+_0x11a810(0x144,'fgHr')]=_0x27f3d2[_0x11a810(0x5cd,'bb@#')+'tegory']||_0x2dba2c[_0x11a810(0x554,'bb@#')],_0x432d16[_0x11a810(0xd8,'uiBq')+_0x11a810(0x98,'B&6q')]=_0x2dba2c[_0x11a810(0x82,'04Bs')](typeof _0x27f3d2[_0x11a810(0xef,'s59!')+_0x11a810(0x53f,'BLiw')],_0x2dba2c[_0x11a810(0x26a,'ry(^')])?_0x27f3d2[_0x11a810(0x767,'w%VX')+_0x11a810(0x321,'4]xv')]:!![],_0x432d16[_0x11a810(0x38e,'4]xv')+'s']=_0x25c19b[_0x11a810(0x355,'LNHM')+'s'],_0x27f3d2[_0x11a810(0x723,'rSuA')+'s']&&_0x1f068c[_0x11a810(0x692,'K)t$')](_0x447d6f=>{const _0x465ee2=_0x11a810,_0x5e818d={'nCpEq':_0x465ee2(0x679,'w%VX'),'YvyHB':function(_0x1b7619){const _0x1c944e=_0x465ee2;return _0x413cfe[_0x1c944e(0x778,'RBUk')](_0x1b7619);}};_0x413cfe[_0x465ee2(0x357,'21nv')](_0x465ee2(0x124,'**1C'),_0x413cfe['rSpAa'])?(_0x37b448['classLis'+'t'][_0x465ee2(0x331,'LNHM')](_0x5e818d[_0x465ee2(0x2d6,']0A5')]),_0x27a942(!![]),_0x5e818d[_0x465ee2(0x8c,'fgHr')](_0x2f06b0)):_0x27f3d2[_0x465ee2(0x74f,'BU&6')+'s'][_0x447d6f['id']]&&(_0x432d16[_0x465ee2(0x654,'8sJn')+'s'][_0x447d6f['id']]={..._0x25c19b[_0x465ee2(0x59d,'vhM0')+'s'][_0x447d6f['id']],..._0x27f3d2[_0x465ee2(0x53b,'q]&!')+'s'][_0x447d6f['id']]});});}catch(_0x13fae1){_0x432d16=_0x2dba2c[_0x11a810(0x44c,'uiBq')](_0x2f5f2b);}}function _0x49c33a(){const _0x57ff50=_0x11e096;try{localStorage[_0x57ff50(0x7f3,'iqmV')](_0x485530,JSON[_0x57ff50(0x151,'(7kx')+'y'](_0x432d16));}catch(_0x55dd85){}}function _0x49802f(_0x436ae1){const _0x12c0dc=_0x11e096;typeof window[_0x12c0dc(0x589,'(W06')+_0x12c0dc(0x7ed,'rSuA')+_0x12c0dc(0x268,'fgHr')]===_0x2dba2c[_0x12c0dc(0x348,'&aKg')]&&window[_0x12c0dc(0x843,'R0]m')+_0x12c0dc(0x83,'5jp8')+_0x12c0dc(0x478,'uiBq')](_0x436ae1||document[_0x12c0dc(0x166,'K)t$')],{'delimiters':[{'left':'$$','right':'$$','display':!![]},{'left':'$','right':'$','display':![]},{'left':'\x5c(','right':'\x5c)','display':![]},{'left':'\x5c[','right':'\x5c]','display':!![]}],'throwOnError':![]});}window[_0x11e096(0x169,'&aKg')+_0x11e096(0x3a1,'04Bs')]=function(){const _0x4a4153=_0x11e096,_0x1819c4=document[_0x4a4153(0x342,'rLGt')+_0x4a4153(0x38f,'m%f&')](_0x2dba2c[_0x4a4153(0x59c,'ry(^')]);if(!_0x1819c4||_0x1819c4['classLis'+'t'][_0x4a4153(0x158,'&IUg')](_0x2dba2c['ietxq']))return;const _0x42d3cf=document[_0x4a4153(0x232,'5jp8')+'ntById'](_0x4a4153(0x6f3,'m^]$')+_0x4a4153(0x48d,'bb@#')),_0x2227c2=document[_0x4a4153(0x3c0,'(W06')+'ntById'](_0x2dba2c[_0x4a4153(0x5ff,']0A5')]);if(_0x42d3cf)_0x2dba2c[_0x4a4153(0x805,'VTMS')](_0x49802f,_0x42d3cf);if(_0x2227c2)_0x2dba2c[_0x4a4153(0x5d7,'U8a4')](_0x49802f,_0x2227c2);};function _0x28eca7(){const _0xb5786d=_0x11e096;let _0x35711e=0x0,_0x249b65=0x0,_0x368bdd=0x0;_0x1f068c[_0xb5786d(0x782,'R0]m')](_0x4dbe16=>{const _0x4ea829=_0xb5786d,_0x5bad1b={'sBRMh':_0x4ea829(0x485,'][YR')+'ab\x20white'+'space-no'+_0x4ea829(0x798,'iqmV')+_0x4ea829(0x75d,'w%VX')+_0x4ea829(0x12b,'freO')+_0x4ea829(0x5ce,'q]&!')+_0x4ea829(0x1cc,'N[ww')+_0x4ea829(0x3b5,'K)t$')+_0x4ea829(0x5c6,'T7N6')+_0x4ea829(0x2f9,'bb@#')+_0x4ea829(0x49f,'&aKg')+_0x4ea829(0x20a,'pODZ')+_0x4ea829(0x668,'q]&!')+_0x4ea829(0x1dc,'HGE)')+_0x4ea829(0x14e,'0&x[')+_0x4ea829(0x7b2,'iqmV')+_0x4ea829(0x83f,'21nv')+_0x4ea829(0x709,'BDRN')+_0x4ea829(0x5b0,'RBUk')+_0x4ea829(0x1ab,'LNHM')+_0x4ea829(0x326,'s59!')+_0x4ea829(0x2e2,'5jp8')+_0x4ea829(0x2e3,'5mW]')},_0x11a340=_0x432d16[_0x4ea829(0x358,'(W06')+'s'][_0x4dbe16['id']];if(_0x11a340&&_0x11a340[_0x4ea829(0x832,'m%f&')]){if(_0x2dba2c['LgohU'](_0x2dba2c[_0x4ea829(0x1d4,'vhM0')],_0x4ea829(0x252,'s59!'))){_0x35711e++;if(_0x11a340[_0x4ea829(0x88c,'HGE)')+'t'])_0x249b65++;else _0x368bdd++;}else _0x4f9e78['classNam'+'e']=_0x5bad1b[_0x4ea829(0x852,'m%f&')];}});const _0x152258=_0x2dba2c[_0xb5786d(0x1db,'N[ww')](_0x35711e,0x0)?Math[_0xb5786d(0x6e6,'C6GW')](_0x2dba2c[_0xb5786d(0x10f,'8^SX')](_0x2dba2c[_0xb5786d(0x41a,'rLGt')](_0x249b65,_0x35711e),0x64)):0x0;document[_0xb5786d(0x232,'5jp8')+_0xb5786d(0x6d9,'ry(^')](_0x2dba2c[_0xb5786d(0x81e,'w%VX')])['textCont'+_0xb5786d(0x4c8,'0&x[')]=(_0xb5786d(0x2a9,'pODZ')+':\x20')['concat'](_0x35711e,_0xb5786d(0x441,'4]xv')),document[_0xb5786d(0x779,'bb@#')+_0xb5786d(0x6a3,'LNHM')](_0xb5786d(0x305,'(W06')+_0xb5786d(0x4eb,'(W06'))[_0xb5786d(0xc9,'T7N6')+_0xb5786d(0x523,'C6GW')]=(_0xb5786d(0x7ca,'uiBq')+'\x20')[_0xb5786d(0x4b8,'04Bs')](_0x249b65,_0xb5786d(0x127,'N[ww')),document['getEleme'+_0xb5786d(0x372,'freO')](_0xb5786d(0x58e,'bb@#')+_0xb5786d(0x238,'U8a4'))['textCont'+_0xb5786d(0x354,'**1C')]=_0xb5786d(0x1b9,'rSuA')[_0xb5786d(0x497,'R0]m')](_0x152258,'%\x20(')[_0xb5786d(0x213,'4]xv')](_0x249b65,'/')[_0xb5786d(0x32d,'rSuA')](_0x2dba2c[_0xb5786d(0x50e,'K)t$')](_0x35711e,0x0),')'),document[_0xb5786d(0x5a9,'21nv')+_0xb5786d(0x6a3,'LNHM')](_0x2dba2c[_0xb5786d(0x482,'VTMS')])[_0xb5786d(0x4c2,'I0iY')][_0xb5786d(0x721,'w%VX')]=''[_0xb5786d(0x718,'(7kx')](_0x2dba2c[_0xb5786d(0x669,'8sJn')](_0x249b65/0x14,0x64),'%'),document[_0xb5786d(0x779,'bb@#')+'ntById'](_0x2dba2c[_0xb5786d(0x621,'&s[F')])['style'][_0xb5786d(0x80,'pODZ')]=''[_0xb5786d(0x6c8,'**1C')](_0x2dba2c[_0xb5786d(0x281,'m^]$')](_0x2dba2c[_0xb5786d(0x6df,'&aKg')](_0x368bdd,0x14),0x64),'%'),document[_0xb5786d(0x1d6,'rSuA')+_0xb5786d(0xe9,'5jp8')](_0x2dba2c[_0xb5786d(0x7a9,']0A5')])[_0xb5786d(0x4dd,'iqmV')](_0x30e51c=>{const _0x555ff2=_0xb5786d,_0x284bc2={'jPACl':function(_0x4abd4a){return _0x2dba2c['wFWZx'](_0x4abd4a);}};if(_0x2dba2c[_0x555ff2(0x129,'bb@#')]===_0x2dba2c[_0x555ff2(0x4a9,'pODZ')])_0x5c0692[_0x555ff2(0x883,'&s[F')+_0x555ff2(0x247,'m^]$')]=!_0x14cfdf[_0x555ff2(0x5c3,'T7N6')+_0x555ff2(0x7ab,'T7N6')],_0x284bc2[_0x555ff2(0x819,'I0iY')](_0x1d63ae),_0x284bc2['jPACl'](_0x1f6428);else{const _0x199176=_0x30e51c[_0x555ff2(0x641,'21nv')+'bute']('data-cat'+_0x555ff2(0x5a7,'vhM0'));_0x2dba2c['opCBK'](_0x199176,_0x432d16[_0x555ff2(0x2a4,'][YR')+'tegory'])?_0x30e51c[_0x555ff2(0x5d2,'8^SX')+'e']=_0x2dba2c[_0x555ff2(0x42b,'T7N6')]:_0x30e51c[_0x555ff2(0x1b0,'K)t$')+'e']=_0x2dba2c[_0x555ff2(0x593,'E7eE')];}});}function _0x48d25d(){return['A','B','C','D'];}function _0x48fb37(_0x36af6a){const _0x45d74b=_0x11e096,_0x356ad1={'jwUhO':function(_0x373bee,_0x15ba69){const _0x1702f7=a0_0x552a;return _0x2dba2c[_0x1702f7(0x12c,'0&x[')](_0x373bee,_0x15ba69);},'wWojc':_0x2dba2c[_0x45d74b(0x6b7,'0&x[')],'eJMhg':_0x2dba2c[_0x45d74b(0x24e,'4]xv')],'EvOLx':_0x2dba2c[_0x45d74b(0x463,'VTMS')],'uXWZS':_0x2dba2c[_0x45d74b(0x82a,'s59!')],'ElnLL':_0x2dba2c[_0x45d74b(0x60f,'s59!')],'PHsad':_0x2dba2c[_0x45d74b(0x376,'4]xv')],'yVFGA':_0x45d74b(0x303,'8sJn')+_0x45d74b(0x6f6,'iqmV')+_0x45d74b(0x1d3,'q]&!')+_0x45d74b(0x23c,'U8a4')+_0x45d74b(0x690,'&s[F')+_0x45d74b(0x24b,'][YR')+_0x45d74b(0x486,'5jp8')+_0x45d74b(0x562,'m%f&'),'ABySB':function(_0x14c095,_0x3d166d){const _0x5be772=_0x45d74b;return _0x2dba2c[_0x5be772(0x7f6,'bb@#')](_0x14c095,_0x3d166d);},'kXCJk':_0x45d74b(0x3d0,'fgHr'),'FOYAx':_0x2dba2c[_0x45d74b(0x599,'I0iY')],'arfth':_0x2dba2c[_0x45d74b(0x7e8,'freO')],'UCiOt':function(_0x1a95be,_0x5ba8d6){const _0xad333e=_0x45d74b;return _0x2dba2c[_0xad333e(0x6ac,'(7kx')](_0x1a95be,_0x5ba8d6);},'eJkle':_0x2dba2c[_0x45d74b(0x101,'RBUk')],'rmqeb':_0x2dba2c[_0x45d74b(0x223,'N[ww')],'fiMhV':_0x45d74b(0x4c4,'pODZ')+_0x45d74b(0x177,'][YR')+_0x45d74b(0x455,'I0iY')+_0x45d74b(0x7d7,'w%VX')+'ext-rose'+_0x45d74b(0x79b,'BU&6')+_0x45d74b(0x466,'HGE)')+_0x45d74b(0x578,'freO')+_0x45d74b(0x860,'**1C')+'0','jbtko':_0x2dba2c[_0x45d74b(0x7a5,'(W06')],'hEJub':_0x2dba2c[_0x45d74b(0x2ab,'bb@#')],'hygBF':_0x2dba2c[_0x45d74b(0x3eb,'q]&!')]},_0x4c3fbe=_0x432d16['question'+'s'][_0x36af6a['id']],_0x178160=_0x2dba2c[_0x45d74b(0x493,'04Bs')](_0x48d25d);let _0x392ea4='<span\x20cl'+_0x45d74b(0x791,'E7eE')+_0x45d74b(0x5c9,'iqmV')+'\x20items-c'+_0x45d74b(0x4d2,'N[ww')+_0x45d74b(0x72b,'5mW]')+_0x45d74b(0x407,'pODZ')+_0x45d74b(0x693,'bb@#')+_0x45d74b(0x87a,'ry(^')+'ext-xs\x20f'+_0x45d74b(0x314,'U8a4')+_0x45d74b(0x1e3,'][YR')+_0x45d74b(0x62c,'q]&!')+_0x45d74b(0x11c,'&aKg')+_0x45d74b(0x7b3,'T7N6')+_0x45d74b(0x295,'&s[F')+_0x45d74b(0x6c2,'BDRN')+_0x45d74b(0x6c5,'Sq6a')+_0x45d74b(0x170,']0A5')+_0x45d74b(0x555,'B&6q')+_0x45d74b(0x7a3,'RBUk'),_0x568de4=_0x2dba2c[_0x45d74b(0x21c,'8^SX')];if(_0x4c3fbe[_0x45d74b(0x36a,']0A5')]){if(_0x4c3fbe[_0x45d74b(0x7ce,'**1C')+'t']){if(_0x2dba2c[_0x45d74b(0x1c1,'BLiw')]('wDMuz',_0x2dba2c[_0x45d74b(0xbf,'LNHM')])){_0x2bcf51=_0x45d74b(0x5ca,'q]&!')+_0x45d74b(0x393,'04Bs')+_0x45d74b(0x139,'m^]$')+_0x45d74b(0x708,'BU&6')+_0x45d74b(0x511,'R0]m')+_0x45d74b(0x84c,'HGE)');const _0x243dd5=_0x356ad1[_0x45d74b(0x2a8,'T7N6')](_0x38c2ad['mode'],_0x45d74b(0x152,'HGE)'))?_0x356ad1[_0x45d74b(0x53e,'fgHr')]:_0x356ad1[_0x45d74b(0x717,'&s[F')];_0x12cb10=('<span\x20cl'+_0x45d74b(0x2ae,'21nv')+_0x45d74b(0x21f,'N[ww')+_0x45d74b(0x225,'m^]$')+_0x45d74b(0xec,'BDRN')+_0x45d74b(0x335,'freO')+_0x45d74b(0x205,'BDRN')+'5\x20rounde'+'d-full\x20t'+_0x45d74b(0x648,'s59!')+_0x45d74b(0x55b,'04Bs')+_0x45d74b(0x69a,'(7kx')+_0x45d74b(0x4e6,'B&6q')+_0x45d74b(0x424,'BDRN')+_0x45d74b(0x37e,'C6GW')+_0x45d74b(0x4ba,'oQ6j')+_0x45d74b(0x736,'5jp8')+_0x45d74b(0x6bc,'K)t$')+_0x45d74b(0x4fb,'VTMS')+_0x45d74b(0x6b6,'R0]m'))['concat'](_0x243dd5,_0x45d74b(0x570,'rSuA'));}else{_0x568de4=_0x2dba2c[_0x45d74b(0x272,'4]xv')];const _0x3809d2=_0x2dba2c['anxsQ'](_0x4c3fbe[_0x45d74b(0x2bb,'U8a4')],_0x45d74b(0x235,'4]xv'))?_0x2dba2c[_0x45d74b(0x6b7,'0&x[')]:_0x2dba2c['ZCqhC'];_0x392ea4=('<span\x20cl'+_0x45d74b(0xc4,'&s[F')+_0x45d74b(0x5c9,'iqmV')+_0x45d74b(0x793,'rSuA')+'enter\x20ga'+_0x45d74b(0x75a,']0A5')+_0x45d74b(0x9f,'E7eE')+_0x45d74b(0x871,'&aKg')+_0x45d74b(0x766,'s59!')+_0x45d74b(0x711,'0&x[')+'ont-bold'+'\x20bg-emer'+_0x45d74b(0x67a,'(W06')+_0x45d74b(0x175,'VTMS')+'emerald-'+_0x45d74b(0x2bd,'bb@#')+'er\x20borde'+_0x45d74b(0x610,'][YR')+_0x45d74b(0x475,'freO')+_0x45d74b(0x744,'iqmV'))[_0x45d74b(0x5e7,'B&6q')](_0x3809d2,_0x45d74b(0x563,'**1C'));}}else{_0x568de4=_0x2dba2c[_0x45d74b(0x691,'&aKg')];const _0x1ab2ec=_0x4c3fbe[_0x45d74b(0x385,'&aKg')]===_0x2dba2c[_0x45d74b(0x63c,'vhM0')]?_0x45d74b(0x825,'s59!')+_0x45d74b(0x530,'0&x['):_0x2dba2c[_0x45d74b(0x861,'fgHr')];_0x392ea4=(_0x45d74b(0xe2,'][YR')+'ass=\x22inl'+_0x45d74b(0x88b,'RBUk')+_0x45d74b(0x8d,'5jp8')+_0x45d74b(0x6e4,'8sJn')+_0x45d74b(0x72f,'fgHr')+_0x45d74b(0x55e,'VTMS')+_0x45d74b(0x160,'BDRN')+_0x45d74b(0x682,'q]&!')+'ext-xs\x20f'+_0x45d74b(0x498,'w%VX')+_0x45d74b(0x2db,'R0]m')+_0x45d74b(0xe5,'T7N6')+_0x45d74b(0x81f,'BDRN')+_0x45d74b(0x71d,'bb@#')+'rder\x20bor'+'der-rose'+_0x45d74b(0x1d1,'4]xv')+_0x45d74b(0x39d,'pODZ'))[_0x45d74b(0x718,'(7kx')](_0x1ab2ec,_0x45d74b(0x552,'pODZ'));}}const _0x138993=_0x36af6a[_0x45d74b(0x747,'(7kx')][_0x45d74b(0xa9,'0&x[')]((_0x1d9f5f,_0x31992f)=>{const _0x212990=_0x45d74b,_0x4cbcd4={'PGHLe':function(_0x22d03e,_0x105fc8){return _0x22d03e===_0x105fc8;},'tmjFT':_0x356ad1[_0x212990(0x30a,'C6GW')],'vcQji':_0x356ad1[_0x212990(0x5dd,'21nv')]},_0xf9152f=_0x356ad1['jwUhO'](_0x4c3fbe[_0x212990(0x50c,'R0]m')+_0x212990(0x586,'bb@#')],_0x31992f);let _0x69a29c=_0x356ad1[_0x212990(0x4fd,'fgHr')],_0x1d8449=_0x356ad1['PHsad'],_0x575faf='',_0x7d40e7='';if(!_0x4c3fbe[_0x212990(0x35b,'freO')]&&_0xf9152f)_0x69a29c=_0x356ad1[_0x212990(0x3ab,'8sJn')],_0x1d8449=_0x212990(0x520,'0&x[')+_0x212990(0x6a4,'T7N6')+_0x212990(0x783,'vhM0')+'0\x20border'+_0x212990(0x848,'VTMS');else{if(_0x4c3fbe[_0x212990(0x2c0,'4]xv')]){if(_0x356ad1[_0x212990(0x5c1,'Sq6a')](_0x356ad1[_0x212990(0xcb,'8^SX')],_0x212990(0x40a,'BLiw')))_0x4cbcd4[_0x212990(0x332,'(7kx')](_0x32aa85[_0x212990(0x1a5,'&aKg')],_0x3fb011)&&(_0x4860a3[_0x212990(0x713,'freO')+'t'][_0x212990(0x4ff,'B&6q')](_0x4cbcd4[_0x212990(0x5de,'rLGt')]),_0x349ac3[_0x212990(0x479,'rLGt')+'t'][_0x212990(0x45e,'fgHr')](_0x4cbcd4[_0x212990(0x307,'iqmV')]));else{if(_0x31992f===_0x36af6a[_0x212990(0x126,'BDRN')+_0x212990(0x6e0,'&s[F')])_0x69a29c=_0x356ad1['FOYAx'],_0x1d8449=_0x356ad1['arfth'],_0x575faf=_0x212990(0x7fe,'BU&6')+_0x212990(0x111,'04Bs')+'ct',_0x7d40e7=_0x212990(0x13d,'vhM0')+'ass=\x22ml-'+_0x212990(0x1b6,'HGE)')+_0x212990(0x228,'s59!')+_0x212990(0x728,'rSuA')+_0x212990(0x33b,'LNHM')+_0x212990(0x51e,'U8a4')+'-bold\x20te'+_0x212990(0x5b3,'m^]$')+_0x212990(0x401,'][YR')+_0x212990(0x6a6,'8sJn')+_0x212990(0x46a,'q]&!')+'lex\x20item'+'s-center'+_0x212990(0x194,'&IUg')+_0x212990(0x324,'5mW]')+_0x212990(0x67d,'s59!')+'\x20px-2\x20py'+_0x212990(0x7bc,'uiBq')+'nded-md\x20'+_0x212990(0x69d,'4]xv')+'order-em'+_0x212990(0x26e,'m^]$')+_0x212990(0x6d6,'5mW]')+_0x212990(0x7d4,'I0iY')+'/span>';else _0xf9152f&&_0x31992f!==_0x36af6a[_0x212990(0x86e,'uiBq')+_0x212990(0x73a,'freO')]?_0x356ad1['UCiOt'](_0x356ad1[_0x212990(0x3c8,'uiBq')],_0x356ad1[_0x212990(0x86f,'w%VX')])?(_0x69a29c=_0x356ad1[_0x212990(0x71a,'&aKg')],_0x1d8449=_0x212990(0x269,']0A5')+_0x212990(0x886,'BU&6')+_0x212990(0x397,'&s[F')+_0x212990(0x4ed,'0&x[')+'se-400',_0x575faf=_0x212990(0x889,'T7N6')+_0x212990(0x79d,'oQ6j'),_0x7d40e7=_0x212990(0x239,'iqmV')+'ass=\x22ml-'+_0x212990(0x292,'N[ww')+_0x212990(0x87f,'BU&6')+'-0\x20text-'+_0x212990(0x15e,'iqmV')+_0x212990(0x5b5,'][YR')+_0x212990(0x550,'&aKg')+_0x212990(0x275,'21nv')+_0x212990(0x351,'I0iY')+_0x212990(0x14f,'E7eE')+_0x212990(0x45b,'0&x[')+_0x212990(0x17f,'(7kx')+_0x212990(0xb6,'LNHM')+_0x212990(0x51a,'vhM0')+_0x212990(0x74d,'w%VX')+_0x212990(0x277,'(W06')+_0x212990(0x32b,'T7N6')+'ounded-m'+_0x212990(0xf6,'I0iY')+_0x212990(0x3fc,'5mW]')+_0x212990(0x4b2,'8^SX')+_0x212990(0x823,'8sJn')+_0x212990(0x327,'q]&!')+_0x212990(0x4f2,'4]xv')+'>'):(_0x2bac10[_0x212990(0x4ea,'5jp8')+'t']['add'](_0x356ad1[_0x212990(0x646,'&s[F')]),_0x481595[_0x212990(0x7c3,'q]&!')+'t'][_0x212990(0x88,'(W06')](_0x212990(0x539,'&aKg'))):(_0x69a29c=_0x356ad1[_0x212990(0x227,'04Bs')],_0x1d8449=_0x356ad1[_0x212990(0xf8,'RBUk')],_0x575faf=_0x356ad1[_0x212990(0x364,'BLiw')]);}}}return('\x0a\x20\x20\x20\x20\x20\x20\x20'+_0x212990(0x678,'iqmV')+_0x212990(0x399,'fgHr')+_0x212990(0x2c1,'8^SX')+_0x212990(0x2d0,'R0]m')+_0x212990(0x742,'21nv')+_0x212990(0x2ad,'C6GW')+_0x212990(0x817,'vhM0')+_0x212990(0x3f3,'fgHr')+_0x212990(0x57f,'R0]m')+_0x212990(0x737,'T7N6')+_0x212990(0x29a,'8sJn')+_0x212990(0x210,'5mW]'))[_0x212990(0x337,'VTMS')](_0x36af6a['id'],_0x212990(0xb1,'RBUk')+'\x20\x20\x20\x20data'+_0x212990(0x113,'5jp8'))[_0x212990(0xbb,'LNHM')](_0x31992f,_0x212990(0x76e,'m^]$')+_0x212990(0x689,'U8a4')+_0x212990(0x837,'rLGt')+_0x212990(0x866,'R0]m'))[_0x212990(0x446,'BLiw')](_0x575faf,_0x212990(0x306,'oQ6j')+_0x212990(0x220,'8^SX')+_0x212990(0x19a,'0&x[')+_0x212990(0x5e3,']0A5')+'ded-xl\x20b'+_0x212990(0x433,'4]xv')+_0x212990(0x1e4,'BDRN')+_0x212990(0x20f,'rSuA')+_0x212990(0x265,'RBUk')+'5\x20')[_0x212990(0x6c7,'RBUk')](_0x69a29c,_0x212990(0x4a1,'U8a4')+_0x212990(0x3ae,'m^]$')+_0x212990(0x2df,'(7kx')+_0x212990(0x10e,'uiBq')+_0x212990(0x725,'uiBq')+_0x212990(0x483,'BLiw')+_0x212990(0x804,'4]xv')+_0x212990(0x402,'K)t$')+_0x212990(0x650,'vhM0')+_0x212990(0x584,'5jp8')+_0x212990(0x684,'m^]$')+_0x212990(0x2a3,'uiBq')+_0x212990(0x3b2,'8^SX')+_0x212990(0x7bd,'E7eE')+_0x212990(0x64b,'&aKg')+_0x212990(0x558,'K)t$')+_0x212990(0x52b,'R0]m')+_0x212990(0x480,'iqmV'))[_0x212990(0x213,'4]xv')](_0x1d8449,_0x212990(0x286,'5mW]')+_0x212990(0x5a4,'Sq6a'))[_0x212990(0x6de,'QHXz')](_0x178160[_0x31992f],_0x212990(0x1e7,'(7kx')+_0x212990(0x57e,'&aKg')+_0x212990(0x7f0,'freO')+_0x212990(0x148,'oQ6j')+'an\x20class'+_0x212990(0x803,'freO')+_0x212990(0x3ff,']0A5')+_0x212990(0x391,'BDRN')+_0x212990(0x616,'4]xv')+_0x212990(0x257,'BLiw')+_0x212990(0x4f4,'BDRN')+_0x212990(0x43f,'&aKg')+_0x212990(0x264,'vhM0'))[_0x212990(0x1ce,'BDRN')](_0x1d9f5f,_0x212990(0x712,'uiBq')+_0x212990(0x254,'N[ww')+'\x20\x20')[_0x212990(0x338,'5jp8')](_0x7d40e7,_0x212990(0x44e,'**1C')+'\x20</butto'+_0x212990(0x6f2,'4]xv')+'\x20');})[_0x45d74b(0x5a5,'8^SX')]('');let _0x2c5f41='';_0x4c3fbe['checked']&&(_0x4c3fbe[_0x45d74b(0x20d,'21nv')+'t']?_0x2c5f41=('\x0a\x20\x20\x20\x20\x20\x20\x20'+_0x45d74b(0x34e,'rLGt')+'class=\x22m'+_0x45d74b(0x4bf,'VTMS')+_0x45d74b(0x256,'0&x[')+_0x45d74b(0x3f4,'HGE)')+_0x45d74b(0x3db,'][YR')+'950/60\x20b'+_0x45d74b(0x749,'E7eE')+_0x45d74b(0x16e,'E7eE')+_0x45d74b(0x360,'oQ6j')+_0x45d74b(0x36d,'m^]$')+_0x45d74b(0x5a1,'m%f&')+_0x45d74b(0x3a7,'rSuA')+_0x45d74b(0x613,'(W06')+_0x45d74b(0x45f,'R0]m')+_0x45d74b(0x5ef,'**1C')+_0x45d74b(0x1eb,'8sJn')+_0x45d74b(0x136,'&s[F')+_0x45d74b(0x885,'N[ww')+_0x45d74b(0x323,'B&6q')+_0x45d74b(0x64f,'q]&!')+_0x45d74b(0x638,'21nv')+'trong\x20cl'+_0x45d74b(0x6bd,'BLiw')+'t-emeral'+'d-100\x22>G'+_0x45d74b(0x4d8,'uiBq')+_0x45d74b(0x2af,'**1C')+'g>\x20')[_0x45d74b(0xbb,'LNHM')](_0x2dba2c[_0x45d74b(0x604,'8sJn')](_0x4c3fbe[_0x45d74b(0x6c6,'iqmV')],_0x45d74b(0x7b9,'oQ6j'))?_0x2dba2c[_0x45d74b(0x607,'w%VX')]:'Choice\x20'[_0x45d74b(0x5e7,'B&6q')](_0x178160[_0x36af6a[_0x45d74b(0x67e,'0&x[')+_0x45d74b(0x670,'C6GW')]],'\x20is\x20corr'+_0x45d74b(0x231,'BU&6')),_0x45d74b(0x255,'Sq6a')+_0x45d74b(0x319,'**1C')+'\x20\x20\x20\x20<but'+'ton\x20type'+_0x45d74b(0x279,'8sJn')+_0x45d74b(0x5eb,'&IUg')+_0x45d74b(0x4fe,'04Bs')+_0x45d74b(0x5f6,'w%VX')+'stion\x22\x20d'+_0x45d74b(0x1bd,'21nv')+'\x22')[_0x45d74b(0x287,'5mW]')](_0x36af6a['id'],'\x22\x20class='+_0x45d74b(0x754,'(W06')+_0x45d74b(0x39e,'oQ6j')+_0x45d74b(0x56d,'RBUk')+'ext-emer'+_0x45d74b(0x590,'RBUk')+_0x45d74b(0x334,'uiBq')+_0x45d74b(0x490,'B&6q')+_0x45d74b(0x32c,'QHXz')+_0x45d74b(0x5e6,'][YR')+_0x45d74b(0x413,'rSuA')+_0x45d74b(0x3ed,'R0]m')+_0x45d74b(0xda,'&s[F')+_0x45d74b(0x54d,'21nv')+_0x45d74b(0x37a,'bb@#')+_0x45d74b(0x70d,'B&6q')+_0x45d74b(0x31e,'HGE)')+'\x20\x20\x20'):_0x2c5f41=(_0x45d74b(0x59f,'rSuA')+_0x45d74b(0x508,'freO')+_0x45d74b(0x88d,'C6GW')+_0x45d74b(0x6bf,'I0iY')+_0x45d74b(0x132,'vhM0')+_0x45d74b(0x65c,'K)t$')+_0x45d74b(0x184,'8^SX')+_0x45d74b(0x51b,'(W06')+_0x45d74b(0x36b,'rLGt')+_0x45d74b(0x5a0,'(7kx')+_0x45d74b(0x55d,'fgHr')+_0x45d74b(0x318,'oQ6j')+'200\x20text'+_0x45d74b(0x146,'rSuA')+_0x45d74b(0x436,'q]&!')+'lex\x20item'+_0x45d74b(0x75e,'8^SX')+_0x45d74b(0x204,'RBUk')+_0x45d74b(0x40d,'&IUg')+_0x45d74b(0x841,'BU&6')+'\x20\x20\x20\x20\x20\x20\x20<'+_0x45d74b(0x3dc,'fgHr')+_0x45d74b(0x276,'&aKg')+_0x45d74b(0x164,'E7eE')+'-rose-10'+_0x45d74b(0xb4,'][YR')+_0x45d74b(0x5cc,'m%f&')+_0x45d74b(0x6c0,'4]xv')+_0x45d74b(0x738,'(7kx')+_0x45d74b(0x535,']0A5')+_0x45d74b(0x3bf,'LNHM')+_0x45d74b(0x494,'&IUg')+_0x45d74b(0x6a5,'m%f&')+_0x45d74b(0x461,'HGE)')+_0x45d74b(0x546,'8sJn')+'oice\x20')[_0x45d74b(0x687,'T7N6')](_0x178160[_0x36af6a['correctI'+_0x45d74b(0x46f,'(7kx')]],_0x45d74b(0x67f,'&aKg')+'>.\x20Revie'+_0x45d74b(0xea,'&IUg')+_0x45d74b(0x311,'vhM0')+'ep\x20deriv'+_0x45d74b(0x518,'(7kx')+'low.</sp'+_0x45d74b(0x81c,'8sJn')+_0x45d74b(0x64e,'m^]$')+_0x45d74b(0x449,'ry(^')+'type=\x22bu'+_0x45d74b(0x6a2,'5jp8')+_0x45d74b(0x4c9,'(7kx')+_0x45d74b(0x773,'bb@#')+_0x45d74b(0xd0,'&aKg')+_0x45d74b(0xb8,'(W06')+_0x45d74b(0x356,'R0]m'))['concat'](_0x36af6a['id'],_0x45d74b(0x3df,'T7N6')+'\x22text-xs'+_0x45d74b(0x1c2,'5jp8')+_0x45d74b(0x5a6,'w%VX')+_0x45d74b(0x1c8,'5jp8')+_0x45d74b(0x7cf,'&IUg')+_0x45d74b(0x41e,'**1C')+_0x45d74b(0x472,'B&6q')+_0x45d74b(0x707,'vhM0')+_0x45d74b(0x7e6,'(7kx')+_0x45d74b(0x81a,'B&6q')+_0x45d74b(0x519,'fgHr')+_0x45d74b(0x7b0,'pODZ')+_0x45d74b(0x109,'&s[F')+_0x45d74b(0x64e,'m^]$')+_0x45d74b(0x536,'E7eE')+_0x45d74b(0x254,'N[ww')));const _0x37b8d0=_0x4c3fbe['selected'+'Index']===null,_0x40ed04=document[_0x45d74b(0x3cf,'8^SX')+_0x45d74b(0x25c,'I0iY')](_0x2dba2c[_0x45d74b(0x585,'BU&6')]);return _0x40ed04['id']=(_0x45d74b(0x82d,'R0]m')+'-card-')[_0x45d74b(0x23e,'&aKg')](_0x36af6a['id']),_0x40ed04[_0x45d74b(0x2ce,']0A5')+'e']=('bg-slate'+_0x45d74b(0x7f5,'(W06')+_0x45d74b(0x66e,'R0]m')+_0x45d74b(0x647,'Sq6a'))[_0x45d74b(0x58b,'21nv')](_0x568de4,_0x45d74b(0x884,'B&6q')+_0x45d74b(0x729,'uiBq')+_0x45d74b(0xb7,'C6GW')+_0x45d74b(0x421,'HGE)')+_0x45d74b(0x1e6,'fgHr')+'l'),_0x40ed04['innerHTM'+'L']=('\x0a\x20\x20\x20\x20\x20\x20<'+_0x45d74b(0x746,'(7kx')+'s=\x22px-5\x20'+_0x45d74b(0x2cd,'(7kx')+'slate-95'+_0x45d74b(0x34c,'iqmV')+_0x45d74b(0x54b,'HGE)')+_0x45d74b(0x5c8,'U8a4')+_0x45d74b(0x26d,'freO')+_0x45d74b(0x66c,'q]&!')+'-wrap\x20it'+_0x45d74b(0x611,'U8a4')+_0x45d74b(0x54e,'QHXz')+_0x45d74b(0x732,'m%f&')+_0x45d74b(0x6ca,'U8a4')+_0x45d74b(0x34f,'w%VX')+_0x45d74b(0x508,'freO')+_0x45d74b(0x3d1,'T7N6')+_0x45d74b(0x7ad,'bb@#')+_0x45d74b(0x581,'4]xv')+_0x45d74b(0xca,'I0iY')+_0x45d74b(0x4c3,'C6GW')+_0x45d74b(0x47d,'q]&!')+_0x45d74b(0x748,'VTMS')+_0x45d74b(0x3b0,'HGE)')+_0x45d74b(0x19b,'s59!')+'ne-flex\x20'+_0x45d74b(0x840,'8sJn')+_0x45d74b(0x85e,'&aKg')+_0x45d74b(0x27e,'21nv')+_0x45d74b(0x880,'RBUk')+_0x45d74b(0x150,'bb@#')+_0x45d74b(0x211,'BU&6')+_0x45d74b(0x760,'N[ww')+'ate-800\x20'+_0x45d74b(0x371,'][YR')+_0x45d74b(0x266,'21nv')+_0x45d74b(0x396,'(W06')+_0x45d74b(0x4f7,'BDRN')+_0x45d74b(0x3ea,'m%f&')+'xs\x20font-'+_0x45d74b(0x525,'HGE)')+_0x45d74b(0x61b,'fgHr')+_0x45d74b(0x4b5,'0&x['))['concat'](_0x36af6a['id'],_0x45d74b(0x4c1,'(W06')+_0x45d74b(0xc2,']0A5')+_0x45d74b(0x3d4,'0&x[')+_0x45d74b(0x308,'C6GW')+_0x45d74b(0x2cb,'E7eE')+'=\x22text-x'+'s\x20font-s'+_0x45d74b(0x359,'C6GW')+_0x45d74b(0x714,'N[ww')+_0x45d74b(0x771,'uiBq')+_0x45d74b(0x317,'q]&!')+_0x45d74b(0x768,'iqmV')+_0x45d74b(0x856,'bb@#')+_0x45d74b(0x40e,'VTMS')+_0x45d74b(0x59e,'rLGt')+'-2.5\x20py-'+_0x45d74b(0x5ad,'U8a4')+'ded-md\x20b'+_0x45d74b(0x47e,'q]&!')+'rder-ros'+_0x45d74b(0x6f5,'rSuA')+'\x22>\x0a\x20\x20\x20\x20\x20'+_0x45d74b(0x48b,'pODZ'))[_0x45d74b(0x5b9,'(W06')](_0x36af6a[_0x45d74b(0x188,'rLGt')+'l'],_0x45d74b(0x4f9,'uiBq')+_0x45d74b(0xac,'q]&!')+_0x45d74b(0x241,'E7eE')+_0x45d74b(0x4da,'04Bs')+'\x20class=\x22'+_0x45d74b(0x62d,'C6GW')+_0x45d74b(0x850,'BDRN')+_0x45d74b(0x1b3,'8^SX')+_0x45d74b(0x353,'][YR')+_0x45d74b(0x81,'K)t$')+_0x45d74b(0x80d,'E7eE')+_0x45d74b(0x538,'oQ6j'))[_0x45d74b(0x666,'m^]$')](_0x36af6a[_0x45d74b(0xab,'&IUg')],_0x45d74b(0x4c7,'ry(^')+_0x45d74b(0x577,'LNHM')+_0x45d74b(0x12a,'m^]$')+_0x45d74b(0x536,'E7eE')+'\x20\x20\x20\x20\x20\x20\x20\x20'+_0x45d74b(0xf5,'rSuA'))[_0x45d74b(0x23e,'&aKg')](_0x392ea4,'</div>\x0a\x20'+_0x45d74b(0x696,'][YR')+'iv>\x0a\x20\x20\x20\x20'+_0x45d74b(0x458,'pODZ')+'lass=\x22p-'+'5\x20sm:p-6'+_0x45d74b(0xd3,'fgHr')+_0x45d74b(0x27c,'&IUg')+_0x45d74b(0x282,'ry(^')+_0x45d74b(0x18a,'fgHr')+_0x45d74b(0x97,'uiBq')+'base\x20sm:'+_0x45d74b(0x39b,'vhM0')+_0x45d74b(0x532,'ry(^')+_0x45d74b(0x278,'m%f&')+_0x45d74b(0x7d0,'K)t$')+_0x45d74b(0x5e5,'bb@#')+_0x45d74b(0x418,'K)t$')+_0x45d74b(0x226,'LNHM')+_0x45d74b(0x38c,'m^]$')+_0x45d74b(0x761,'BDRN'))[_0x45d74b(0x5e7,'B&6q')](_0x36af6a[_0x45d74b(0xa2,'E7eE')],'\x0a\x20\x20\x20\x20\x20\x20\x20'+'\x20</div>\x0a'+_0x45d74b(0x64f,'q]&!')+_0x45d74b(0x3de,'HGE)')+'ss=\x22grid'+'\x20grid-co'+_0x45d74b(0x21e,'Sq6a')+_0x45d74b(0x4f3,'rSuA')+_0x45d74b(0x417,'C6GW')+_0x45d74b(0x503,'q]&!')+'\x20\x20\x20\x20\x20\x20\x20\x20')['concat'](_0x138993,_0x45d74b(0x4c7,'ry(^')+_0x45d74b(0x3e5,'rSuA')+_0x45d74b(0x737,'T7N6'))[_0x45d74b(0x497,'R0]m')](_0x2c5f41,_0x45d74b(0x10b,'QHXz')+_0x45d74b(0x426,'vhM0')+'ass=\x22mt-'+_0x45d74b(0x119,'m^]$')+_0x45d74b(0x68d,'BU&6')+_0x45d74b(0x46b,'w%VX')+_0x45d74b(0x70f,'**1C')+_0x45d74b(0x27b,'&s[F')+_0x45d74b(0x31f,'&aKg')+_0x45d74b(0x339,'T7N6')+_0x45d74b(0x328,'s59!')+_0x45d74b(0x49e,'m%f&')+_0x45d74b(0x633,'Sq6a')+_0x45d74b(0x4ef,'U8a4')+_0x45d74b(0x157,'5mW]')+_0x45d74b(0x81d,'(W06')+_0x45d74b(0x462,'vhM0')+_0x45d74b(0x5db,'U8a4')+_0x45d74b(0x145,'Sq6a')+'-2\x22>\x0a\x20\x20\x20'+_0x45d74b(0x419,'uiBq')+_0x45d74b(0x19e,']0A5')+_0x45d74b(0x399,'fgHr')+_0x45d74b(0xc6,'fgHr')+_0x45d74b(0x68b,'fgHr')+'ton\x22\x0a\x20\x20\x20'+_0x45d74b(0x541,'K)t$')+_0x45d74b(0x22d,'uiBq')+_0x45d74b(0x4f8,'04Bs')+_0x45d74b(0x76b,'8^SX')+'\x22\x0a\x20\x20\x20\x20\x20\x20'+_0x45d74b(0x419,'uiBq')+_0x45d74b(0x1ae,'rLGt')+'=\x22')[_0x45d74b(0x5e7,'B&6q')](_0x36af6a['id'],_0x45d74b(0x75b,'N[ww')+_0x45d74b(0x1c7,'U8a4'))[_0x45d74b(0x477,'Sq6a')](_0x37b8d0?_0x45d74b(0x29f,'VTMS'):'',_0x45d74b(0x3da,'pODZ')+_0x45d74b(0x316,'RBUk')+'lass=\x22px'+_0x45d74b(0x6f8,'4]xv')+_0x45d74b(0x2aa,'rLGt')+_0x45d74b(0x6ab,'m^]$')+_0x45d74b(0x284,'8sJn')+_0x45d74b(0x65a,'LNHM')+_0x45d74b(0x502,'HGE)')+_0x45d74b(0x875,'RBUk')+_0x45d74b(0x2c5,'m%f&')+_0x45d74b(0x5b6,'(7kx'))['concat'](_0x37b8d0?_0x2dba2c[_0x45d74b(0x9c,'rLGt')]:_0x2dba2c[_0x45d74b(0x5d6,'w%VX')],_0x45d74b(0x3c1,'LNHM')+_0x45d74b(0x5be,'B&6q')+_0x45d74b(0x230,'R0]m')+_0x45d74b(0x217,'I0iY')+'eck\x20Answ'+'er\x0a\x20\x20\x20\x20\x20'+_0x45d74b(0x5c5,'m^]$')+'/button>'+_0x45d74b(0x159,'I0iY')+'\x20\x20\x20\x20\x20')[_0x45d74b(0x4b8,'04Bs')](_0x2dba2c['NkoIW'](_0x4c3fbe[_0x45d74b(0x18f,'fgHr')+_0x45d74b(0x2bc,'QHXz')],null)||_0x4c3fbe[_0x45d74b(0x163,'R0]m')]?(_0x45d74b(0x18d,'Sq6a')+_0x45d74b(0x33e,'C6GW')+_0x45d74b(0x769,'rSuA')+_0x45d74b(0x5f7,'m%f&')+_0x45d74b(0x53c,'K)t$')+_0x45d74b(0x92,'bb@#')+_0x45d74b(0x44f,'(7kx')+_0x45d74b(0x329,'s59!'))[_0x45d74b(0x213,'4]xv')](_0x36af6a['id'],_0x45d74b(0x2fc,'C6GW')+_0x45d74b(0x7e5,'&aKg')+_0x45d74b(0x41b,'pODZ')+_0x45d74b(0x644,'&s[F')+_0x45d74b(0x86d,'BU&6')+_0x45d74b(0x2da,'uiBq')+_0x45d74b(0x6b4,'04Bs')+'-slate-3'+_0x45d74b(0x5e8,'fgHr')+_0x45d74b(0xee,'21nv')+_0x45d74b(0x50a,'N[ww')+_0x45d74b(0x2a0,'VTMS')+_0x45d74b(0x7ee,'BU&6')+_0x45d74b(0x7a4,'HGE)')+_0x45d74b(0xe3,'BDRN')+_0x45d74b(0x658,'uiBq')+'>'):'',_0x45d74b(0x1e7,'(7kx')+_0x45d74b(0x792,'ry(^')+_0x45d74b(0x9a,'N[ww')+_0x45d74b(0x7ef,'iqmV')+_0x45d74b(0xf0,'oQ6j')+_0x45d74b(0x301,'HGE)')+_0x45d74b(0x5ea,'ry(^')+_0x45d74b(0x574,'&s[F')+_0x45d74b(0x406,'0&x[')+_0x45d74b(0x42a,'LNHM')+_0x45d74b(0x61d,'R0]m')+_0x45d74b(0x7aa,'E7eE')+_0x45d74b(0x3aa,'&aKg')+_0x45d74b(0xce,'5mW]')+_0x45d74b(0x71e,'8sJn')+_0x45d74b(0x377,'BDRN'))['concat'](_0x36af6a['id'],_0x45d74b(0x75b,'N[ww')+_0x45d74b(0x2b5,'vhM0')+_0x45d74b(0x540,'bb@#')+_0x45d74b(0x854,'uiBq')+_0x45d74b(0x4aa,'K)t$')+'enter\x20ga'+_0x45d74b(0x77a,'0&x[')+_0x45d74b(0x423,'VTMS')+_0x45d74b(0x340,'**1C')+_0x45d74b(0x2c2,'5mW]')+_0x45d74b(0x1da,'w%VX')+_0x45d74b(0x33d,'rLGt')+_0x45d74b(0x2ec,'ry(^')+_0x45d74b(0x7a6,'&IUg')+'\x20transit'+'ion\x20')['concat'](_0x4c3fbe['solution'+_0x45d74b(0x6d7,'rSuA')]?_0x2dba2c[_0x45d74b(0x6d4,'freO')]:_0x2dba2c[_0x45d74b(0x870,'rSuA')],'\x22\x0a\x20\x20\x20\x20\x20\x20'+_0x45d74b(0x774,'4]xv')+_0x45d74b(0x233,'rSuA')+_0x45d74b(0x35a,'BLiw')+'lass=\x22w-'+'4\x20h-4\x20te'+_0x45d74b(0x3d7,'5mW]')+_0x45d74b(0x6ee,'BDRN')+'ll=\x22none'+_0x45d74b(0x3f5,'pODZ')+_0x45d74b(0x35f,'&s[F')+'tColor\x22\x20'+_0x45d74b(0x631,'21nv')+'\x220\x200\x2024\x20'+_0x45d74b(0x643,'QHXz')+_0x45d74b(0x7df,'s59!')+_0x45d74b(0xa8,'ry(^')+_0x45d74b(0x4e4,'rSuA')+_0x45d74b(0x37b,'04Bs')+_0x45d74b(0x521,'freO')+_0x45d74b(0x35d,'vhM0')+'inejoin='+_0x45d74b(0x4a4,'HGE)')+_0x45d74b(0x84e,'21nv')+_0x45d74b(0x197,'iqmV')+_0x45d74b(0x7e0,'VTMS')+_0x45d74b(0x38b,'bb@#')+_0x45d74b(0x619,'ry(^')+_0x45d74b(0x4de,'E7eE')+_0x45d74b(0x27d,'vhM0')+_0x45d74b(0x868,'][YR')+_0x45d74b(0x6fd,'s59!')+_0x45d74b(0x510,'m^]$')+_0x45d74b(0x5f5,'VTMS')+_0x45d74b(0x82e,'rSuA')+_0x45d74b(0x16b,'pODZ')+_0x45d74b(0x4d0,'rLGt')+_0x45d74b(0x251,'&s[F')+_0x45d74b(0x7cb,'m^]$')+'0l-.548.'+'547A3.37'+_0x45d74b(0x6d2,'04Bs')+_0x45d74b(0x685,'vhM0')+_0x45d74b(0x362,'w%VX')+'a2\x202\x200\x201'+_0x45d74b(0x121,'RBUk')+'531c0-.8'+_0x45d74b(0x10d,'bb@#')+_0x45d74b(0x1dd,'RBUk')+'88-2.386'+_0x45d74b(0x698,'5mW]')+_0x45d74b(0x87d,'VTMS')+_0x45d74b(0x49c,']0A5')+_0x45d74b(0x430,'oQ6j')+_0x45d74b(0x62b,'bb@#')+'\x20\x20\x20\x20\x20\x20\x20<'+_0x45d74b(0x178,'ry(^'))[_0x45d74b(0x52d,'I0iY')](_0x4c3fbe['solution'+_0x45d74b(0x853,'QHXz')]?'Hide\x20Ste'+'p-by-Ste'+_0x45d74b(0x84,'oQ6j')+'on':_0x2dba2c[_0x45d74b(0x572,'QHXz')],_0x45d74b(0xc3,'ry(^')+_0x45d74b(0x7be,'QHXz')+'\x20\x20</butt'+_0x45d74b(0x1a0,'vhM0')+_0x45d74b(0x3d2,'&s[F')+_0x45d74b(0x699,'21nv')+_0x45d74b(0x297,'ry(^')+_0x45d74b(0xdb,'iqmV'))[_0x45d74b(0x5b9,'(W06')](_0x4c3fbe[_0x45d74b(0x2ff,'m^]$')+_0x45d74b(0x382,'T7N6')]?'block':_0x2dba2c[_0x45d74b(0x26c,'5jp8')],_0x45d74b(0x199,'0&x[')+_0x45d74b(0x17d,'21nv')+_0x45d74b(0x831,'w%VX')+_0x45d74b(0x60a,'**1C')+_0x45d74b(0x818,'N[ww')+'der-slat'+_0x45d74b(0x73c,'21nv')+_0x45d74b(0x2de,'K)t$')+_0x45d74b(0x612,'iqmV')+_0x45d74b(0x66d,'VTMS')+_0x45d74b(0x78a,'rLGt')+_0x45d74b(0x135,'5mW]')+_0x45d74b(0x595,'ry(^')+_0x45d74b(0x319,'**1C')+_0x45d74b(0x23d,'8sJn')+_0x45d74b(0x3b4,'s59!')+_0x45d74b(0x2c8,'B&6q')+_0x45d74b(0x5a3,'5mW]')+_0x45d74b(0x7d5,'LNHM')+_0x45d74b(0x38a,'iqmV')+_0x45d74b(0x701,'E7eE')+_0x45d74b(0x1b8,'R0]m')+_0x45d74b(0x42e,'K)t$')+_0x45d74b(0x688,'0&x[')+_0x45d74b(0x6eb,'m^]$')+_0x45d74b(0x313,'E7eE')+_0x45d74b(0x781,'m%f&')+_0x45d74b(0x1c9,'w%VX')+_0x45d74b(0x216,'8sJn')+_0x45d74b(0x62a,'s59!')+_0x45d74b(0x630,'RBUk')+_0x45d74b(0x500,'ry(^')+_0x45d74b(0x11a,'&aKg')+_0x45d74b(0x94,'rLGt')+_0x45d74b(0x4b3,'uiBq')+_0x45d74b(0x7d1,'iqmV')+_0x45d74b(0x3c4,'rSuA')+_0x45d74b(0x10c,'BDRN')+_0x45d74b(0x1f3,'&aKg')+_0x45d74b(0x3da,'pODZ')+_0x45d74b(0x551,'C6GW')+'svg\x20clas'+_0x45d74b(0xfa,'C6GW')+_0x45d74b(0x4d3,'N[ww')+_0x45d74b(0x799,'BDRN')+_0x45d74b(0x4b6,'Sq6a')+_0x45d74b(0x881,'m^]$')+_0x45d74b(0x4ee,'8sJn')+_0x45d74b(0x59b,'(7kx')+_0x45d74b(0x13b,'(W06')+_0x45d74b(0x753,'B&6q')+'stroke-l'+_0x45d74b(0x21a,'K)t$')+_0x45d74b(0x5fa,'bb@#')+_0x45d74b(0x322,'rLGt')+_0x45d74b(0x315,'HGE)')+_0x45d74b(0x34d,'I0iY')+_0x45d74b(0x65b,'5mW]')+_0x45d74b(0x2f8,'5mW]')+_0x45d74b(0x40f,'K)t$')+_0x45d74b(0x489,'m%f&')+_0x45d74b(0x3a4,'8^SX')+'\x200\x2011-18'+_0x45d74b(0x3bc,'rLGt')+_0x45d74b(0x86b,'8sJn')+_0x45d74b(0x556,'][YR')+_0x45d74b(0x80b,'vhM0')+_0x45d74b(0x507,'iqmV')+_0x45d74b(0x59a,'freO')+_0x45d74b(0x2d9,'][YR')+'p\x20AP\x20Cal'+_0x45d74b(0x601,'04Bs')+_0x45d74b(0x529,'LNHM')+_0x45d74b(0x24d,'BLiw')+_0x45d74b(0x1b7,'(7kx')+_0x45d74b(0x366,'**1C')+_0x45d74b(0x507,'iqmV')+_0x45d74b(0x892,'m^]$')+_0x45d74b(0x248,'oQ6j')+_0x45d74b(0x123,'&aKg')+_0x45d74b(0x6a9,'q]&!')+_0x45d74b(0x4be,'BLiw')+_0x45d74b(0x5a8,'m^]$')+_0x45d74b(0x5da,'R0]m')+_0x45d74b(0x7a7,'vhM0')+_0x45d74b(0x22a,'m^]$')+_0x45d74b(0x3a2,'oQ6j')+_0x45d74b(0x2c7,'5mW]')+_0x45d74b(0x60c,'rLGt')+_0x45d74b(0x491,'ry(^')+_0x45d74b(0x609,'&aKg')+_0x45d74b(0x115,'4]xv')+_0x45d74b(0x64f,'q]&!')+_0x45d74b(0x80c,'Sq6a')+_0x45d74b(0x3e2,'QHXz')+_0x45d74b(0x2ee,'vhM0')+_0x45d74b(0x7b4,'&IUg')+_0x45d74b(0x1d0,'][YR')+_0x45d74b(0x5fc,'vhM0')+'\x22>')[_0x45d74b(0x666,'m^]$')](_0x178160[_0x36af6a[_0x45d74b(0x786,'rSuA')+_0x45d74b(0x253,']0A5')]],_0x45d74b(0x649,'(7kx')+_0x45d74b(0x62f,'T7N6')+_0x45d74b(0x7f4,'8^SX')+_0x45d74b(0x751,'(W06')+_0x45d74b(0x313,'E7eE')+_0x45d74b(0xa5,'HGE)')+_0x45d74b(0x7be,'QHXz')+_0x45d74b(0x591,'5mW]')+_0x45d74b(0x3a3,'K)t$')+_0x45d74b(0x1de,'C6GW')+_0x45d74b(0x636,'T7N6')+_0x45d74b(0x142,'q]&!')+_0x45d74b(0x3a0,'0&x[')+'text-sla'+_0x45d74b(0x2eb,'BLiw')+_0x45d74b(0x4b9,'][YR')+'elaxed\x20s'+_0x45d74b(0x1ed,'&aKg')+_0x45d74b(0x47a,'I0iY')+_0x45d74b(0x476,'N[ww')+'\x22>\x0a\x20\x20\x20\x20\x20'+_0x45d74b(0x4fc,'C6GW'))[_0x45d74b(0x6de,'QHXz')](_0x36af6a[_0x45d74b(0x731,'VTMS')],'\x0a\x20\x20\x20\x20\x20\x20\x20'+_0x45d74b(0x1a1,'rSuA')+_0x45d74b(0x5ab,'iqmV')+_0x45d74b(0x1f0,'HGE)')+_0x45d74b(0x64a,'HGE)')+_0x45d74b(0xf7,'N[ww')+'3.5\x20bord'+_0x45d74b(0x384,'04Bs')+_0x45d74b(0x138,'BLiw')+_0x45d74b(0x84f,'QHXz')+'ex\x20flex-'+_0x45d74b(0x730,'R0]m')+'lex-row\x20'+_0x45d74b(0x84a,'bb@#')+_0x45d74b(0x1c6,'**1C')+_0x45d74b(0x1a7,'m%f&')+_0x45d74b(0x42c,'8sJn')+_0x45d74b(0x288,'bb@#')+_0x45d74b(0x3fb,'8sJn')+_0x45d74b(0x1f9,'04Bs')+'n\x20class='+_0x45d74b(0x189,'m%f&')+_0x45d74b(0x37d,'freO')+_0x45d74b(0x259,'RBUk')+_0x45d74b(0x5dc,'BLiw')+_0x45d74b(0x17c,'fgHr')+'\x20\x20\x20\x20\x20\x20\x20\x20'+_0x45d74b(0x100,'5mW]')+_0x45d74b(0x614,'BDRN')+_0x45d74b(0x3c2,'&s[F')+_0x45d74b(0x88f,'8sJn')+_0x45d74b(0x726,'rSuA')+'\x20your\x20wo'+_0x45d74b(0x680,'LNHM')+'date\x20the'+_0x45d74b(0x143,'N[ww')+_0x45d74b(0x4dc,'&aKg')+'\x0a\x20\x20\x20\x20\x20\x20\x20'+_0x45d74b(0x4ca,'uiBq')+_0x45d74b(0x41d,'C6GW')+_0x45d74b(0x737,'T7N6')+_0x45d74b(0x481,'C6GW')+'ass=\x22fle'+_0x45d74b(0x694,'E7eE')+_0x45d74b(0x271,'m^]$')+_0x45d74b(0x374,'21nv')+_0x45d74b(0x4b0,'5mW]')+_0x45d74b(0x38d,']0A5')+_0x45d74b(0x3ee,'uiBq')+_0x45d74b(0xaf,'B&6q')+'\x20\x20\x20\x20\x20\x20\x20t'+_0x45d74b(0x808,'oQ6j')+_0x45d74b(0x1e2,'Sq6a')+_0x45d74b(0x734,'freO')+'\x20\x20\x20\x20\x20dat'+_0x45d74b(0x1ea,'&IUg')+_0x45d74b(0x2d8,'**1C')+_0x45d74b(0xb2,'BDRN')+_0x45d74b(0xaf,'B&6q')+_0x45d74b(0x52e,'HGE)')+_0x45d74b(0x273,'**1C'))[_0x45d74b(0x471,'&IUg')](_0x36af6a['id'],_0x45d74b(0x60d,'q]&!')+_0x45d74b(0x1c7,'U8a4')+_0x45d74b(0x61a,'bb@#')+_0x45d74b(0x1b2,'fgHr')+_0x45d74b(0x7fc,'&aKg')+_0x45d74b(0x3fb,'8sJn')+_0x45d74b(0xc1,'][YR')+_0x45d74b(0x7b8,'**1C')+'-3.5\x20py-'+_0x45d74b(0x1e0,'R0]m')+_0x45d74b(0x2a7,'BLiw')+_0x45d74b(0x829,'fgHr')+_0x45d74b(0x156,'&IUg')+_0x45d74b(0xa7,'rSuA')+_0x45d74b(0x39c,'HGE)')+_0x45d74b(0x544,'rLGt'))[_0x45d74b(0x6c8,'**1C')](_0x4c3fbe[_0x45d74b(0x40b,'21nv')]&&_0x4c3fbe[_0x45d74b(0xdc,'0&x[')+'t']?_0x45d74b(0x78e,'&aKg')+_0x45d74b(0x553,'T7N6')+_0x45d74b(0x739,'21nv')+_0x45d74b(0xe7,'C6GW')+_0x45d74b(0x243,'I0iY')+_0x45d74b(0x3fe,'vhM0')+_0x45d74b(0x6fe,'fgHr')+'sm':_0x2dba2c[_0x45d74b(0x1fc,'I0iY')],_0x45d74b(0x587,'QHXz')+_0x45d74b(0x573,'LNHM')+_0x45d74b(0x76c,'K)t$')+_0x45d74b(0x403,'bb@#')+'\x20\x20I\x20Got\x20'+_0x45d74b(0x68c,'fgHr')+_0x45d74b(0x488,'&IUg')+_0x45d74b(0x2d1,'ry(^')+_0x45d74b(0x31a,'pODZ')+_0x45d74b(0x2d4,'B&6q')+_0x45d74b(0x57a,'I0iY')+_0x45d74b(0x6c1,'C6GW')+_0x45d74b(0x776,'][YR')+_0x45d74b(0x313,'E7eE')+_0x45d74b(0x167,'K)t$')+_0x45d74b(0x580,'q]&!')+_0x45d74b(0x3ce,'21nv')+_0x45d74b(0x1f8,'B&6q')+_0x45d74b(0x608,'5mW]')+_0x45d74b(0x77f,'BU&6')+_0x45d74b(0x838,'5jp8')+_0x45d74b(0x45a,'&IUg')+_0x45d74b(0x313,'E7eE')+_0x45d74b(0x7e7,'pODZ')+'=\x22')[_0x45d74b(0x5b9,'(W06')](_0x36af6a['id'],_0x45d74b(0x7ea,'&aKg')+_0x45d74b(0x48a,'RBUk')+_0x45d74b(0x15d,'m^]$')+_0x45d74b(0x1ee,'8sJn')+_0x45d74b(0x208,'0&x[')+_0x45d74b(0x4c7,'ry(^')+_0x45d74b(0x6ea,'][YR')+_0x45d74b(0x6af,'(7kx')+'px-3.5\x20p'+_0x45d74b(0x7b5,'4]xv')+_0x45d74b(0x4cd,'(W06')+_0x45d74b(0x743,'0&x[')+_0x45d74b(0x2a6,'&IUg')+_0x45d74b(0x7cc,'B&6q')+_0x45d74b(0x3e0,'4]xv')+_0x45d74b(0xd9,'(7kx'))[_0x45d74b(0x666,'m^]$')](_0x4c3fbe[_0x45d74b(0x464,'VTMS')]&&!_0x4c3fbe[_0x45d74b(0x56a,'fgHr')+'t']?_0x2dba2c[_0x45d74b(0x516,'E7eE')]:_0x2dba2c[_0x45d74b(0x534,'(W06')],_0x45d74b(0x6c3,'rLGt')+'\x20\x20\x20\x20\x20\x20\x20\x20'+'>\x0a\x20\x20\x20\x20\x20\x20'+_0x45d74b(0x5bd,'8^SX')+_0x45d74b(0x4a8,'RBUk')+_0x45d74b(0x5fb,'U8a4')+_0x45d74b(0x7d6,'LNHM')+_0x45d74b(0x2ba,'s59!')+_0x45d74b(0x797,'N[ww')+_0x45d74b(0x1e7,'(7kx')+'\x20\x20\x20\x20\x20</d'+_0x45d74b(0x69f,'N[ww')+_0x45d74b(0x873,'BLiw')+'div>\x0a\x20\x20\x20'+_0x45d74b(0x4cb,'m%f&')+_0x45d74b(0x61c,'04Bs')+_0x45d74b(0x176,'bb@#')+_0x45d74b(0x596,'VTMS')),_0x40ed04;}function _0x318b32(){const _0x4a939c=_0x11e096,_0x462180={'fuZLH':function(_0x11c1aa){const _0x1d6f7a=a0_0x552a;return _0x2dba2c[_0x1d6f7a(0x642,'BU&6')](_0x11c1aa);},'jWSMa':function(_0x2f6ec4){const _0x16f277=a0_0x552a;return _0x2dba2c[_0x16f277(0x304,'U8a4')](_0x2f6ec4);},'nOeCo':_0x2dba2c[_0x4a939c(0x845,'&aKg')],'DYzom':_0x2dba2c['juGbp']},_0x52a610=document[_0x4a939c(0x25f,'rSuA')+_0x4a939c(0x706,'K)t$')](_0x4a939c(0x4cc,'C6GW')+_0x4a939c(0x5b1,'fgHr')+_0x4a939c(0x3e4,'BU&6'));_0x52a610[_0x4a939c(0x11d,'s59!')+'L']='';const _0x20def1=_0x1f068c[_0x4a939c(0x3cc,'&aKg')](_0x54c87f=>_0x432d16['activeCa'+_0x4a939c(0x496,'U8a4')]===_0x4a939c(0xb5,'R0]m')?!![]:_0x54c87f[_0x4a939c(0x7c0,'s59!')]===_0x432d16[_0x4a939c(0x887,'(W06')+_0x4a939c(0x14d,'(7kx')]);_0x20def1['forEach'](_0x78bdd3=>{const _0x4c276d=_0x4a939c;if(_0x2dba2c[_0x4c276d(0x25e,']0A5')]===_0x2dba2c['kPWZL']){const _0x3a7767=_0x3e5464[_0x4c276d(0x800,'fgHr')+_0x4c276d(0x14d,'(7kx')];_0x5ddc93=_0x462180[_0x4c276d(0x1a6,'4]xv')](_0x10f1d2),_0x68fdf2[_0x4c276d(0x79f,'&IUg')+_0x4c276d(0x7dc,'uiBq')]=_0x3a7767,_0x462180['jWSMa'](_0x4ce2bf),_0x462180[_0x4c276d(0x522,'5mW]')](_0x4c3fb2),_0x5893ba(),_0x5a4d4c[_0x4c276d(0x4a7,'ry(^')+'t'][_0x4c276d(0x4ff,'B&6q')](_0x462180[_0x4c276d(0x172,'U8a4')]),_0x14e06e[_0x4c276d(0x639,'bb@#')+'t'][_0x4c276d(0xa1,'freO')](_0x462180[_0x4c276d(0x7d9,'5jp8')]);}else _0x52a610[_0x4c276d(0x183,'HGE)')+'ild'](_0x2dba2c[_0x4c276d(0x2dd,'oQ6j')](_0x48fb37,_0x78bdd3));}),_0x2dba2c[_0x4a939c(0x2f7,'8^SX')](_0x49802f,_0x52a610);}function _0x45993d(_0x359ce3){const _0x118650=_0x11e096,_0x203e08=_0x1f068c[_0x118650(0x814,'Sq6a')](_0x16cd38=>_0x16cd38['id']===_0x359ce3),_0x197162=document[_0x118650(0x229,'(7kx')+_0x118650(0x372,'freO')]((_0x118650(0x1a8,'VTMS')+_0x118650(0x675,'21nv'))[_0x118650(0x118,'oQ6j')](_0x359ce3));if(!_0x203e08||!_0x197162||!_0x197162['parentNo'+'de']){_0x318b32();return;}const _0xe955f0=_0x2dba2c[_0x118650(0x3b1,'8^SX')](_0x48fb37,_0x203e08);_0x197162[_0x118650(0x6d1,'uiBq')+'de'][_0x118650(0x22e,'C6GW')+_0x118650(0x1a3,'pODZ')](_0xe955f0,_0x197162),_0x49802f(_0xe955f0);}function _0x3eb4f2(){const _0x5df563=_0x11e096,_0x2608e6={'DhDau':function(_0x466520){return _0x466520();},'teath':_0x2dba2c[_0x5df563(0x677,'E7eE')],'KzLvj':_0x2dba2c[_0x5df563(0x6d0,'][YR')],'aEGOZ':function(_0x599969){const _0x1078be=_0x5df563;return _0x2dba2c[_0x1078be(0x7a2,'s59!')](_0x599969);},'mNRtv':function(_0x50fa10,_0x582afa,_0x38422e){const _0x484c52=_0x5df563;return _0x2dba2c[_0x484c52(0x13f,'bb@#')](_0x50fa10,_0x582afa,_0x38422e);},'rBNrZ':_0x2dba2c[_0x5df563(0x405,'4]xv')],'fbFry':function(_0x5f64b4,_0x4b1079){return _0x2dba2c['xSUob'](_0x5f64b4,_0x4b1079);},'LwQhy':_0x5df563(0x249,'5jp8')+_0x5df563(0x429,'fgHr'),'cuGnM':function(_0xc4e169,_0xf54ac9){const _0x1e3e47=_0x5df563;return _0x2dba2c[_0x1e3e47(0x333,'R0]m')](_0xc4e169,_0xf54ac9);},'UVrlt':_0x5df563(0x78b,'bb@#'),'TEYlP':_0x5df563(0x1b1,'K)t$'),'uuzHh':function(_0x4e37c7,_0x507ea5,_0x53c99b){const _0x48e877=_0x5df563;return _0x2dba2c[_0x48e877(0x7c5,'w%VX')](_0x4e37c7,_0x507ea5,_0x53c99b);},'xenUq':_0x2dba2c[_0x5df563(0x30e,'ry(^')],'IIELj':function(_0x381175,_0x28ef96){return _0x381175===_0x28ef96;},'yQJxl':function(_0x1f6390,_0x44b00e){const _0x46a2c8=_0x5df563;return _0x2dba2c[_0x46a2c8(0x6ce,'][YR')](_0x1f6390,_0x44b00e);},'MUIPl':function(_0xf81351,_0xfbe1e3){const _0xd0d905=_0x5df563;return _0x2dba2c[_0xd0d905(0x1f2,'U8a4')](_0xf81351,_0xfbe1e3);},'fNhCk':function(_0x39bf6a,_0x339d32){return _0x39bf6a===_0x339d32;},'VqQpT':function(_0xa0a7f9,_0x57ab69){return _0xa0a7f9(_0x57ab69);},'JEDfQ':_0x2dba2c[_0x5df563(0x39f,'w%VX')],'uZpwn':_0x5df563(0x49d,'m^]$')+'de','uSfMc':_0x2dba2c[_0x5df563(0x700,'5jp8')],'RMpKg':_0x5df563(0x283,'0&x['),'zALGa':function(_0x9a9d0a,_0x2119d9){const _0x3d8ac9=_0x5df563;return _0x2dba2c[_0x3d8ac9(0x117,'w%VX')](_0x9a9d0a,_0x2119d9);},'DlLNy':function(_0x4ce43d,_0x2063ff){const _0x5ddf96=_0x5df563;return _0x2dba2c[_0x5ddf96(0x826,'oQ6j')](_0x4ce43d,_0x2063ff);},'gfwhR':function(_0x5103c7,_0x57cd1e){return _0x5103c7===_0x57cd1e;},'LOxea':_0x2dba2c[_0x5df563(0x575,'QHXz')],'eOOVH':function(_0x73757b){const _0x270c5e=_0x5df563;return _0x2dba2c[_0x270c5e(0x78d,'w%VX')](_0x73757b);},'MnnzQ':function(_0xfe1228){const _0x267ba3=_0x5df563;return _0x2dba2c[_0x267ba3(0x18e,'BDRN')](_0xfe1228);},'HCqtL':function(_0x1295e2,_0xf04d72){const _0x4bc3bc=_0x5df563;return _0x2dba2c[_0x4bc3bc(0x49a,'QHXz')](_0x1295e2,_0xf04d72);},'lZAAu':function(_0x556b5f,_0x8a8a28){return _0x556b5f===_0x8a8a28;},'vfCSd':_0x5df563(0x19c,'Sq6a')+_0x5df563(0x674,'0&x['),'MsYFe':function(_0xcd3d71){const _0x5b4817=_0x5df563;return _0x2dba2c[_0x5b4817(0x392,'RBUk')](_0xcd3d71);},'UBSOg':_0x2dba2c[_0x5df563(0x244,'21nv')],'UhZdE':function(_0x22fd0a,_0x499467){const _0x5059e9=_0x5df563;return _0x2dba2c[_0x5059e9(0x836,'(7kx')](_0x22fd0a,_0x499467);},'byFaU':function(_0x371da4,_0x173dfb){return _0x371da4+_0x173dfb;},'YdLET':_0x2dba2c[_0x5df563(0x6b8,'N[ww')],'DUFDw':_0x2dba2c[_0x5df563(0x68f,'ry(^')],'XUDad':_0x2dba2c[_0x5df563(0x65e,'HGE)')],'gGYgr':function(_0x401c6a){const _0x38f913=_0x5df563;return _0x2dba2c[_0x38f913(0x495,'4]xv')](_0x401c6a);},'OloqD':function(_0x45dcc7){return _0x45dcc7();},'lnJUU':function(_0x5d6f2d,_0x43f976){const _0x4a57df=_0x5df563;return _0x2dba2c[_0x4a57df(0x5cb,'K)t$')](_0x5d6f2d,_0x43f976);},'qIodo':function(_0x1ae0d0,_0x31fe1b){return _0x1ae0d0===_0x31fe1b;}};if(_0x2dba2c[_0x5df563(0x756,'][YR')](_0x2dba2c[_0x5df563(0x7f2,'s59!')],_0x2dba2c[_0x5df563(0x6b1,'21nv')])){const _0x3ea0f0=document[_0x5df563(0x787,'I0iY')+_0x5df563(0x345,'vhM0')](_0x2dba2c[_0x5df563(0x890,'pODZ')]),_0x310be9=document[_0x5df563(0xf4,'&IUg')+_0x5df563(0x733,'uiBq')](_0x2dba2c[_0x5df563(0x73d,'VTMS')]),_0x5826b3=document[_0x5df563(0x5c4,'&s[F')+'ntById'](_0x2dba2c[_0x5df563(0x11f,'B&6q')]);function _0x1ddc15(){const _0x4d1f76=_0x5df563;_0x432d16[_0x4d1f76(0x263,'VTMS')+_0x4d1f76(0x85c,'I0iY')]?(_0x310be9[_0x4d1f76(0x44a,'(7kx')+'t'][_0x4d1f76(0x3e7,'21nv')](_0x2dba2c['ietxq']),_0x5826b3[_0x4d1f76(0x20b,'N[ww')][_0x4d1f76(0x4bd,'RBUk')+'m']=_0x2dba2c[_0x4d1f76(0x5fd,'I0iY')]):(_0x310be9[_0x4d1f76(0x7a8,'VTMS')+'t'][_0x4d1f76(0x6dd,'K)t$')](_0x4d1f76(0x679,'w%VX')),_0x5826b3[_0x4d1f76(0x811,'m%f&')][_0x4d1f76(0x653,'oQ6j')+'m']=_0x2dba2c[_0x4d1f76(0x80f,'ry(^')]);}_0x2dba2c[_0x5df563(0x4ec,'&IUg')](_0x1ddc15),_0x3ea0f0['addEvent'+_0x5df563(0x592,'&s[F')](_0x2dba2c[_0x5df563(0x7d2,'0&x[')],()=>{const _0x39f4b8=_0x5df563;_0x432d16[_0x39f4b8(0x3ca,'oQ6j')+_0x39f4b8(0x53f,'BLiw')]=!_0x432d16[_0x39f4b8(0x3ca,'oQ6j')+_0x39f4b8(0x147,'(W06')],_0x2608e6[_0x39f4b8(0x85b,'bb@#')](_0x1ddc15),_0x2608e6[_0x39f4b8(0x85b,'bb@#')](_0x49c33a);}),document[_0x5df563(0x207,'T7N6')+_0x5df563(0x38f,'m%f&')](_0x5df563(0x629,'T7N6')+_0x5df563(0x48c,'5jp8'))[_0x5df563(0x2f0,']0A5')+_0x5df563(0x8e,'uiBq')](_0x2dba2c[_0x5df563(0x569,'04Bs')],_0x5e587f=>{const _0xaab1fb=_0x5df563,_0xe45d4f=_0x5e587f[_0xaab1fb(0x30d,'5mW]')][_0xaab1fb(0x69b,'vhM0')](_0x2608e6[_0xaab1fb(0x373,'04Bs')]);if(!_0xe45d4f)return;const _0x7391e8=_0xe45d4f[_0xaab1fb(0x6fc,'R0]m')+_0xaab1fb(0x470,'iqmV')](_0x2608e6[_0xaab1fb(0x4e9,'C6GW')]);if(!_0x7391e8)return;_0x432d16[_0xaab1fb(0x795,'T7N6')+_0xaab1fb(0x7fb,'BLiw')]=_0x7391e8,_0x2608e6[_0xaab1fb(0x6ff,'&IUg')](_0x49c33a),_0x2608e6[_0xaab1fb(0x361,'5mW]')](_0x28eca7),_0x318b32();}),document[_0x5df563(0x3fd,'fgHr')+'ntById'](_0x2dba2c[_0x5df563(0x6b9,'oQ6j')])[_0x5df563(0x31c,'&IUg')+'Listener'](_0x2dba2c['mABhe'],_0x34e5fb=>{const _0x307885=_0x5df563,_0x68d7fe=_0x34e5fb[_0x307885(0x5af,'BDRN')][_0x307885(0x2f2,'QHXz')](_0x307885(0x22b,'E7eE')+_0x307885(0x4b1,'s59!')+_0x307885(0x161,'QHXz'));if(!_0x68d7fe)return;const _0x50821c=_0x68d7fe[_0x307885(0x185,'(7kx')+_0x307885(0x91,'s59!')](_0x307885(0x772,'BDRN')+_0x307885(0x2a2,'w%VX')),_0x4ebfd1=_0x2608e6[_0x307885(0x5bc,'0&x[')](parseInt,_0x68d7fe[_0x307885(0x83c,'C6GW')+_0x307885(0x3ad,'E7eE')](_0x2608e6[_0x307885(0x543,'5mW]')]),0xa),_0xb8ee5f=_0x1f068c['find'](_0x4c6588=>_0x4c6588['id']===_0x4ebfd1);if(!_0xb8ee5f)return;const _0x61caa9=_0x432d16[_0x307885(0x2ca,'m^]$')+'s'][_0x4ebfd1];if(_0x2608e6[_0x307885(0x830,'ry(^')](_0x50821c,_0x2608e6[_0x307885(0x7e9,'B&6q')])){if(_0x2608e6[_0x307885(0x5d5,'fgHr')](_0x2608e6[_0x307885(0x3e1,'bb@#')],_0x2608e6[_0x307885(0x5d0,'q]&!')])){const _0x286c8e=_0x2608e6['uuzHh'](parseInt,_0x68d7fe[_0x307885(0x623,'bb@#')+_0x307885(0x3d9,'C6GW')](_0x2608e6[_0x307885(0x71c,'s59!')]),0xa);_0x61caa9[_0x307885(0x67c,'iqmV')+_0x307885(0x2bc,'QHXz')]=_0x286c8e,_0x61caa9[_0x307885(0x5e1,'N[ww')]&&_0x2608e6[_0x307885(0x1ec,'][YR')](_0x61caa9[_0x307885(0x672,'oQ6j')],'mc')&&(_0x61caa9[_0x307885(0x785,'E7eE')+'t']=_0x286c8e===_0xb8ee5f[_0x307885(0x82b,'(7kx')+_0x307885(0x775,'BDRN')]),_0x2608e6[_0x307885(0x7cd,'][YR')](_0x49c33a),_0x28eca7(),_0x2608e6[_0x307885(0x5b7,'**1C')](_0x45993d,_0x4ebfd1);}else _0x35c865[_0x307885(0x762,'04Bs')]();}else{if(_0x2608e6[_0x307885(0x5ac,'uiBq')](_0x50821c,_0x307885(0x5d9,'][YR'))){if(_0x2608e6[_0x307885(0x344,'21nv')](_0x61caa9[_0x307885(0x168,'BDRN')+_0x307885(0x137,'BDRN')],null))return;_0x61caa9['checked']=!![],_0x61caa9[_0x307885(0x622,'T7N6')]='mc',_0x61caa9[_0x307885(0x26f,']0A5')+'t']=_0x2608e6[_0x307885(0x891,'N[ww')](_0x61caa9[_0x307885(0x5ec,'8sJn')+_0x307885(0x73f,'I0iY')],_0xb8ee5f['correctI'+_0x307885(0x2e6,'U8a4')]),_0x49c33a(),_0x2608e6[_0x307885(0x280,'Sq6a')](_0x28eca7),_0x2608e6[_0x307885(0xd4,'vhM0')](_0x45993d,_0x4ebfd1);}else{if(_0x50821c===_0x2608e6[_0x307885(0x12d,'(7kx')])_0x61caa9[_0x307885(0xfb,'rLGt')+'Open']=!_0x61caa9['solution'+_0x307885(0x58a,'LNHM')],_0x49c33a(),_0x2608e6['VqQpT'](_0x45993d,_0x4ebfd1);else{if(_0x50821c===_0x2608e6[_0x307885(0x4bb,'vhM0')]){const _0x122da7=_0x68d7fe[_0x307885(0x834,'B&6q')+_0x307885(0x5f9,'K)t$')](_0x2608e6[_0x307885(0xbd,'m%f&')]);_0x61caa9['checked']=!![],_0x61caa9['mode']=_0x307885(0x15f,'0&x['),_0x61caa9['isCorrec'+'t']=_0x2608e6[_0x307885(0x460,'oQ6j')](_0x122da7,_0x2608e6[_0x307885(0x582,'B&6q')]),_0x2608e6[_0x307885(0xdf,'U8a4')](_0x122da7,_0x307885(0x66f,'iqmV'))&&_0x2608e6[_0x307885(0x128,'rSuA')](_0x61caa9[_0x307885(0x3f9,'&IUg')+_0x307885(0x606,'R0]m')],null)&&(_0x2608e6[_0x307885(0x79a,'5mW]')](_0x2608e6[_0x307885(0x457,'&aKg')],_0x2608e6[_0x307885(0x24f,'5jp8')])?_0x61caa9[_0x307885(0x50c,'R0]m')+'Index']=_0xb8ee5f[_0x307885(0x878,'m%f&')+_0x307885(0x670,'C6GW')]:_0x183041[_0x307885(0x246,'B&6q')+_0x307885(0x4cf,'RBUk')]=_0x267f53[_0x307885(0x81b,'N[ww')+_0x307885(0x3ba,'rLGt')]),_0x2608e6[_0x307885(0x4d5,'m%f&')](_0x49c33a),_0x2608e6[_0x307885(0x381,'&s[F')](_0x28eca7),_0x2608e6[_0x307885(0x876,'oQ6j')](_0x45993d,_0x4ebfd1);}else _0x2608e6[_0x307885(0x134,'oQ6j')](_0x50821c,_0x2608e6[_0x307885(0x13c,'K)t$')])&&(_0x61caa9[_0x307885(0x190,'s59!')+_0x307885(0xa3,'C6GW')]=null,_0x61caa9[_0x307885(0x888,'vhM0')]=![],_0x61caa9['isCorrec'+'t']=null,_0x61caa9[_0x307885(0xa0,'BU&6')]=null,_0x2608e6[_0x307885(0x141,'E7eE')](_0x49c33a),_0x2608e6['MsYFe'](_0x28eca7),_0x2608e6[_0x307885(0x6a1,'U8a4')](_0x45993d,_0x4ebfd1));}}}}),document[_0x5df563(0x13e,'BDRN')+'ntById'](_0x2dba2c[_0x5df563(0x15b,'&aKg')])[_0x5df563(0xcf,'(7kx')+_0x5df563(0x70c,'4]xv')](_0x2dba2c[_0x5df563(0x5ee,'(7kx')],()=>{const _0x57025c=_0x5df563,_0x14037d={'Lfymk':_0x2608e6[_0x57025c(0x71c,'s59!')],'PAwix':function(_0x5a0073,_0x73c2f3){return _0x5a0073===_0x73c2f3;},'YAmQm':function(_0x360b87,_0x3ff1b9){const _0x24b2c2=_0x57025c;return _0x2608e6[_0x24b2c2(0x499,'LNHM')](_0x360b87,_0x3ff1b9);},'VEKec':function(_0x1f480c,_0x3c3974){const _0x475431=_0x57025c;return _0x2608e6[_0x475431(0x663,'5jp8')](_0x1f480c,_0x3c3974);}};_0x1f068c[_0x57025c(0x80a,'&aKg')](_0x5354d0=>{const _0x15009c=_0x57025c;if(_0x2608e6[_0x15009c(0x71f,'I0iY')]===_0x2608e6['UBSOg'])_0x432d16[_0x15009c(0x358,'(W06')+'s'][_0x5354d0['id']][_0x15009c(0x51d,'uiBq')+_0x15009c(0x3b3,'iqmV')]=![];else{const _0x3a4163=_0x2c2131(_0x358555[_0x15009c(0x834,'B&6q')+_0x15009c(0x1a9,'w%VX')](xqPzwb[_0x15009c(0x720,'U8a4')]),0xa);_0x1243b2[_0x15009c(0x190,'s59!')+_0x15009c(0x137,'BDRN')]=_0x3a4163,_0x3d8168['checked']&&xqPzwb[_0x15009c(0x7af,'ry(^')](_0x5a5b66[_0x15009c(0x5f1,'5jp8')],'mc')&&(_0x3e8193[_0x15009c(0x627,'U8a4')+'t']=xqPzwb[_0x15009c(0x215,'&aKg')](_0x3a4163,_0x32f6ee[_0x15009c(0x7fd,'E7eE')+_0x15009c(0x222,'BLiw')])),_0x52702d(),_0x30533c(),xqPzwb['VEKec'](_0xc77e0b,_0x3bacf9);}}),_0x49c33a(),_0x2608e6[_0x57025c(0x43a,'s59!')](_0x318b32);});const _0x11cdf8=document[_0x5df563(0x524,'5mW]')+_0x5df563(0x858,'iqmV')](_0x2dba2c[_0x5df563(0xd7,'VTMS')]);document[_0x5df563(0xed,'uiBq')+_0x5df563(0xae,'m^]$')](_0x5df563(0x5f4,'5jp8')+'t')[_0x5df563(0xcf,'(7kx')+_0x5df563(0x790,'][YR')](_0x2dba2c[_0x5df563(0x4ad,'(W06')],()=>{const _0x2fd5fc=_0x5df563;_0x2608e6[_0x2fd5fc(0x6b2,'I0iY')]!==_0x2608e6[_0x2fd5fc(0x32a,'bb@#')]?_0x1d1adb[_0x4c05f8]=xAEfuq[_0x2fd5fc(0x6f4,'T7N6')](xAEfuq[_0x2fd5fc(0x2d3,'N[ww')](_0xe9fd25[_0x13032a],_0x438619[_0x4222a4]),0x0):(_0x11cdf8[_0x2fd5fc(0x79e,'4]xv')+'t'][_0x2fd5fc(0x412,'rSuA')](_0x2608e6[_0x2fd5fc(0x755,'N[ww')]),_0x11cdf8['classLis'+'t'][_0x2fd5fc(0x331,'LNHM')](_0x2608e6[_0x2fd5fc(0x6d3,'w%VX')]));}),document[_0x5df563(0xed,'uiBq')+_0x5df563(0x296,'RBUk')](_0x5df563(0x7ae,'0&x[')+'ncel')[_0x5df563(0x2f3,'K)t$')+'Listener'](_0x5df563(0x76a,'T7N6'),()=>{const _0x5861b5=_0x5df563;_0x11cdf8['classLis'+'t']['add'](_0x5861b5(0x588,'(7kx')),_0x11cdf8[_0x5861b5(0x815,'C6GW')+'t'][_0x5861b5(0x9b,'BDRN')](_0x2608e6[_0x5861b5(0x2be,'BLiw')]);}),document[_0x5df563(0x779,'bb@#')+_0x5df563(0xfc,'][YR')](_0x2dba2c[_0x5df563(0x125,'04Bs')])[_0x5df563(0x7f8,'N[ww')+_0x5df563(0x547,'BDRN')](_0x5df563(0x1fa,'ry(^'),()=>{const _0x3858fb=_0x5df563,_0x58aa18=_0x432d16[_0x3858fb(0x515,'freO')+_0x3858fb(0xb0,'freO')];_0x432d16=_0x2608e6['MsYFe'](_0x2f5f2b),_0x432d16[_0x3858fb(0x79f,'&IUg')+_0x3858fb(0x4e8,'5jp8')]=_0x58aa18,_0x2608e6[_0x3858fb(0x212,'bb@#')](_0x49c33a),_0x2608e6[_0x3858fb(0x715,'uiBq')](_0x28eca7),_0x2608e6[_0x3858fb(0x182,'4]xv')](_0x318b32),_0x11cdf8[_0x3858fb(0x815,'C6GW')+'t'][_0x3858fb(0x564,'R0]m')](_0x2608e6[_0x3858fb(0x7eb,'w%VX')]),_0x11cdf8[_0x3858fb(0x7f,'21nv')+'t'][_0x3858fb(0x66b,'E7eE')](_0x2608e6['XUDad']);}),_0x11cdf8[_0x5df563(0x30f,'rSuA')+_0x5df563(0x76f,'freO')](_0x5df563(0x76a,'T7N6'),_0x5f41fc=>{const _0x97369b=_0x5df563;_0x2608e6[_0x97369b(0x20c,'I0iY')](_0x5f41fc[_0x97369b(0x102,'**1C')],_0x11cdf8)&&(_0x11cdf8[_0x97369b(0xbc,'vhM0')+'t'][_0x97369b(0x85a,'I0iY')](_0x2608e6[_0x97369b(0x28f,'HGE)')]),_0x11cdf8[_0x97369b(0x201,'fgHr')+'t'][_0x97369b(0x289,'BU&6')](_0x2608e6[_0x97369b(0x6d3,'w%VX')]));}),document[_0x5df563(0x207,'T7N6')+_0x5df563(0x66a,'(W06')](_0x2dba2c[_0x5df563(0x438,'BU&6')])['addEvent'+_0x5df563(0x790,'][YR')](_0x2dba2c['mABhe'],()=>{const _0x33d2f8=_0x5df563,_0x47c90e=_0x2dba2c[_0x33d2f8(0x72c,'&s[F')][_0x33d2f8(0x260,'B&6q')]('|');let _0x3fe6f5=0x0;while(!![]){switch(_0x47c90e[_0x3fe6f5++]){case'0':document[_0x33d2f8(0x234,'C6GW')+_0x33d2f8(0x66a,'(W06')](_0x33d2f8(0x83a,'U8a4')+'e')[_0x33d2f8(0x104,'iqmV')+'t'][_0x33d2f8(0x330,'vhM0')](_0x2dba2c[_0x33d2f8(0x309,'Sq6a')]);continue;case'1':document[_0x33d2f8(0x5c4,'&s[F')+_0x33d2f8(0x1fe,'BLiw')](_0x33d2f8(0x784,'0&x[')+'l')[_0x33d2f8(0x527,'rSuA')+'t'][_0x33d2f8(0x564,'R0]m')](_0x2dba2c[_0x33d2f8(0x309,'Sq6a')]);continue;case'2':document[_0x33d2f8(0x229,'(7kx')+_0x33d2f8(0x4d1,'**1C')]('auth-pas'+'s')[_0x33d2f8(0x120,'s59!')]='';continue;case'3':document[_0x33d2f8(0x6e2,'B&6q')+_0x33d2f8(0x80e,'oQ6j')](_0x2dba2c[_0x33d2f8(0x250,'m^]$')])[_0x33d2f8(0x531,'&IUg')+'t']['add'](_0x33d2f8(0x6aa,'(W06'));continue;case'4':_0x2dba2c[_0x33d2f8(0x697,'BDRN')](_0x30b257,![]);continue;}break;}});}else try{return xAEfuq[_0x5df563(0x456,'4]xv')](_0x408898[_0x5df563(0x869,'vhM0')](_0x21a762),_0x23727d);}catch(_0x2fd2a2){return![];}}function _0x5b66d0(){const _0x30bc40=_0x11e096;document[_0x30bc40(0x802,'HGE)')+_0x30bc40(0x4d1,'**1C')](_0x2dba2c[_0x30bc40(0x15a,'**1C')])[_0x30bc40(0x440,'**1C')+'t']['add'](_0x2dba2c['ietxq']),document[_0x30bc40(0x270,'BU&6')+_0x30bc40(0x6a3,'LNHM')](_0x2dba2c[_0x30bc40(0x882,'iqmV')])[_0x30bc40(0x600,'w%VX')+'t']['remove'](_0x2dba2c[_0x30bc40(0x37f,'LNHM')]);if(!_0xbde933){if(_0x2dba2c[_0x30bc40(0x84d,'K)t$')](_0x2dba2c[_0x30bc40(0x863,'BLiw')],_0x30bc40(0x4d9,'ry(^'))){_0x2dba2c[_0x30bc40(0x620,'][YR')](_0x28d60b);return;}else _0xbde933=!![],_0x2dba2c['oLUoy'](_0x3bdc3b),_0x2dba2c[_0x30bc40(0x203,'N[ww')](_0x3eb4f2);}_0x28eca7(),_0x318b32(),window[_0x30bc40(0x29c,'8sJn')+_0x30bc40(0x30c,'vhM0')]();}document[_0x11e096(0x2ac,'rLGt')+_0x11e096(0x4e3,'(7kx')](_0x2dba2c[_0x11e096(0x1e9,'B&6q')],()=>{const _0x594cc6=_0x11e096,_0x547fc9={'tqfLp':function(_0x3df93e,_0x558656,_0x228d7b){const _0x23a0ce=a0_0x552a;return _0x2dba2c[_0x23a0ce(0x4a3,'21nv')](_0x3df93e,_0x558656,_0x228d7b);},'FATre':_0x2dba2c[_0x594cc6(0x5f2,'B&6q')],'BqUGZ':function(_0x2660b5,_0xe9c8b5){return _0x2660b5(_0xe9c8b5);},'OGcRK':function(_0x5b047b){const _0x4f5fd0=_0x594cc6;return _0x2dba2c[_0x4f5fd0(0x8a,'&s[F')](_0x5b047b);}},_0x30c53e=document['getEleme'+_0x594cc6(0x85,'w%VX')](_0x2dba2c[_0x594cc6(0xd5,'21nv')]),_0x4f08d0=document[_0x594cc6(0x779,'bb@#')+'ntById'](_0x2dba2c[_0x594cc6(0x53d,'rLGt')]),_0x1a5256=document[_0x594cc6(0x802,'HGE)')+_0x594cc6(0x7b7,'N[ww')](_0x2dba2c[_0x594cc6(0x7c8,'pODZ')]),_0x1c09d2=document[_0x594cc6(0x779,'bb@#')+'ntById'](_0x2dba2c[_0x594cc6(0x1e1,'21nv')]),_0x233fd5=document[_0x594cc6(0x343,'][YR')+_0x594cc6(0x18c,'21nv')](_0x2dba2c[_0x594cc6(0x261,'B&6q')]);_0x233fd5&&_0x233fd5[_0x594cc6(0x53a,'HGE)')+_0x594cc6(0x640,'E7eE')](_0x2dba2c[_0x594cc6(0x4f0,'N[ww')],()=>{const _0x5c8bf4=_0x594cc6,_0x173ae0=_0x1a5256[_0x5c8bf4(0x86,'VTMS')]===_0x2dba2c[_0x5c8bf4(0x75c,'QHXz')];_0x1a5256[_0x5c8bf4(0x4a6,'pODZ')]=_0x173ae0?_0x5c8bf4(0x1f7,'21nv'):_0x2dba2c[_0x5c8bf4(0x89,'I0iY')],_0x233fd5[_0x5c8bf4(0x571,'q]&!')+_0x5c8bf4(0x24c,'8^SX')]=_0x173ae0?_0x2dba2c[_0x5c8bf4(0x17a,'K)t$')]:_0x5c8bf4(0x3f0,'BDRN');}),_0x30c53e[_0x594cc6(0x6be,'BU&6')+_0x594cc6(0x55f,'8^SX')](_0x2dba2c[_0x594cc6(0x5b8,'C6GW')],_0x573bf3=>{const _0x1b2e92=_0x594cc6;_0x573bf3[_0x1b2e92(0x4d4,'uiBq')+_0x1b2e92(0x299,'fgHr')](),_0x547fc9[_0x1b2e92(0x383,'B&6q')](_0x4ff0f1,_0x4f08d0[_0x1b2e92(0x557,'&IUg')],_0x1a5256[_0x1b2e92(0x120,'s59!')])?(_0x1c09d2[_0x1b2e92(0x713,'freO')+'t'][_0x1b2e92(0x3a9,'fgHr')](_0x547fc9[_0x1b2e92(0x1c5,'rLGt')]),_0x547fc9[_0x1b2e92(0x34a,'0&x[')](_0x30b257,!![]),_0x547fc9[_0x1b2e92(0x44b,'ry(^')](_0x5b66d0)):(_0x1c09d2[_0x1b2e92(0x713,'freO')+'t'][_0x1b2e92(0x412,'rSuA')](_0x547fc9[_0x1b2e92(0x29e,'(W06')]),_0x1a5256[_0x1b2e92(0x131,'RBUk')]='',_0x1a5256[_0x1b2e92(0x2e9,'QHXz')]());}),_0x2dba2c[_0x594cc6(0x4b7,'VTMS')](_0x913955)?_0x2dba2c[_0x594cc6(0x82f,'&s[F')](_0x5b66d0):_0x4f08d0[_0x594cc6(0x52a,'RBUk')](),window[_0x594cc6(0x2a5,'R0]m')+_0x594cc6(0x5d1,'I0iY')](_0x2dba2c['YdlWf'],()=>{const _0x271326=_0x594cc6;_0x2dba2c[_0x271326(0x842,'ry(^')](_0x913955)&&window['onKatexR'+_0x271326(0x1f1,'m%f&')]();});});}()));function a0_0x2380(){const _0x365b61=['mJz4W6fKk8kntW','yKddRSkWWPe','WR0tW78IW5W','WRTyW7VdTeiAW4XE','kNO7eCoXW4vn','W7FdIJawWQT1aCks','hCklq8k5DZNcMGq','F3ddQmk7WQi','eshcHbxdUG','emkEWQPwrLRdJmoM','W5axrZvRWPJdKxm','F2OAWODX','f8kEW6uhFKfBhG','gmk3zwVcOa','kCkigSo0W5lcQmo1nG','C2BcI0v+','W4a4WONcHmkJ','W54jWQ4/WOVcQSkfW44','WORcPCkTECo/ESoRW4S','BYuykJHbWOSQ','WRCHW60wW78','ESoJxgDarttdOG','W6ddHWyuWQjYfmkx','fG7dM8kbW44','W7f1umkZFW','BSk5d8oBW4hcUCoPkW','EH48W6ldVCkoWOZcOW','WP8xgcDJWPZcHXW','WQepWOFcJv53fmkI','mCkSdq','WOddTtldL0BdKrtdNq','W7lcUmkPWRTR','W54rWR0KWOxdOSkFWOK','W4WRgSo+iSkqW4hcLW','WOzYDdlcUxFcUIG','WOidW4/cKaOJq8oX','oLamp8oY','W6z2r8kG','qL1dWRxcVhCIhW','hGerWQ7dQcX1mSo7W73cICo1W70','WQehWPddLXOIwCkZ','fgtdP3jJ','WRpcUX5LW4fs','W6RcHCoFW5vrW7dcTd8','W4ueWPC','WPykW7NcHv8','W5qfWP0','WORcReVcIbFcMKlcIq','er/dISklWP/dNs1c','mCkiat9WzwZdPW','W6L7kSoiou3dG0m','hvFdMgXi','W77dSGCYWO3cVsag','EMNcILDH','WPHzWR7dQ8ocvIxdTG','WR3dSKe','zSkRuhDlfW','W5xcKHDfWR/cK8oflG','WO/cIfqEW7ddKmkqna','W6dcJXCWWRnLga','kstcJf1IW5VdLmoi','W4pdOCo5jCk0D8k4W5q','WQizW4GxW6O','nw8/CMTbW41L','sfXuW6RcV3GZlG','W6LxW63cVhS','tw8kWOz6','sKVdNCkwW4RdMtXu','WPhcSmk/','octdNHqSWPZdHCkv','p28YxNKpW4XV','W7ddHmooW7ldNgRdRSor','W6CYF8opW4u','tH4FWQ3dQJSLca','kN0Samo/W4nDaG','uSoKBbGCouBdMG','WR9CW58LW4NdGfddGW','WPeNbmkYbW','sXFcNSkfWO/dI2Pn','yLLGW6hdSSkvWOlcMq','C24sWQa6','ntzHyMOiW4vH','W7ddK8oDWRZdN3VcT8kk','W7CAWQuiW7ldPbhdIa','WOVcTH5BW68','xfBdMCk4WQFcH1vu','wSkDx8kzzYlcN0a','faK7WO/dQCo0hSof','EcSIkMWeW5n+','FCoFrwyMCKBdQa','W6tcGGyAWQXLeq','x8k9t21fWPzsEa','W6/dKLG2W5BdTJvz','W63dMmokWRhdIw/dV8oa','WO3cQ0tcIatcJelcJG','lCkbd8ogW5xdOCkLmG','W6BdMCoDW7JdINhcT8oz','WOlcOCkTzSkZD8oBW4S','WPtdTmkAWQ1I','iheqWRRdSq','WRrtWQqkW7BdPexdQa','WPRdTCkEuCoXeGfg','W44jWQ44WP3dI8oBWO0','WQJdNmklWOfn','W7JcSmkEW5rxCSkWWRS','lweqW5Ds','WOKyFdPkWPhcLHq','W59rxCouW6xcGSk2kW','W7voW57cOfbD','iXqNW74','W6lcMayDW6DVg8oB','BSozxgaMCG','W4WnWQBcQSko','tx/dVmkpWQO','rLyGWQnfWO3dL8os','juFdLLb4','W50zqtfIWO7dNHO','z1PvW6ZcV3uIfq','WPxcJG1VW7G','ywqCeW','W5uEW7/cRG','W78tW4JcGvLMemk+','W4ukW7W','b8ogW7OzqKVdNCo9','cmkpqa','WPX6oJ7cRq','x1SgW6ZcV2mZsG','cSklwq','DrmQ','uY55W4RcVCkJw8ka','WOD6iYNcQMO','l8ohW6DmyG','k8kShSoCWOOOW4HG','WQ/cRIS','hsrqbSkRmCoVxq','ihr2BW','W4xdJColWPiMuW','q2mFg8kIAa','b8kdcSoqW54','uaDJWQnCWONdNmos','W5JdT2pcJGddGc3dJq','W7bmB8k8qq','phq/WRDMDCokda','W7TrWPLSW5xdJqtdNW','t2vf','Fcj+eCoVW5jAja','WO/dQCkEvCk5','ufmRWO9jt8kNW5m','ntZdJGqSW4JcNmoc','W7OBWPudW57dRG','wSoof8oyi23dIe0','W4pdJCobWPiItW','WQBcVmkpWRZcJYpcUSky','WOD+kIpdVGxdRIu','j3vZq8k6W5jajq','WPhcNvPIWRVcGSoqiW','ACoQxG','f8oJBbGdAGZdMa','iSkcgCkyW47cTCoJoW','CSkEewSXy2tcPa','W453rSkEFa','WRpdUSkoWQzY','eCoIDH4qpG','W6tcHGikWRrmhmki','pee4p8o5','W5CcWRGVWRG','iSozBJui','W4HQtG','WOhcN0qjW77dH8kaya','tmoUktlcPSkhW7/dTG','W6DEW4OGW4tdGK7cVq','w0RdMmoOW7dcGLP3','W4PPtmk6D8oEW5m','xbhcJZGAW5zOyq','W4agWPyvW6C','tmooxMSLDhhcQq','rmkOq3bPWPCrBG','W4enWOddV8kyWOCexW','kmkvoCo5WPy','smovCgaG','WQFdLe4oW54','W6/cSXz3WPRcR2yq','ca3cKGRdLmkhWR9w','uHRdMSkCW4ZdGZfE','rbRcMI7dLSkhW7WB','B1bXu8oLy8oYeW','xG/cPtGAW5zOnq','W5hcMZijWPm','W74eWRKUWQW','WPGrus0','iXOhW7/cLq','tvXuW7xcR3CMka','gW3cKZ3cGG','sedcI8kuWRxcIL11','WR7cOZ1VW7SlWOO','s3D2W7VdO8k4l30','WRmxW4NcJaD0fSkJ','xZSwwmox','dmkQW50OmG','WPTNrmkIumo5W4i','WOhdUhdcJGlcLGFcVq','WP3dJbriWRddH8odBW','WPS9CaxcSgRcR3C','Agm/WPHN','hCo0dJqfW4fpoG','W5v+BHBcS2BcOhe','k8oav8kaWPBdVmoLma','wmo0qe9S','WPGtqtT9WRZcNXu','WOZcOmkEuCk5qHnb','e8oUBbqhlYJdMa','WPbXoIpcRI/cQwq','tfzsW53cTN4QaG','WPCrWQOZWPRcQSofWPy','W5eeW7NcPSodxZZdJq','W5SEymkXWQNdL8oIyG','hmkBlCoCW4m','lcPUe8kUW4fmkq','ESoNrq','WPZdPCkEFmkWbW1q','igqKWQa2','W4baWPhcVCkjWOypwq','afb0W5/cVCoZd8kn','W6ZdS8oLW6NdJq','qmotWQDAyrvzgSolWPThW4q','pCoqtmocWOVdQmkNnW','emomW6rmqKFdISoN','W4/dIYzqWPFcGW','rmkfW7vpf0niaW','WPOAW6a2W6O','WQ0cWQRdRcSkWP9SW7Ptn8os','W6/cSXz3W63dOdrB','W77dLCocW7ldJq','W65/DCkwAqK','bSoqW5bOEa','WR7cOZ1VW7T6W4hcTa','hKS1WP/dQCoQfmoo','W7qbWOhcPSoBW5zqcW','W6BdKCkcW6/dHhRcT8kb','W5BcTSoAcq','t03dN8k6WRZdLt47','uv7cJ8kjW4BcMMGF','WQmMaSoUmSkqWOFdMW','WPz6idlcUx3dRMi','W6TxWPddIHKNt8o8','w1jiWRJcUxCMfa','kmkKf8ocWRW','W4/cHreqWR1Vg8kp','eLL+W6bhWP7dLSod','x8o+os7dQ8kBW73dSW','W5aFrsaYW58','aum8WOJdR8oIeSod','pK5tmmkWmCkKvG','W4rNvSkNFCoEWOFdKW','W5DoW7dcVg8','W4WEymoyW6JcGW','WQfpWQCoWRRcVKxdQq','haddHSkxW5JcMI9y','W4CoWR8sWOu','t0VdM8kCW4FdG3vc','W54fW6xcRSoeEWNdJW','thDCW6ddUmkLjd4','dSkPCCk7tW','W4ekW6FcVSot','WRxcM8kBWRZcN3xcT8kw','WPZdJ8k/w8kZ','bX/cGSkbW4ZcLZ5E','W7nOsmkLwq','fNOaW7rb','WPzWpdtcUwZcUKW','tqT5W5JcRq','wgWbWPHX','WOuNW6RcR0K','WP5pW7DAWRFcQKxcQW','WPFdMSojWOG+uSojW64','EhbVW57dKW','iYZcSINdSW','BSoDrG','lNDZEwSVW4PN','WQbkfHtcQW','W7ldL8odW6NdIG','WRldIHewWRjUeCkE','W5tdV8oxWRyE','W4mRt8o6W7W','W6/dOXTJWPRdVcSk','sbNdGCkGWQhcN119','WRXXkIpcPa','FghcJbL/W5dcMmoo','WQrFW7HnWQFcQHFdOG','BwJcMW','pmkmet1KnZFcVq','W6VcRSkPWQPe','WRVcMrmyWQKGfSkx','WPj6oGpcSgRcO2a','WRmQW5tcPvG','WRZcVc8','FN8Edmkd','aX4RW4albSkJW5C','tva2WPRcVCoWgmop','cftdIhDiWO8','WROwj8knsgxcLWm','mxG+W7z7A8kzda','BmozxW','WO9rlSkBWQNdI8kXmG','W5BcUmoAcCoZvvuv','WOODqJHn','p3PL','WOZdIaXaWQRcGSkaCa','hqZcKsddKmkB','vMeyWQFcOCo6ANy','uhOzgmk1mCkOgG','W7XxWP3cLfm/smoX','gH3cHcBdJmkfWRHe','WPFcVwVcGq','WOtdVLeNW6O','W6RcLCkDWPPqW7VcQc4','aXCaW6ThWP7dKmof','WPtdRSkEfmk+dqXr','W6/cSXz3WPRcR2ym','WPJdR8ketCk9cW5g','WQ5aW5pdSSoBW4jkcW','W7TtAmk6zW','gXVdU8kRW7S','W5GgWRKFWRFdMqNdPa','WRrpWRmBW6pdQ0JdRa','WQ/cOc95WQufWPJdTW','uwfzW7i','W4a/pcNcQwhcQMa','W4zOFW','cqldISko','A8oUv2bouH0','qgjnvmkMECkNbW','W7dcUdr1W7Xt','W7/cP8koWOa','WR3cVmktWOLfj8o7WQ0','WOz6iIpcV3VcQ2e','eaxdPmkyW4VdKIbJ','AgxcJeDP','W6/cGSocW5SsWQxdUYy','W57cUMddIGxcLv7dGa','W7bcW6fkWQFcPvpcUW','qxuvbmo/ECkYfG','imkiha','tSoWxgddQmkAW7ZdOa','WOdcHSk5x8oc','gmkKW7qSpa','W7tcVCkYWO1U','la7dJmkwW5hdK3H1','BL13W6/cTCocW4JcVG','W7jcWOhdI057d8oV','WPJcILqgW6NdKSkayq','WQGbW5G+WPS','WQOUj8ktyW/cIbm','W57cQCkfWOL4','nqygW6VcUa','sahcNZOeW7XOnq','W5GlWQSUWORcQSokWPi','md9QqSkQWO8EEW','sqdcGIRdJ8krW7Xb','hLe7WOFdTmo3','W5xdLCoQW67dHW','uXW2yCou','WOxcQhFcGHJcMMtcHq','mCkIcCowW5a8WO49','dGZcGG7dLSkwWQnl','W7zjWOLGWOxdMbxdJW','q0iWWOBdQCoMcCkn','e8ocW7PnEK/dH8oS','A2y7cSoUWO1roa','dL7dGMHoW5SLDa','WR0KW6OkW5C','W4mrWO0YWQFdOW','W6Gan8klhg3cMfm','WP15cd/cLG','d1tdG31zWOiTCq','W4qoW6FcRSovrZJdPG','W5GKW6pcO8oZ','W74TWOhcLmkz','zmoNrMyid0NcSW','W5VdP8klsCoXu0bx','bCkGAhRdRmkhWQy','wIiprmoz','WRtcQYH0WRuuWPRdPq','WPucCd1S','aMLbWRNcPCoQohe','vIrfW6ZcVmo+AM4','W4qyWRBdQCoFxthdQW','WQyhnSknes/cHWy','WQihWP3cK0nMeCoX','tmoYA3VdVCkaW6ddUq','WPLYpbxcVW','W6JcHf1ZW6CGvCoB','pcbTW6ONySokdG','AxBcKefO','WRFdNmkdWPe','ufNdLJVdH8kAWQup','cWRdNCkEW5RdGW','EGudxmoy','i2CTbSoZW4zqzG','jHGYW6JcPmotW5pdVq','W7LpW6JcVa','dSkdW7Trv0RdISo+','bSoOob8Eoa/dNa','C8o9wSoBWPjZW55/','yMroW53cQG','b8ocW7Xyg1/dJmoT','W7JcUSohWOPmE8kTWQO','W77cPmklWOPtvmk4WQi','W4ZcICkVWObp','dLddI30hW5qREG','iCkScCowW51JW5rJ','eZK2gCk+DCkQhG','W44BWO0WW5u','WOxcRxpcIfBcMeVcIa','suNdLM/cGSoEW75r','z8o0vMzxgGRdRW','t2mIWQrTpmkd','W45cvajfWO/cTYm','WP4Nrb9b','WRyxW57cKaO0wCks','W4WrWQ5MWP/dRSowW4m','eSkhu8kCzIm','WPzRoWVcJq','jv8YW6PgW4ZdTSot','vM/cKx1B','W50wwJP7W5dcGbW','W7lcUSkoWPXsn8kRWQa','W5xcKCkLWO9o','jCoIW5XluW','WRD9ySkFEbJcNLy','vSolWRfpCWyAsG','WPGiqxL9WPlcGbW','W7uAW7/cTxHkWO8H','bmkoW7WajunZhG','WRtdU8kRWQvG','qfWQW4RdRSoUqCou','W5umWQBcUmoAuINdPW','WPzWicxcVxS','W4eeWRSUW4pcV8kcW44','W5xdMHXDW7pcGSonzG','muvPimk/jmk0va','mH93W7NcV8oiW5JdTG','aHDUW4flt8k8W4S','W53cGqu8WPa','WP1foCkiWR3dJ8oYdNZdT8oGW7xdMq','BxuOWQrXvCogfa','W78xW7RcRhvvW5XO','BJuiFmoz','dfVdVvnm','WRTjW7hdO21CWOrO','kvuQWP7dUa','WPdcVx/cK1VcJuVcJa','WRxcMmkyWQNcMY7cTmkb','o8kzb8oAW4JdSCoLma','ESoIv3efvrBdSq','oCkObYnxwaZdRq','W44CWRu+WQi','WQanlmoDyIldLLm','W4pdKaHnW77cHCohlG','WPnZkZ7dVgBcUMa','WPBdR8kowmkWtWnA','fuxdHNDuW5SPEq','y0NdLM/cGSocW7ec','W70eWR0/W47cTCkiW54','fCkgzmkcta','WPRcRCklwSkOcW9B','WO7cOSoLD8oPoCo8W4S','W6JdTIfLWRq','dWRdJmkCWPldJNud','WPhcSmkSCCkXDCoHW4a','B3XRW5VcTxuZaG','W4tdUcFdH0RcMK7cMW','lhm6cW','oSkFW70kjq','hHVcGSoiWPhcGNOp','W6JdKSkcWQNcNZpcUSom','W4GgWRS','hb3cNYddJmkr','W5KaWRC/','wSoof8oyi23dIaK','rHDZWQmuWP/dLmoh','WRGDW5aZW44','wfJdMCo4WRVcHvD0','W7uzWRRcPmk9','W6VdHmkcW7ldGhFcT8oz','DNdcVe1fW5G','WPZdV1KNW5/cRYDe','WRe1W4ZcR2q','h13dJMTjWROHzG','W65nW47cLeT8rW','awe+WOtdQW','WQtdNmoAW6/dM2RdVmob','W5SQBJBcPsldVIS','h8odbmoim23cIGi','v8kOt0fgWP0sFW','qwThW6BdTmkPpJW','dqRdMa','WR3dKSocWOzjW7tcUc4','hLaGWOBdUa','W4GoWRNcH8kU','W4qwWOWKWPZdTCoxWP0','nqi7W7RdUq','CxnGWRvTAmoxhq','WQVcRHq','p3rNzhWeW48N','WRCTW7lcSMi','FX83C8oXzq','W5FcMaWDWRjJaCoB','jIRdGSkOW5i','W4hcPCkTBmo4ESoWW50','WOraW5pdSSoBW4iPqW','W4KEFmowW7ZcM8kJBW','ebVdM8kqW5ddMxvt','W7tcPSkpWPPbASoKW60','WRahmmosgM3cHry','l8k7fmo9WPq','mfehkSot','WRGrB8oosg/cKKK','beO8W4FdU8oVhSoy','n8kOaSohW5bPW55R','W4ddJrbaWR3cI8of','DMdcM0W','bfCRWQ/dRa','eHqMW4anrCo6WOC','WRqgWQmFW7RdUuJdQa','f8oPobatz17cMW','dfuNW6Hh','W49gW7JcO8oewJpdQq','dGZcGGRdJSkhWRXh','W6qxW7PiWRNcV0xdUW','uwqeaSk9CSkefW','W7GcWQuPW7q','cXmgW7ZcU28MsG','pmkihSozW4FcV8oIha','kmoeW5jtFW','kmkMeImff1NcOW','khHMja','WPOvqrfJWPJcNHW','pcbTW7yOjSkdwa','kCkigSoWW4RcUCoQoG','BXu1DG','teFcK1vQ','qxah','fCkoW78B','W6hcVcX9W6ywW4VcQW','W4HKd8o9pmkcWP3dGq','p1PdqLy','w8oFWQfFC1rtba','W5/cTCkHySkSnmoKW48','hatdGCkAW57dGW','phqOWQ58k8oqfa','WQJdUSoDW48slCoRWPRdHbbcfLe','xs96vSoYpmo/uW','jCkpvCkNCcJcI14','W5yeWPBcOmowWOChtG','W6usWOyBWQi','W6LBW6S','cCklw8kDydNcJqK','W6qkWRK','W4mqFCoiWRtdLCk2jW','WO4vwtfSWONdNHy','ffyK','WOZdJa9qW7pdK8kqmW','jSkJdG','eItdNHqSWPZdMCkA','rJmOEmot','WRe/ttfU','W7CwWQ0pW5S','a1JcNSo1W6FdIWq7','W7SNW6tcR8oL','aSkQBhy','tqr5W4RcVCkJw8ka','W6HnmCkpcwZdIhK','fYrhW7VdPmkKlNS','AMlcKLT7WPhcGCkx','rCkHxG','W6ddN8oAW7hcJ3FdV8oa','W5hdNHzDW6O','WRCmW4K','W4enWPBcVmkp','WPBcUxa','d8k9qx/dPG','E2u5WPnKy8oohq','cCkEw8krDW','lmkmz8kcBa','WQidW4/cKbG','mqiLW7BcPCowW53dNa','W6BcMqzBW7K','W7BcLSoiW73dNY7cQCkw','W4ixWQSUWPZcQSobWPi','x8o3FKCx','gv/dMW','dSkPjhZdPSkhW6RcUG','WR4FW6GPW6q','WR3cOmkfWO9fAmoJWQ0','WPqvqsX+','W4pdJCklW4vGbSkmW6W','W7eDWRywW7pcP1dcUW','bCk9sMhdU8kgW6RdTa','kN5Mt3qeW4zV','W7CkWRKoW7ldUexdRa','rJ0krSoA','W65/kSkazrNdKvq','vh7cSKbf','W5uwW68+WP7dT8oxWOW','dqtdGCkEWP/dLdrq','k8kmex8OoJFcQq','pxDZq8kQWPajlq','W57dS8kQyCo4i8oNW4a','WPnRkYldVeRcOMK','gL/dH8kWWQRdI1j3','W5VcOmokbCk4cXyv','WQFdM01pW7q2gCow','W5KmWQKYW4pdPmoxWPa','W6JdUCooW4/dUa','WRuNbCkWmG','W4WGWO4GW7m','WRGDW5GJW5BcKvldHW','qwThW6BdTmkPpG','WPVcOSoOz8oHBCo8W4S','lKiPvSoODCo8pW','W63cRtX3WPRcR2yq','WQZdVfG0W5VdUW','WRudW43dIrKWr8oB','p35/zw4e','rem7WPmeu8kLW5y','b8ogW7OurehdLSoS','svZcHSoSW6FdMXrV','WPiFW5O/W5FdNHxdLa','WOiqW5lcGf9XdCoX','WQdcJuhcOWe','bcr2W7ZdSmkJjd4','gmkMqgddJmkyW6RdUG','dfeTWOxcVCoLf8of','WQ0qW405W5pdIqm','BSkrvgi1zwtdPq','gLVdHmkNWRBcJKy7','W6RdGSoTW6xdPMC','W7TrWPLSW4hdHqBcLW','eahcHWJdRq','gvFdJM1wWOi','W4pcTCkPymoTESo5W4C','qCk4xNDEWPeqDa','WOZcV8kdDCo4mSoWW7W','WP4OW5iaW4q','wSo9zx01','mWqKW7RcSSowW5NdTW','jvC1W7ZdVCojW5ddSG','WR4bbCkZha','W7jvW7i','c1PsW73cT2HQba','W4ddNbbaWQJcGSoJyG','ACoIvKztuHFdTW','W5VdPSkfv8kOtWjA','FghcMHLGW5VdMCoo','wSk6BMXL','WP7dM8kCWOjaW6FcQs8','eComW71xuKVdGCkK','WQeUW7BcHNW','aSohW6X8qeVdI8o9','BSontSorW4FcQmoMCG','W4WwWRX2W4ZdRSoCWPi','WRSIkmkcEa/cGXG','WP0BW64XW60','W6CkW7NcV8kwagFcOG','W4ddMSohWO1WrSouWQC','W7BdL8oy','E2VdGmktWOy','WQFdIKnzW6CGfSkx','qemKWOrwhmkLW5S','dfddNwWi','W5m/W4RcJSox','bsTGW4CP','WPDlWQVdQ8kwe33cVG','g8keW7uk','W6bOrSkRAG','W6fsWO3dHeH9c8k1','qfhcULvO','bMi7ha','FXG8C8o7DmoG','y8oTwSohWOr1W54W','W6/dP1mVW47cOJ5d','W6jHEmkKwW','WQRdSLiU','jNX+aCoYW4fnja','W4xdNCo2W7RdOa','WRRdVviYW57cOITu','wSkhq8kDBJ7dHq4','WRbshHtcNq','W6uAWRijW6pdOWRdPq','uN9qfCk+FCkSaa','W5bgWRNdQ8oewJpdPq','grddM3VcGSkaWRyp','d8kIAh3dUSk6W67dUG','oSkcW78kia','kSoKr3DrwbFcOq','W7TrWPLWWOxcJfdcLW','gmo9vZa5','d10FWOVdIa','fmoqpCoyi23dIe0','WQadW4O','aSknEuVdUa','iZXAW5Ot','WQC8DmkuybVdGre','W5hcKGzqW7pcTmouzG','ruClW6VcV3yUbq','kmoKvs5xwaRdPG','W4ddMWa','W6O0smo2W6y','WR3cQSkfWOTeF8kRW6i','suNdLM/cGSocW61r','ctfYW6eY','WQGLBqz4','W5adwtv7WPJdNK4','W7/cOXLVWOO','lSkVh8obW5aWWOS9','WP/dSKqJWPRcVNWq','gmkpW7qx','f8o1BfajouVdNW','W4THd8k9FSorW5pcNG','W49PqCk7yq','etyaWQxcPmo8o3VdGe7cJae','BghdKWy8WOZdMCow','W7ycW5W9W4ZdJH/dMW','W4XDW4BcJvy','WQFdLHanWRvVg8kC','WRynmmkBdxddMWa','dCkQBuVdV8krW6hdOW','rSk5l006bJhdKs3cRG','W4PQtCk9D8odW5m','W7ZcRmkoWRXwF8k3WRS','FMSCWQzG','f8koW7Tvv1RdGmkK','WRaLdmkNbW','iSkjaSoeWQW','WQVdP15QWPJcVwqq','WRanW5hcGaPMc8kW','qx4ua8kXAmo/iq','aCo5EqLCkWxdIG','BmondCozW4FcR8o0yG','W5xcNW8CW6Dcfmki','W6H5W7dcK00','W6CaWRSpW6pdOWRdPq','W4X+vSoJASodWOFcNq','W4tdUcFdH1BdNGFdJq','W79MC8oCFHlcNXm','WOhcTSoLz8oNlSkLWPC','h8kEW4KBhq','B8oiuhT9DgRdUW','WO8gi8oDW7ZcM8kUyG','WQVcRa12W6e','BSontSkvWOBdOmo0lW','WR0hnSkhgq','c8kBiCo5W54','WO/cTCoLlCk5z8kNWPK','W6lcIWCa','WRVdSKqWW5/dUW','WPKsW70DW6C','FwqPWPn+y8onda','WOFcUWzwW4O','W6lcMK4BWR4TbSkp','jNWve8oUW4vrgq','eZfqvSoYpmo/uW','gCkfW6vcienxaW','WORcVw3cIb/cKbRdJW','WQtcLSkpWRZcJYpcUSoB','hHqMW4qpwmkYW4a','W5Cfi8ojW6BcHmkNBW','WRO+j8orlf3dJfy','W7/cICoaWPDqW6hcUcq','khzPf8o4WPnlFq','WPRdPmkoFmkQbW5b','W6H/Ca','WPldPG3dH1BdNGFdJq','gHpcGSkoW43dLIGr','a8k5BhZdUSouW4ZdVW','Bbu3','f8orW6DsuWpdICoG','fmomcCoYi23dIe0','WQJcVLm6W5/dVsDC','EqiWzSoXzCoTaa','W4vlW6NcPmoevZJdSa','hWz5WPmLvmk4W5S','W5KFW67cUCkwwsJdSq','W4ycW6/dTSku','WOSgW7hcOx4','qmk0fJqeW41FAa','W51JwSk6p8ohW4/cKG','F28JWRvPCG','h8kRFuFdVCkrW6i','W6OeW57dKriQtmoP','W7xcJW4wWRfL','e8oPFa','os7cVGpdHW','xSo3xevl','xL1cW73cQhCUcq','W4FcHCkxW50GtSkbWRG','WRydWQNdQtyoW4W8','nai5W7JcSCoo','WP4FwZDUWOK','wCk5xMLzW5uCFW','WRO1W4eNW7q','f8oGFq8qjG/cLa','sNhcKLe','tSoqW6uzuehdI8o9','oSkuhSoqWPVdVSoLkG','aHj8','W69Wy8kuAfdcLbO','WO0QuJHS','bmogW7X8wKVdImoS','W4BdMHbSWRlcGSonzG','W4SRWQCiWOu','W6NcNIeaWO5K','bColWRKSpeLidG','W5xdMHXDW7pcKmoiAG','dZhdImkvW5W','W4RcUCosd8kLmtLcySoy','yhvGW5pdIW','WQhdH8kCv8kM','W63dOgSSWQHuW4FcTq','W5ypWOBcVmkFW4bkwa','q8kdWQGfuKFdK8kP','WRKeWPBdUtKzW5W8','kN0WeCo7W5q','W4CbWOdcT8oBWPyysG','iCkIcmoxWPH3WPz+','W5xcKGzgWRlcG8kaDW','W79WCW','a8o4Fq4fiWtdLW','ECoVvJ4h','W48IWP4tWPq','BCojvhWKFMRdPW','k8kab8oxW4NcSmoJFW','octdGKD6W5VdMCoz','W5tdGmodWP47u8oi','v8kcBMzf','W7tcNHewWQXLwmkx','WPG1W6evW60','bXVdImkGWQdcMvf1','W50qySoFWQtdGSoYCG','WQ7dLNeyW6a','WQmuWQJdRYbVW40L','WOD+oq','Ch3cMxzk','W55Ws8kHua','W6P/ACopbL3dJfy','WQJdTKiEW47dQIS','rMmYW61pWONdISos','W5VdICosWPH9aCkCWRO','d8kMBg3dOSkrW6S','bSorWQHBwvZdGCoS','dthcJbNdUG','WRTBW6DAW6pdRX3dVW','g8oJFvaxjG7dGq','WOJdSmklwSk5tW5A','W5OeW6/cRG','W4pdKbznWRVcLCkayq','W5NdNmoKWOqzuG','eLiYW7Da','W4WvW6j5W4dcSSkqW4a','W7TUD8oCFXxcIrO','uGmGDSoJ','W5HUjYldOs0','u03dJSo1WOlcHen+','WOVdHCkqx8k+','W6XOWP3dHaOYwCoX','cL49W6zlWO3dLmkB','x8kJCgvEWP0hsa','WPFdJSojWPmKg8obW68','k8kac8ohW4FcSmoJCG','g8oOBaua','i3WYBSkQgmkeBG','D1FdHCkVWOm','F8k9xMO','dSkFuCk0CW','a0v+W7CiWO7dI8ou','eGtdI8kC','W7e1WQVcGmkm','AMxcIq','imocFdqa','n8kQW7m1bW','WQNcUdL5W6ywW4RcQa','W6rrWP3dLr16tCo/','WQPLW7DAWRFcQKxcQW','tmoUks7cQCouWQ/cQW','Bqu8y8oKEmoRga','j2yCc8otW4q','pCkBFxRdKW','WPbNy3FdVglcP2S','W6JdPSo7W5RdTq','c1iHW6jeWOJcICkt','kJBcJNj0W5JcGCoZ','WPtcHSkeEmoy','FCoivcjNjZxcQq','f07dG8k8WQBcJHr5','gupdHM5BWOiHyW','DHhcJZGAW5zOnq','WQWkWQZdUxPmWO5V','W7pcJXSnW6PSeSoB','WO3cT2NdHXtcKvxcIq','W6hIN7NdJW','WO8xyCovW73dMSkXjW','W6LTW5BcThq','wNayW7BdSmk5lZ4','a1y3W7O','W5zCpSkvWRZdL8kWlq','W7ZcU8kzW4qcACk2WQm','lSo7wSkbWPW8WPS0','W78AW47dHfL/q8kL','xWpdGmkpW5RdHwjt','mtj9W6yOCSogaa','WQRdU0v6W43dOcPg','hvxdIW','eX7dM8kqW5ddMxO7','WPRcH8kou8on','WPHqDdHOWPJcKqS','uwqeeW','WRrpW6LWWRFcQKxcQW','W7hdVmocW5RdPa','WPFcQgBcIvBcNuVcJa','b8kke8ozWRa','jSkJdSowWO8LW5f4','WPlcVZLY','W4qyWRBdQCoqxZJdUG','W7JcSmkEW5rtD8o5WQK','hWOxWQZdRcSid8oPW57cOmoC','ff4+WOnwe8oKWOi','W58eWRG','WR7dMCklW5GCWQddVgq','dCohW61b','pNr+F2WiW4rK','q8ktWQGafHFcHCk5','gCkcvSklCahcGr4','zcTUqSk6W5rmmW','uSoSDG4glXNcMq','E8ozruO8CMJdRa','umkhof1rAKVcMq','vuZdN8o1WR3cHrrR','WO4CvcbQW5ddIKW','zcaKWQjTA8oqvq','gvNdNeDzWPCKDG','sSkJA1rY','W6eLWRxcN8ku','tNLnW7tcVW','kuSSWOJdSCoMw8oW','W4KEFmowW7ZcM8kJdq','W4ZcQ8kVWOTi','gqldG8knW5RdHq','W5pdNHm','WO1fW69RW47cP8ksW54','imk/h8osWOLGW75H','eMldPNL0','u8kHwNDzW4vDFa','gHNcI8o1W67dHfbY','EcSIkNOoW5LU','tdO/WRtcSCoQAJ4','CXCpCCok','qgTAW7JdTmkRja','WRFdPXS2W5FdRsnc','WPXDWOiIWPRdV8oNWO8','lmkygSoq','W5xcLCopW5ufWRxdRgS','W4tdKGfBWR/cI8oelG','d0hdJNyeW4O7yq','WQ8uW54/W5FdLq','W5JcVg7cKvBcNuVcJa','eSoTwgHlWOSmjW','DqqWF8o+mCoMgq','WOC0W4/cIf4','WOLfsSkHE8otW4ldGq','hWiLW7lcQSkvW6RdTG','i35G','pdXIWRjHCmkDCG','WPiEqxL8WPJcNHa','W58aWQiKWPJdOG','guNdMZvjWPTOCW','f0VdRmkwW5ldHZDc','pxD+bSo/W5HDzG','pJHEW5ud','W45/ACkwArpcMfy','yCoOws4vfuFdLW','suzsW6ZcTxvnrW','W65DW4ZcTvG','WQz3ite','WRZcNxlcGGW','kxPMAZuqW4jU','d1tdG31zWOjLEG','WOddTx/cI1BcNeddGa','W73cLCkCWOfxW7RcPY4','WRzBW7hcU3XlW5eU','q8olW7maiujFga','wxZcQ39F','WOJdPCkgxmk/fGvr','W4TYtmoJCCoFW4VcLW','W4pdSCoOnmkSD8kOWO4','W6/dSvKLW57dQJqD','g1tdM11wWPmLCa','W7xcIW8DW6O0rCol','qCkJAhRdOCouW6NdUW','w0/cSxXl','W5hdMHzkWR/cLmofiW','W6/cRmkpWOSaBSk8WRC','W7jcWP3dHaOYwCoX','kYVcHZ3dIq','CdyXwCoQ','aIqvWRtcSCoQAJ4','W7hcGmopWOvCWRJdVgu','ntldJGqJWORdIq','WQqdmCkmh23cHbC','w1pcJvDA','W44nWQOOWOxdOSow','WPK1W77cIgm','W5BdOSkptCkRbWvB','meaLW7tcO8oFWPhcQG','W7NdTCoiWRqzoSoOW70','WQZdUwegW4m','W4BdNCohWOW3','BMuGWRL+yW','EMWOWQ4LDColcG','W5KgWR0fWOe','u0TGW78yWPdcLSoA','uvCPWOVdS8kJgmom','pCoaxmkvW4hcVCo3CG','W7pcR8ohWOTfDSk4WRC','cXmgWRJdUJTNrW','mmoSW5LqqW','W7lcH8opWODkW6dcOI8','WRxdISkB','pSkmamklWQZdVmkNFW','W79SA8kyyHJdJb4','q3bqWRNcPSo6EJ4','ptyJkMGzWOy4','WOhcTIFcKWtcN0NcNG','WQRcNrzXW7e','DX0UWRBdOSkAW47dVa','W4WVBJlcUxFcUIG','WQrpimkgrvhcGHy','WQFdLGCqWReGfSkx','uxzDbmk9B8k6xG','Crm4ymov','dexdHNDu','uSkTFbWfk0BdMa','FCkuBwjY','WOhcTmk8y8oPmSoMWO4','W6jsW63cNLy','W7ZcVmkpW5qykSoPW68','WOxcUmkKymoPjCkLW5O','WO9rlSkBWRxdMmkXna','WRtcHSkpW6JdINVdRSkv','mGO4W6NcQq','CWi9DCoIpmk2vG','k8kmex05EwlcPa','qLLfW4VcNG','fqT/WP4vuCo3W5q','W6DEW4OGW4tdGK4','cufcw3y','jgeQWPJdIa','W7OyW5lcJCot','b8k6nSoCWRm','WPG6W7yyW6i','Ew3cNrrpW5tcMmot','mCkPe8oDWPXXW55+','tKVdM8kCW4FdG3vt','W7LYzSkcFZhcHqu','pf95iSkG','ymk2W54CrCorWONdLG','c8kRFuVdPCkrW6ldSG','jqWG','CZO3smov','E2VcKfDTW4G','WQrpWQmFW6/dVKJdRG','ASoHh3botLtcTG','W6CtW4WKW5hdGX7cLW','cGxcLZZdKCkUWRHr','WPq2W5OcW64','xhvXW4lcOG','EHK1zmo1y8kPaG','WPa+j8orlf3dJfy','b0VdLIVdG8kwWRap','W7emWQm','W5BcUCoAcCoZvvav','WP7dSSokw8kZearq','mWldGCkCWP/dGdff','W6ldG8obW7/dM2RdTCow','W4SsWPFcT8kjW48yra','BtK2Dmo/','mYtdL8kCW54','W7/cLCotWPfmW6pdRcG','dqFdG8kDW5e','W5VcOmokgCo8qKav','rMfhWRtdT8kMl2y','jSk+v8oqWPXPW5GG','vJe2gCkGCCkQhW','dLtdGNDmWPm','FmoJsNCirbtcOW','W4KtsmojW7a','W5NdUNpcGG7cIGRcMG','W7tdL0eFWQTLdCoB','pGGJW6pcOq','nauYW7JcU8oFW5G','tSkqWRGjfKZdISo7','WOdcT3ddIHVcMGFcNG','cSouCtiq','WORcRhtdH17cVuJcGG','aWqlWP/dSCoM','xqrIW5CdtSo3W5q','W7LvW67cVxXlW5fV','ereRW4qovCkJW5C','WPddTxtcIXFcIKldGa','W51JwSk6p8ocW4JcIa','bW3cKZC','WR/cUIH5','WPJdR8kewSk9fG','fCkyuSkkotNcJru','W4pcSmoAgCkObXHb','WPnkhrZcRG','W5pcHCktW41GgCkzWRO','gGKHW4FdVmo2d8op','WRCnlmkCcxy','tL1s','amopW6LkrwldJmo6','WOqpWOxcT8kjWOqgra','v3aC','ycmIoJGjW4r8','xKyPWO1Shmo3WPi','hWfVW5yuhmk1W50','W6lcMtWkWQjZbSks','WRtcUZvZW6yw','BSorcSoCW5ddVmoKmW','oYueW73cKG','ntZdNKzJW4NcL8oE','ELLNWQVdSmooW5NdQW','W4FdLGHDWRVcLCknDW','W5jcahr7WPJcIW0','W5D2W7pcVuO','W5VINOxdObNdVejafq','jsb+qmk6WPqeFW','WQtcLSkpWRZcJYpcUSky','W7/cLCopW5ufWRxdRa','W5aevdz8','WQehW57cKen9fW','nqi7W7/dSmooW47dSG','W5izWRhcQCorhJJdRW','h8oox8kxDsJcMLC','WRKEW4S0W4ddNL3dHa','puKAWO/dJW','b2C5W6fl','WPldS8okbCkVfHjA','FXeWCCoj','aSkoW7yaiv8','A8oPxgbeqW','W7ruW6JdThTwWPb4','fmodCd4A','W71GsCkixa','mmkHe8oqWPG','tmoUks7cQCouWQ/cTW','W6CkWRSCWRRdRrFdQG','pxS4c8k3W4jmpW','erJdHSknW5BdMdyr','WPdcVCkPymoPESk/WP4','vmoHWRfpCWyAsG','W4pdJCkgWP8/rmoiW68','W6eRWOe9WRG','W4BcQMJcKHJcMGxdJq','gWJcGq','WQVdJmkFWPa','WRGDW5GJW5BdObNdHa','WQtcLSoHW7NdIMFdQCky','WQNdGCk5WODv','WR3cOCkEWPXnACo0WQW','bqCI','pK7INzWW','CCo9C2C1','a1CWWP7dTmoSfCka','WOOsW7WIW40','W4xcSXz3WPRcR2yq','W5yFW6RdPSoxucNdQW','mCkIcCowW5aWWOS9','bLzlW73cQhORaW','WRhcKmkMzSog','aIqvW4u','WQCwmmkqa2FdI1e','hqG4W5/cSG','bvG9W6bjWPG','W4tdNGbaWRdcGmknCq','WPXbpSkBW6VcMmkWjG','W7lcSbmoWQK','bmogW6eaoKHodW','W7ddHmooW7ldNgxdTCok','D2JcMHr4W5NcGCoo','i0bJWRVcOmkxWO/cVq','W40fWOFcQSkk','fSkCes9WnYxcQq','W5CuWORcVSkE','k8kFtSosW4FcRmkQBq','WR3dKSocWODkW6BcQwy','W4CqASouW77dMSkXlW','y8kIhmktWRLGW4HU','W5frWPLWWOxcJfdcLW','r2Pb','hqJdMY7dGCkwWRHn','cXmgWRJdUIDOfa','Atj+uSk6WPWglW','p8kyc8ogW5lcTCoOmq','ACosvwO0oMNdRG','h0uU','W43dMmolW7NdLW','uCknWRaldG7cNmkN','W7rQrCkirrK','ceOTWO/dR8kJhmob','qbb7W4RdU8oQf8om','w0fdW67cV3uZiW','lf0rjmos','WPJcLJDmW6K','z2mzeq','wvzhW6ZdUNeObq','WO4sW4a3W6W','rHDZWQmiW5ddJmkv','WQ7cQCoBW4erk8oVWQK','dq7dJCkwW57dHtWl','WRVcOc5zW6LvW4a','rsaDqmo8l8oPrW','isONW7FcLG','WRHggcdcHa','tSopW68zqKVdNCo9','dCkcamowW4FcQSoUkW','jqdcHtVdH8kmWRrq','phm5WQrNBCogvq','e8ocW7Pnba','g8kcu8ovoNJdMei','kmohqNnxwahdQG','WOKvuJT9WOq','bCkxiSodW4W','WP4CvcD8WRhcMGO','BSozuNS','WOZdHSk9y8kK','txzrW7hdO8oNohe','WOZcVCkNzSkUD8o+W4C','w8oyWRnrwqyAsG','aguBWOldUa','WONdOCkD','FXvLp8oJyCoLga','E3iKWRiLzComfa','WPrQoINdVh/cTYG','W5TNvq','sfJdNa','WOf6nJldSxJcPMW','b1qNW6PhWOlcMCke','irmgWRJdUJTNrW','WRNdMCkkWO0','m0bIWQVdOmkvWONcOW','BSontSkvWOBdVmkN','ov3dGvr2','bum6W6XgW5hcHSou','g8kkuW','WRGqW4O1WOxdMaldLG','jUkDImoE','WORcRcRcHrNcKKpdJq','q10+WPfynSo3WPi','WROwmq','vMTsW7pdVCkVz24','rCoLywPT','W73dR3W8WQGwWOJdPW','WPFcImkgW4e0x8oAWQO','W4qoW7/cGSocvJa','bfa8W4RdTCoSdCof','W4X7DCkfzr7cJrO','E8oJxMzgqXZdPW','W7D7DCkqybNdGum','W7ZcRmkyWPnA','W4SkWR0MWPVdQ8otW5m','WQuIW6nAWQBcUc3cUa','B8kRv25arrJdRW','r3XhW4VcJq','hqtdNCkDW5RdHxvc','g8kDrmofistcHGe','W5BdI8osWPqMu8oVW6S','weGwl8kE','W7BdK8oCW7NdMY7dT8ox','cb3cNYddJmocWRnh','uqhcJszUWOqXnq','W7FdH1jzWQvNwmkj','m8kkas8YEhFdRq','WPraWPVcVCknWOCyeq','wfXkW63cRNiOcq','rCoBWQfpnuLuhG','W54jWQyOWOS','qgmyW6FdUSkZzYS','WPxdMSojWOG+uSkoWQO','WQxdHguAW5S','k8kdgG','WQJdTKisW5BdQITv','WOBcT2VcG1tdGc3dJq','fZXEW5ej','F2WSWQv7sSokcW','nmk7e8oCWR8','amoKBHWfiWtdLW','W6ldMComW6NdNa','jCk2eNDxvHFdSa','W4CRExxdQdFdVKLDgSoHrSoJ','W4CpWP3cSCkAWPy','W4tdUcFdH1BdNKpcJa','W45qrs0IW4ZdNuW','vg1qW6m','WPJdRmklsSkVlGLg','WQ8uW4eKWOJdNXZdLG','W5SExCopW7VcNSkSjq','smowqf0N','tmkTzNZdU8krW6ZdOW','eY1FeSk7ASoHEq','WRO8W5yBW44','WO9rlSkBWQNdL8oIyG','gqFdISkb','WOxcVgpcOGdcM0NcMq','aqzUW4asvCk4W5W','W7pdTCoiWOTfBSkRWRy','imoiW611qq','c2BdGhjz','AghcKa','WRmrW47dMqH7f8k9','WR3dQmokW5KaoSo5W68','W7ldMmklW5vwW73cRs8','WR3dKxGLW6a','bSorWQG','q3DgWQNcS8kJjhi','WOVcUmk8CCkUAColW4y','WRL2ptlcUwhcQ3C','wHhdRhbBWP8Mnq','W5CAWRxcImks','kSkCwmkCDI7cNe0','WOdcVxxdIHtdNKxcGG','gLy4WPRcVCoZa8kn','WPfkWQ0+WPRdS8oDWPa','W4X0aSkKz8odW5pcKG','W7fBASk5wq','eW/cJ8knW5RdJYWC','BSontSkvWOBdVmkNyW','W6pcMSkCWOveW7VdSG','xmkPfJeAW4HFBG','WQeyW7VcVKm','h8kCuSkCp2lcMX0','WOpcKfOvW7hcLmowza','WO3dOCkgtmk5','W6xdPCkzWPfsC8k3WQq','E8oJxMu','W6ddRSovW4RdTW','cvKNWQ5kWOpdImoc','zSoYChPSuW','tahcGcWkW5y8Ca','EvH3W6VcQCkxWOZcVq','d8kKcCohWPHRW55/','uCktWRGzvehdL8oT','WRaLiCkTiG','zgu2g8oUW4u','WQyXDmkbBrpdKG','ACoIvG','zmoIhZOqb1BcTG','r3XbWRNdOSkMk2O','WPhcLmkzEmof','W5ybWOq','c3yrW6Tn','fuldRhDiWOqTDG','WONdPCkexCk5ec1u','WOVdPhO4W7q','W6NdN8onW7pdG2FcUSom','WO4NgSkEpW','c8ocW6fxfMpdJmoX','ic8+WQzPAmkD','bbzZW4CLu8k5W4y','W5HfwSkkuq','uSkTof1rAKVcMq','tK3dHmk7W7ddOrq7','W4XtBmkOvW','W55mW73cTwXyWOH1','uSkToefEiLJcHW','W5/dICocWPiNg8oEW6u','qgerfCk3mCkXha','WOraW5pdSSoBW4jkcW','kSkbxSkwDW','iSkmgSoqWOVdQ8k3BW','bmkkW6y','x0VcJ8ofWPddHcHq','EmoYw2XlfxpcOW','bqD/W5WihSoDWPi','mqCRCCoGmCoTaG','kmkJr8kZza','WQhcU8kAWPHooSk6WQm','WOLDucX7WO/cKHS','ngHWtxK','WPSmW5NcGvi','WOSmaSoUmSkqWOFdMW','aqdcKIVdH8km','BSozx2S1zuJdQa','pCo9Frm','W44kWQeOWO/dSW','WPKrqtuIWPlcGW0','huuRWP7cQq','WQewW5ZcKaDIhmkJ','WQKqW44','W6xdMSolWRhcNdpcQSky','W6/cR1i+W4ZcRYvC','DLddMmkHWRFcHvfP','w0q4hmkl','WQZdKglcNHWIWPDt','WQTCWOXYWPVcPLdcLW','xu13WRVdSa','WPSFvIf8','rH8BW6XAWOxdNSoj','W5meWPxcVCk6','W7hdNCokWPfWzCoyW68','db7cTcddMSoFW7ms','WO0iW7SxW4i','W7BcNWykWRnPgSkv','vSktWQCbbG7dLCoX','fIbTW7yOjSkdwa','g0tcHcddKCkhW7Wx','zhCZf8oOW4fflW','hCk+uh0hW4XpkG','WQRdVuiYW4JcRYXf','W7rcySoFscldLG','kCkIe8oD','W7ztW77cTNvDW5XO','W6lcJqWlWR4','WRKCWRSBW6pdR0JcUa','W4OaWRSoWOldOSoFWPS','wr1OW57cQ8kZnmoiWOX1cmka','W6pdHxW8WQGwWOJdPW','zMzVW4JcTG','rSofWQrpiuLpba','W7lcVSkpWOSAEmk+W6i','WOf+pchcUxS','W7ddK8oxW6JcGNtdSSor','dXZdJhDuWOiPFa','W57dHSodW5a2wSojW7i','W6WBW7OcW6tcQHddUW','W6hdMmoBW7NdNspdVCoz','WOhdMqThWQRdISocBa','hKtcHslcGG','W6nptCkjya','j8kxiSoJW5m','F8otx2WXyW','WOigzSosW73cKSoIia','W510s8kJ','t0PNW6ddPW','y8oTwSktW50LWPST','wSoof8oyi23dLMC','uL7cN8ojWPdcGMGt','W5yzF8o8W4y','WPuGo8kSkG','WPpcNeRcKGW','vSkIswLFWPqEvq','xvZdN8kqWR7cJLL+','WRrpW7DAWRFcQKxcTW','x8kJtYLzWP0sCW','WRdcT8kKqmob','bmkpW7qDFLvwcW','WRtcOtKXW65AW43cVW','eHX5W5CdtSo6W5C','W5hcR8kfWPf1','owa/eCoUW4LkiG','WRmbW4NcJvX3oSkW','xr9SWPmswCkVW4y','W4WzB8ojW4RcMmkMjW','jdzsW582','W6GjWOdcPSkEWOWpwq','imkHg8oaWO5lW5PG','n8kctCkvzG','r8k9n0PbAGNdLG','h0tdQhz3','W7L1W6xcQ3O','eSkcW4uUea','gmkRCxRcPmkhW6pdTG','W4ldLWfkWRxdISonya','omk2eMfcgGRdRW','h8kFW7qciaTzdW','BcNcJvHTW4JcNmkx','W5G9WPGrWR0','f8ooW6j/yG','zmkvww9g','W7xcIXq','dKW8WONdTSoMhW','W6ZdTMqQW7fLW7hcSghdHa','fCoJps7dU8kBW7RdUq','WOnqW687WPFcQSkcW5a','WQCpWP3cIe9ZhCk4','W5xdMKreWRldISktiW','gCkbwCkByJK','tahcJ3bvWOaTzW','BmoEsfv9','WQ8iW4K1WPJcJHldGG','W5NcOmkowmkOa01u','WPdcTmkKCCoVi8oTW4O','W6GxW7/cTNDnWP11','bcJcTcFdHW','W7XYySkjlbtcMbm','W6jryCkIwW','WPaFute','e8klq8kaCG','CSo7q8kgW4O1WOPjo8kfc8oLW5G','WP8ew3L9WPJcGbW','oL55WQJdPmkjWPhcPG','W75oW67cOdriWOL5','pxnZe8o5W5raja','W40wi8oiW6xcLSk2jW','W7/cVCkEWPW','WQanW4JcIK4WwCkI','jmkoW6CgnLeA4PYM','W7xcIW8DW6OZrCol','W6iAWOxcUSk5','BHeU','o8kStxNdSa','W7HwW73cQMP1WPvV','bui/W7zBW4ZdOmod','E2ZcM0j+W5pcLW','W4pcO8kNyCoIm8oTW4O','WOZcOCklvSoh','BNiOWRv8','qCoOvMzD','W7XyW5NcNxW','WQ7dP1D6W5VdRdjz','eWRdM8kCWPlcGgGb','WQSVnCobuv3cJHK','xey2fCkg','q8obW6DluKVdL8kP','uNKRWPnghmo3WPi','pae6W5BcTG','W7uXW4pcSSoW','W5pcKGfeWRVcLCobBW','e8kgW6jcmenuhG','WRhdOMG8W6PzW5RcOW','AmkrsxXWzgJcSW','WPb7BJlcTgBcVsu','W6HXC8kqEbJdHfS','mqD0imkWFSoYeW','W78arColW4S','twPbWRNdS8kLjNO','W61gWOODWPtcNLdcHa','W7jcW5NcHv5Zvmk2','xbhcJZGAW5zOnq','d0fTWOKiW4ZcHmkg','A8oYw2XlcLVdTW','W48EuxrlWPJcGra','W6nDxSkPrq','W47dSZfgWQC','svRdNmkpWRa','xCkIx2e','WRuhW4NcPv5Mc8k4','ux5ZW47dUa','W77cPmklWOPtvSkWWRW','WQ3cRI5OWRS','h8kyW5iaivrFcq','s8oPqhfava0','u8kSt2fnWPCnyW','WPCnW6tcPCochJ/dRq','WRvCWRFdHaOYwCoX','aX9QW4CdeCoVWOi','oSkifSobWOVcR8oQFW','W4xcHCodWPa1rmonW6y','dSohgYqkW5HFoG','W6JdKSkpW6NdN3pdV8ok','W5SmWQO8WQZdQmokW4m','WPtdS8kpfmoPuLaA','WQmhj8krsgxcLWm','aSkDwSo1WQ9uWPTE','x0u7WPmswCkVW4y','vmk0g3bpWOalnW','F8oquhWJw2ZdUG','WPewWR8QWOdcUCkoWO0','WReoW5ZcL1LEemkI','W4lcJselWQ4','jSoSDHOujb/cMq','W53cObuCWR8','WR7dGCkkW5GwWQxdVa','xNLlW57cKq','W5WYySoXW50','F3GdaSk3CSk6aq','W4OaWRSkWPRdS8oaWPC','dLbDqL8','WPSYamoWgmkqWOFdMW','x13cHSkTWR7dI0b+','v0KCWPfb','F0/dPmkzWQO','W7qalCkndgFcHfm','W5itW7/dPSooqh3dPa','vuBcHtVdKmknWR9f','W4tcU2VcHGxcJrRdJW','er/dISklWP/dKtru','W57dP8oMW4BdIq','W50qEq','WRrpW7DAWRFcQKxcQW','ufmRWPnghmo3WPi','W7pdHXSkW6DMgSkv','W7uoW4dcGSo8','WPWhW5GDW5q','W5SdB8ovW7RcKCkTma','WPlcPmkTz8o4pSoNW4a','oZ8ThSo7W5rmzG','WOGaW47cKM8','WR01W7VcH34','fXXeW63cRM8Ocq','W7iDW6RcP8oduINdQW','cSo5nq4CAG3dLG','WRVdOvK8W5/cOJfz','W7NdPCksWPuaEmk+W6i','WQ3cNxtcLsm','WO7cRudcHqy','BM8PWQnRCSkdkG','W61qCCk5lK3cGt7cIq','WRRcUqz9W5S','WQDDWRySW53dUchdKq','WOqHFYXJ','lSkCxSkFi2VdId0','xrzMW5yuxCk7W5y','W7CaWRKzW7BdVG','ceK8WPJdVmoVh8kn','xuS7WOnjbCoNWPi','WOJcUmkLzCon','CSoiC3yzCW','qxqDgCkKEq','hbzZWPmaumkYW4O','mH96W7FdVCoFW5hdTG','zSoIv2CibqhdRW','WR7cOc5UW61vW5W','imkjc8on','WQydnq','W4iEASoE','k8kfhCoQW5hcS8oRkq','r3DbW73dVSkK','WOagWQ45WORcQG','WQFcIaruWRvVbSkE','wv4FlSkx','W73dSZ5PW7XcW4FcQq','W7ntW7JcVxXx','FCoqvsjPiJxcPG','l8kIg8ox','WQ7cQJb5W6TcW43cOW','W5ngWRldU8kghgRcSG','qwThW6BdTmkPpLC','q0tdNmknW43dMdzw','amoMoaKEAH7dIq','WR/cOc54W61eWOxcTq','ff5TW4ykumo3W4y','ELPNWQS','W7SdWRnAW7hdPGddSW','WRFdILnjW7y0vCok','hSkmhmobWOBdQmk9FW','u8kIvwDlWOW','uMyyWQBcV8o/ANm','vSolWRfpmePBgq','hSkVFG','buhdIIuyWPq9yq','nuxcJ0PtWPeGyq','iML2B2PmW58Q','a8k8BwVdU8ozW7ZdVa','WRiuW40OW5q','xrtcMCo1WQdcGLP8','ftNdH8k0W7i','W7VcP8kyWRXbECkX','W6DcW4/cI198hCk0','sZezaSk3CCkSxG','WR7dUmkEs8k9davA','WOhcN0qjW77dM8kpzW','WP11fcxcJq','WQpcVHHIWO7cT2SE','W5TBW4vRW47cP8ksW54','sqVcKwldH8kpWRrq','W6tcHGWkWQjZaq','hH/dISouWO3cH2G','FH8RDmo1y8kKfa','WQ3dTbS2W5FdRsnc','bfjNW6dcVCkJw8ka','Cmozx2GKFW','imkAW4aFbW','WOKewJOTW53cLXG','hmo5wGq4lG','amo9g3bpWOalnW','j3v+eCo2W4fAoa','WPFcO8kPD8oNpSoMW4K','W7LACSoprZVdHLm','p1GMWQnfWO3dLSon','hGCMW4aduCk+W5a','DmovvwS1Eq','W6WdW7CoW7ldSHhcPG','iX/cLcBdQG','W5BcUCoFcCoZw1av','DLhdQCkzWOu','sqRcMI7dKCkrW6Wa','WRpcSmk6ymkSzCkYWO4','W7O0WOGXWQS','W70eWR/cL8kV','W59xrmkFFa','cvS3WQnCWONdNmos','h0u1WO7cSmk3s8kq','kSk44PY3iW','A01ZW5xdHa','guaZWQpdIq','W7GtsSomW7a','W71vW67cNhHAWPq','bSoXW6XGrW','W6/dPCkpWPrfAmk4WQm','ExFcJqKUW4JcNmoc','lh92t24eW4v+','W5bnW4FdSSklW49zbq','CHD4lmk/ySoWba','BSordmoaW5lcQmoOmq','WPDWpclcUx3dO3y','qCkPWQGzfG7cHCkP','vMKew8kHCCo/fq','WRGdnSkArtxdHKm','WRdcOdH5','W6FdMCobW7/dJNC','W7LXACksBqK','WPjykbtcVG','e8kfWReimLyxwa','imkJzmkUsq','naZdTCktW7y','W4JcUCkJWP91','W6FdUI9+WO4','nhbMxMK','W6NdVq5oWPO','w1juW73cTg8jca','uHDGWQ0BW5VcKmkg','W4nVW5JcUh0','W7ddKCo1WQKA','WQlcQmkdFCoe','W7/cVajNWPJcSEkDLra','u3aOWRG','gfddM3KxWPuPyq','WRufW7SPW6ZdIa','WO3cT8kHzSoH','dK9W','WPO0f8o/j8kgW5BcNNJdGxLS','W7ZcRmko','W4PPtmkTC8oe','lctdVSkqW4O','vf3dJSkT','WQVcQf/cGZK','hCklq8k9BYJcHqG','WQNcOxf4W6fBW4xcOG','WOBcV8k8CCo+D8oVW48','WOhcTSoLzSoJjmoTWOm','pmkcg8oBW4i','EbeTCCk9DSo2fW','W6yoWQa','fgCaWRldLa','WOhcN0qjW77dH8kaiW','W7zcW6ruWQlcQfVcGq','gSkmamosW4pcSSoZFW','B3e1WQjP','W5GRFNBdVI/cQgW','wvjr','mWWZWQVcSCoyWO/cOa','W7yiW7OFW7RdRXFdQG','CK5tmmkWmCkKvG','W7iaWQuxW6ldPGtcPG','zCkLywbV','Es14W6y4kCkqsa','W6JdV3mRWRGwW4RcQa','W4xdICor','mur5ymoPpmk2vG','gLVdJmo4WRFcHLfP','BSoNvdivbuVdOa','bfyHWQ5lWOpdLSou','B8oJrKjrqWVdQG','W7PzWRRdQ8khatxcRW','xeldH3LEWPK/oa','WR/dQmkUwmkP','WOuawXn+','qxuvbmo/FSo/eq','W4RdK8okW7JdNcpdImoD','nvi/W6ufWQVdLSoh','WRahjSoFk23cHae','amoSBW','W7pcVmkOWObPFG','W7pdHXqrWQ50emoB','i3W/oZGtW4jK','W4u/jINcQMRcVd8','hLBcGN1xWPm6Da','wfBdH8kXW7lcN0z6','ubKQzmo1F8oHba','wSoof8oyp2lcJaq','aCowW7XC','W7z/C8kuiuxdNey','WOpdGCkoEmkg','r3XbWRNdQCk5ANG','fXXvW6JcU3v5Bq','W5tdHmohWO4JESofW7K','gfqPWO/dR8oGgSot','thr/W7/cQa','aMT3za','x3pdPSk9WRu','cGBcMcZdG8kw','hSkcW7ulnKG','gqldOSkrW6K','W49iW7xcVJLPWO5Z','W48oW6xcNSoh','WRDpWO7dLbOYg8k+','W4pdSCoOnmoOnSo8W48','W7eIWQdcNCkC','oSknW6Gcoa','W6XtW7JcRxe','o3y7amk3W4velG','BxuOWQv8B8omfG','uSomrgzD','wa4eW6/dTYnNdW','CgzGWRf6z8ohhq','qZisWRjPF8krjW','mtbTWQjTFSoxvq','r1qgW7FcRh41aq','WPhcUZb5W74','WR/cVGD3W4RdT2Sc','qe7dPSkyWPm','pmkmgq','W7zYAmkgArK','dbZcNJHkWO5LjW','A8oPxInwwKpdPq','jbKYW6VcOW','l2TZemo/W5rElG','ruDKW6hcK38','WPFcImkgW51WfSkmWQO','qbXPW5RcVCoRfmow','WPGcftzGWO/cLXW','emoTgYqkW5HFoG','bGFcKxhcGSk2WRLh','W4GDWRTMWP3dQ8otWOO','W5NdJmodWOu','WRdcQM7cGa','W4HiW7H7W57cQmkkW44','fsWKW7BcQG','sLegW6/cSNiZaG','W60oWPFcT8kd','hY89W7ZcLa','W7vPkSkuyrJcNHC','WQDfW69RW47cP8ksW54','aNbqW6ZdPCoNmM0','W7/dSEkDMtW','WQaNW6ZcIgm','dqdcGg/dGCkoWRbr','bHNcGIBdJCkmWQi','D013WRVdSmkAWPZcRW','xgmue8kGpmk9ha','eCocW78','WQ3dLmky','W4TPrSk3','W7rjW7NdTcajW4WZ','rIKeWQtcOCoQlhe','pg53EwWiW4rK','W6HQj8kLBrpcIXm','B8omugfUhsxcQq','qfPlW6NcMW','wmoqc8kiyJNcGe0','pSoivhCKoN3dUG','kxeFWQ7dQG','W6ZdLX1/WQy','B8oJrKzjuHtdPG','W5pdMGLgWQJcGG','cSotW7TChW','hmoJoc7dUCkmWQlcPq','tY55W4RcVCkJw8ka','W4fRD8k2zW','WQGAW6ZcOdqiW5iP','mmoGgCowWPnXW55/','WO/cTmoOy8oLi8oGWO4','aun5WOJdUSkUcmom','W5u/BMy','afGWW7zB','WRWwW7/cNwn2','FYCOw8oE','W6/cQCkD','W5ngW63cVSoAx33dTG','W71vW67cTgXvWP1t','W73cUZLKW7WBW5RcQa','AhqIWRGQjSohgq','u8kHuMDb','imkLh8oqWPyOW5zU','WQpdGSokW5KaoSo5W68','WONcPH1ZW7G','WRzLW7DAWRFcQKxcQW','W7VdGCovWOK1wmojW7G','aNbqW6ZdPCoNoxi','tHnsW6RcU3GSdG','WPf+oIFdSw7cRxe','WRXFWP/cLK9Mc8kO','pfb5mmkUg8kKvG','WPT7kZ4','WQVcN0qjW77dH8kaiW','caxdLHVdG8kmWRzh','W4JdJ8ovW5xdQq','WRuhW4NcOuz3fmk0','uIKhWRtdOCkYzYO','WRZdO1O+W44','W4FdICouWOLH','W6qoWQuoWQq','p8kbwgFdVa','iNuVkgSeW4DS','y8k/fCogWPnHW55P','Atj+uSkMW5nzkG','BSoPqezevbe','W7tcHGinWQiTtmoo','q3rfWRNdOSkIl3i','wMiZgCkGBSk6ea','F28/WQrTzCoxmq','W4mfWOFcL8kxWOChtG','df8oimoB','nCogW7Pnx03dHmoL','eCocW6rDgXVcLCk5','WQufW6xcNg4','omkNsghdUq','W7DQW4JcN0m','hqZcGSkCW5ldKIPq','WRpcU3fXW61sW4hcSG','W63dLHDDWRVcICofCq','uMids8oWDCkXhW','W7TrWPLSWORdIbNdGq','pgK5WRnLDCkogW','gv/dMZH2WP8MCa','uCkUt21CWP08EW','ohRdUv1l','qKySWP7dQCoSfCkE','WQRcVt1SWQHgW5ddQG','W4G9icNcSMRdRcu','WQJdTue/W6G','ycOIoJGsW4nR','cLddM3fmWPm7','W5SFi8omW7VcMmkSjq','FXW4y8oJxCoTbq','WPRdO8kEumkQbYnu','hutdM3axWPm6zW','W4WmWQfRWRZdSSoEWPS','W5qkW6lcQSoV','W6xdMmkr','WPBcUwNcLb/cIK7cGG','ECojreug','WP/cOmkivSkUbGvh','W6BcNGzuW78WrCoB','nae2W6JcO8o2W5xdOa','bSkbzLBdJa','xhyxgSk3mCkSha','qmkOvq','Fqm8','WR4hW4xdHeX+hmkP','t2TrW7xdVCoNkx8','WOSWW445W50','WP7dKSkoWPXlWQNdOYK','BSk+fSosWOLGWPy6','WRlcUtLUWRjuW4/dQG','xmkSt2ehW4TpkG','W5VdO8kgwmkVev0x','zv1OpSkLmCo2gq','uLbZW5BcVq','a1aBWPpdLmoN','W7z/Dmkcmv/cNa4','W5WuySoD','WOlcPCkHE8oID8kGW68','w2VcK0rJW4/cKmoo','bGmiWQ3dUMKOeG','qguzemkRmCk8fG','WOKMaSoUmSkqWOFdMW','W6pcJWDzWOrVb8kj','W5qkW7/cRSorxc/dUW','amopW6fAxq','lJ8ThSo7W5rmzG','eX9QW4avCmk+W4e','WQJcTSksFSof','W49tW53cTMK','amknW54/oa','Abv0i8kGiCkKhG','WPtdPSkNWPfp','WPqtxcaVWQ3cGry','AfXuW6RcV3GZxq','WQvEW6buWQFcVvFcQW','fSkkf8kmCsZcHH4','W4ddUInMWOq','W7nTrmkEFG/cIru','W5BcS8oAcCo8fW5r','W7lcPSkEW5rnF8k9WQy','W7ddU2WSWQHqW4tcOG','t0v3W7ZdTa','imo4DbG','W6CpWOhcOmkEWOeEfW','aCo5CrSizWNdNa','EmkTof1rAKVcMq','W6HFWRhdRsKjW5XO','DK3dH8kWWQq','WRKPtZTI','daRcGG','hCk+v2vEWP1skW','x1zbW7FcQgi','aviNW4PCWONdIq','fmkeW6mlnLqxgq','WPDlWQVdQ8kwe33cOG','DWLQWRNcNCkdWPlcPq','l8kfrKBdJG','d0SRWO7dUmoXvSof','d8k/bCoZW7i','W6HKC8kgrG','xrVdL8ouWOZcLYHi','baxdM3ZcGSkeWR1h','WRVdLmkBWPqiW6tcPs8','W7xdPmoWWPGD','nSkzzSkqEG','xwhcJ8ozWP/cL3Gr','W59VW5RcNw4','gqbiW5WutSkYW5e','AgGeWRHnASogfq','ox4/mIHrWOT+','W73dR3W8WRruW53cSW','W5NcLSkSW51WfSkmWQO','cfbZW6FcMSkvWOVdGG','W4qFW77cO8oG','WQ7cQIHvW7XtW4u','y8oTwSktW50LWOCI','mCkfat9WzwRdVa','WQaoW7JcOf8','nf7dNxfaW5KECa','dea9WQ/dQ8oMfCou','cmoovCkxCsNcJr8','fWhcM8oLW7lcG1TT','BghcMvT+W4u','drNdISkAW4VcLvir','uh4cbmk3F8kRoG','iMTMy3CpWOzO','uSkvWRemar7cLmonW5hcQs/cNvy','hvldM3fmWPmlDa','WOJdJmkCWP1/','WOpcVxpcOHRcM0RcIa','WORcISojWO0Kx8odW6q','Err0Fmo3mCoMgq','mWqdW5RcKW','WQ7cSX4FW4pdVYnc','WOpcNmkrW40BESo2W6lcHei','W5ybA8kgWQVcLCk3nG','W6vAd8kwhhRcOWi','gqtdNCk8W57dLda','WRNdOenzW6CGvCoB','W7qHlCkngMFcLqC','vJnoFmoYpmo/uW','W4eftmocW4dcKW','WRW7W7mYW6K','W7BdKSokW67cGNddSCob','oMyNhSo/','hX9+W4Cpu8k5','vmoGdJqAW5DkkG','WRillmkB','lCkbd8ogW5xcKmoUla','fHPIWQnyWPtcICku','W6BcIrCqWQHUsmoz','h0a8WPJcVCoHfmos','W44WWRlcKCkx','aSodrmkqCstcHGy','dKSRWPJdUmoGd8oP','WOlcV8o2hSkSD8kOWO4','EmovrY8ZE2tdUG','W5P4W7tcShu','WOf6nJldSx3cOxy','W5BdUmkzgCkVd1Pb','WOn4gYpcHa','WPavrZvJWPNdNKO','W4ZdPCo4nSkY4P2aWQJdTW','W5xcOCkoWPW','W7KoW67cR8ofeW/dPW','W4qKFSoqW4C','d8kmW7qhgW','W7pcIWe','guNdMZvcWOvOCW','W50EW4ZcQCog','cGBcHd3dH8kbWQvR','ndOMW5dcNG','ECoZv3brxHBdRq'];a0_0x2380=function(){return _0x365b61;};return a0_0x2380();}
   </script>
 </body>
 </html>
