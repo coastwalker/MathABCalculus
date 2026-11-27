@@ -4,6 +4,10 @@ export type ModuleId =
   | 'lesson-3-2'
   | 'lesson-4-4'
   | 'webassign-hw'
+  | 'knowledge-checks'
+  | 'mcq-review-35'
+  | 'bultman-review'
+  | 'big-10-puzzle'
   | 'mock-test';
 
 export type CalculatorPolicy = 'allowed' | 'non-calculator';
@@ -92,7 +96,18 @@ export type VisualDiagramId =
   | 'cylinder-barrel-diagram'
   | 'unit-circle-diagram'
   | 'plank-pulley-diagram'
-  | 'streetlamp-shadow-diagram';
+  | 'streetlamp-shadow-diagram'
+  | 'kc42-velocity-graph'
+  | 'kc-42-velocity-graph'
+  | 'pptx-42-velocity-graph'
+  | 'mcq35-bug-velocity-graph'
+  | 'mcq35-position-concavity-graph'
+  | 'mcq35-triangle-angle-diagram'
+  | 'mcq35-rectangle-diag-diagram'
+  | 'bultman-p1-velocity-graph'
+  | 'bultman-particle-a-graph'
+  | 'bultman-eastlake-position-graph'
+  | 'bultman-sprinter-velocity-graph';
 
 export interface Problem {
   id: string;
@@ -105,6 +120,7 @@ export interface Problem {
   visual?: VisualDiagramId;
   watchOut?: string;
   inMockTest?: boolean;
+  puzzleDigit?: number;
   parts: ProblemPart[];
 }
 

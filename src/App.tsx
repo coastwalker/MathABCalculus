@@ -12,10 +12,12 @@ import {
   Target,
   X,
 } from 'lucide-react';
-import { ALL_PROBLEMS, getProblemsForModule, MODULES } from './data';
+import { ALL_PROBLEMS, getProblemsForModule, MODULES, ModuleMeta } from './data';
 import { ModuleId, PartProgress, PortalState, Problem } from './types';
 import { ProblemCard } from './components/ProblemCard';
 import { Big4Banner } from './components/Big4Banner';
+import { Big10Banner } from './components/Big10Banner';
+import { TeacherStudyBanner } from './components/TeacherStudyBanner';
 import { CheatSheetDrawer } from './components/CheatSheetDrawer';
 import { MockExamBanner } from './components/MockExamBanner';
 
@@ -35,15 +37,15 @@ function loadInitialState(): PortalState {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
+      const validIds = new Set(MODULES.map((m) => m.id));
       return {
         darkMode: typeof parsed.darkMode === 'boolean' ? parsed.darkMode : true,
-        activeModule: parsed.activeModule ?? 'lesson-4-1',
+        activeModule: validIds.has(parsed.activeModule) ? parsed.activeModule : 'lesson-4-1',
         drillMissedOnly: !!parsed.drillMissedOnly,
         cheatSheetOpen: false,
         partProgress: parsed.partProgress ?? {},
       };
     }
-    // Migrate progress from v1 while switching default theme to dark mode!
     const legacyRaw = localStorage.getItem(LEGACY_STORAGE_KEY);
     if (legacyRaw) {
       const legacy = JSON.parse(legacyRaw);
@@ -72,7 +74,6 @@ export const App: React.FC = () => {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [confirmResetOpen, setConfirmResetOpen] = useState(false);
 
-  // Sync dark mode class on <html> & persist state
   useEffect(() => {
     const root = document.documentElement;
     if (state.darkMode) {
@@ -117,7 +118,6 @@ export const App: React.FC = () => {
     });
   };
 
-  // Compute readiness & module completion stats
   const stats = useMemo(() => {
     const calcForList = (problems: Problem[]) => {
       let total = 0;
@@ -144,14 +144,10 @@ export const App: React.FC = () => {
     };
 
     const overall = calcForList(ALL_PROBLEMS);
-    const byModule: Record<ModuleId, ReturnType<typeof calcForList>> = {
-      'lesson-4-1': calcForList(getProblemsForModule('lesson-4-1')),
-      'lesson-4-2': calcForList(getProblemsForModule('lesson-4-2')),
-      'lesson-3-2': calcForList(getProblemsForModule('lesson-3-2')),
-      'lesson-4-4': calcForList(getProblemsForModule('lesson-4-4')),
-      'webassign-hw': calcForList(getProblemsForModule('webassign-hw')),
-      'mock-test': calcForList(getProblemsForModule('mock-test')),
-    };
+    const byModule = {} as Record<ModuleId, ReturnType<typeof calcForList>>;
+    for (const mod of MODULES) {
+      byModule[mod.id] = calcForList(getProblemsForModule(mod.id));
+    }
 
     return { overall, byModule };
   }, [state.partProgress]);
@@ -172,7 +168,6 @@ export const App: React.FC = () => {
     );
   }, [moduleProblems, state.drillMissedOnly, state.partProgress]);
 
-  // Group visible problems by section while preserving packet order
   const groupedSections = useMemo(() => {
     const groups: { section: string; problems: Problem[] }[] = [];
     for (const p of visibleProblems) {
@@ -185,6 +180,12 @@ export const App: React.FC = () => {
     }
     return groups;
   }, [visibleProblems]);
+
+  const handleSelectModule = (modId: ModuleId) => {
+    setState((prev) => ({ ...prev, activeModule: modId }));
+    setMobileNavOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const handleResetActiveModule = () => {
     setState((prev) => {
@@ -199,26 +200,92 @@ export const App: React.FC = () => {
     setConfirmResetOpen(false);
   };
 
+  const renderModuleButton = (mod: ModuleMeta) => {
+    const mStat = stats.byModule[mod.id];
+    const isActive = state.activeModule === mod.id;
+    const isMock = mod.id === 'mock-test';
+
+    return (
+      <button
+        key={mod.id}
+        type="button"
+        onClick={() => handleSelectModule(mod.id)}
+        className={`w-full text-left p-2.5 rounded-xl border transition ${
+          isActive
+            ? isMock
+              ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
+              : 'bg-indigo-50 dark:bg-indigo-950/60 border-indigo-300 dark:border-indigo-500/50 text-indigo-950 dark:text-white'
+            : 'bg-transparent border-transparent hover:bg-slate-100 dark:hover:bg-slate-800/70 text-slate-700 dark:text-slate-300'
+        }`}
+      >
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-xs sm:text-[13px] font-bold truncate">
+            {isMock ? '⏱️ ' : ''}
+            {mod.shortTitle}
+          </span>
+          <span
+            className={`text-xs font-extrabold ${
+              isActive && isMock
+                ? 'text-indigo-100'
+                : mStat.pct === 100
+                ? 'text-emerald-600 dark:text-emerald-400'
+                : 'text-slate-500 dark:text-slate-400'
+            }`}
+          >
+            {mStat.pct}%
+          </span>
+        </div>
+        <div
+          className={`w-full h-1.5 rounded-full mt-1.5 overflow-hidden ${
+            isActive && isMock ? 'bg-indigo-800' : 'bg-slate-200 dark:bg-slate-800'
+          }`}
+        >
+          <div
+            className={`h-full transition-all duration-300 ${
+              isActive && isMock
+                ? 'bg-amber-300'
+                : mStat.pct === 100
+                ? 'bg-emerald-500'
+                : 'bg-indigo-600 dark:bg-indigo-400'
+            }`}
+            style={{ width: `${mStat.pct}%` }}
+          />
+        </div>
+        <div
+          className={`text-[10px] mt-1 ${
+            isActive && isMock ? 'text-indigo-100' : 'text-slate-400 dark:text-slate-500'
+          }`}
+        >
+          {mod.pages} • {mStat.correct}/{mStat.total} parts
+        </div>
+      </button>
+    );
+  };
+
+  const coreModules = MODULES.filter((m) => m.group === 'core');
+  const teacherPrepModules = MODULES.filter((m) => m.group === 'teacher-prep');
+  const examModules = MODULES.filter((m) => m.group === 'exam');
+
   const renderSidebarContent = () => (
     <div className="flex flex-col h-full">
       {/* Brand Header */}
-      <div className="p-5 border-b border-slate-200 dark:border-slate-800">
+      <div className="p-4 sm:p-5 border-b border-slate-200 dark:border-slate-800">
         <div className="flex items-center gap-2.5">
           <div className="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-sm flex-shrink-0">
             <GraduationCap className="w-5 h-5" />
           </div>
           <div>
             <h1 className="text-sm font-extrabold text-slate-900 dark:text-white leading-tight">
-              AP Calculus AB
+              AP Calculus AB • Runqi
             </h1>
             <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-              Unit 4 Mastery &amp; Test Prep
+              Ch. 4 Mastery &amp; Test Prep
             </p>
           </div>
         </div>
 
         {/* Overall Readiness Score Card */}
-        <div className="mt-4 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200/90 dark:border-slate-700/70">
+        <div className="mt-3.5 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200/90 dark:border-slate-700/70">
           <div className="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
             <span className="flex items-center gap-1.5">
               <Award className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
@@ -248,79 +315,31 @@ export const App: React.FC = () => {
       </div>
 
       {/* Module Navigation */}
-      <nav className="flex-1 overflow-y-auto p-3.5 space-y-1.5">
-        <div className="px-2 pb-1 text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-          Curriculum Modules
+      <nav className="flex-1 overflow-y-auto p-3 space-y-3">
+        <div className="space-y-1">
+          <div className="px-2 pb-0.5 text-[10px] font-extrabold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+            ★ Ch. 4 Teacher Test Prep
+          </div>
+          {teacherPrepModules.map(renderModuleButton)}
         </div>
-        {MODULES.map((mod) => {
-          const mStat = stats.byModule[mod.id];
-          const isActive = state.activeModule === mod.id;
-          const isMock = mod.id === 'mock-test';
 
-          return (
-            <button
-              key={mod.id}
-              type="button"
-              onClick={() => {
-                setState((prev) => ({ ...prev, activeModule: mod.id }));
-                setMobileNavOpen(false);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className={`w-full text-left p-3 rounded-xl border transition ${
-                isActive
-                  ? isMock
-                    ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
-                    : 'bg-indigo-50 dark:bg-indigo-950/60 border-indigo-300 dark:border-indigo-500/50 text-indigo-950 dark:text-white'
-                  : 'bg-transparent border-transparent hover:bg-slate-100 dark:hover:bg-slate-800/70 text-slate-700 dark:text-slate-300'
-              }`}
-            >
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-xs sm:text-sm font-bold truncate">
-                  {isMock ? '⏱️ ' : ''}
-                  {mod.shortTitle}
-                </span>
-                <span
-                  className={`text-xs font-extrabold ${
-                    isActive && isMock
-                      ? 'text-indigo-100'
-                      : mStat.pct === 100
-                      ? 'text-emerald-600 dark:text-emerald-400'
-                      : 'text-slate-500 dark:text-slate-400'
-                  }`}
-                >
-                  {mStat.pct}%
-                </span>
-              </div>
-              <div
-                className={`w-full h-1.5 rounded-full mt-2 overflow-hidden ${
-                  isActive && isMock ? 'bg-indigo-800' : 'bg-slate-200 dark:bg-slate-800'
-                }`}
-              >
-                <div
-                  className={`h-full transition-all duration-300 ${
-                    isActive && isMock
-                      ? 'bg-amber-300'
-                      : mStat.pct === 100
-                      ? 'bg-emerald-500'
-                      : 'bg-indigo-600 dark:bg-indigo-400'
-                  }`}
-                  style={{ width: `${mStat.pct}%` }}
-                />
-              </div>
-              <div
-                className={`text-[11px] mt-1 ${
-                  isActive && isMock ? 'text-indigo-100' : 'text-slate-400 dark:text-slate-500'
-                }`}
-              >
-                {mod.pages} • {mStat.correct}/{mStat.total} parts
-              </div>
-            </button>
-          );
-        })}
+        <div className="space-y-1 pt-2 border-t border-slate-200 dark:border-slate-800">
+          <div className="px-2 pb-0.5 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+            Lesson Notes &amp; WebAssign HW
+          </div>
+          {coreModules.map(renderModuleButton)}
+        </div>
+
+        <div className="space-y-1 pt-2 border-t border-slate-200 dark:border-slate-800">
+          <div className="px-2 pb-0.5 text-[10px] font-extrabold uppercase tracking-wider text-indigo-500 dark:text-indigo-400">
+            Readiness Assessment
+          </div>
+          {examModules.map(renderModuleButton)}
+        </div>
       </nav>
 
       {/* Bottom Quick Tools */}
-      <div className="p-4 border-t border-slate-200 dark:border-slate-800 space-y-2">
+      <div className="p-3.5 border-t border-slate-200 dark:border-slate-800 space-y-2">
         <button
           type="button"
           onClick={() => {
@@ -446,8 +465,11 @@ export const App: React.FC = () => {
 
         {/* Module Body */}
         <main className="flex-1 px-4 sm:px-8 py-6 sm:py-8">
-          <div className="max-w-4xl mx-auto space-y-8">
-            {/* Module Intro / Mock Test Banner / Big 4 Banner */}
+          <div className="max-w-4xl mx-auto space-y-6">
+            {/* Eastlake Teacher Study Plan Collapsible Banner */}
+            <TeacherStudyBanner onSelectModule={handleSelectModule} />
+
+            {/* Module Intro / Mock Test Banner */}
             {state.activeModule === 'mock-test' ? (
               <MockExamBanner
                 correctCount={activeStats.correct}
@@ -476,6 +498,13 @@ export const App: React.FC = () => {
 
             {state.activeModule === 'lesson-4-1' && !state.drillMissedOnly && (
               <Big4Banner />
+            )}
+
+            {state.activeModule === 'big-10-puzzle' && (
+              <Big10Banner
+                problems={moduleProblems}
+                getPartProgress={getPartProgress}
+              />
             )}
 
             {/* Empty State when Drill Missed Filter is active and 0 missed! */}
