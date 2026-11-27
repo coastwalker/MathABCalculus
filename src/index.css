@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* KaTeX typography refinements for crisp light & dark mode rendering */
+.katex {
+  font-size: 1.08em;
+}
+
+.katex-display {
+  margin: 0.65rem 0 !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.45rem 0.75rem;
+  border-radius: 0.65rem;
+}
+
+.math-option .katex {
+  font-size: 1.15em;
+}
+
+/* Subtle custom scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.45);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.7);
+}
