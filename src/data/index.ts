@@ -3,12 +3,14 @@ import { LESSON_4_1_PROBLEMS } from './lesson4_1';
 import { LESSON_4_2_PROBLEMS } from './lesson4_2';
 import { LESSON_3_2_PROBLEMS } from './lesson3_2';
 import { LESSON_4_4_PROBLEMS } from './lesson4_4';
+import { WEBASSIGN_HW_PROBLEMS } from './webassignHw';
 
 export const ALL_PROBLEMS: Problem[] = [
   ...LESSON_4_1_PROBLEMS,
   ...LESSON_4_2_PROBLEMS,
   ...LESSON_3_2_PROBLEMS,
   ...LESSON_4_4_PROBLEMS,
+  ...WEBASSIGN_HW_PROBLEMS,
 ];
 
 export interface ModuleMeta {
@@ -47,6 +49,13 @@ export const MODULES: ModuleMeta[] = [
     fullTitle: 'Lessons 4.4 & 4.5 — Related Rates (Days 1–2)',
     subtitle: 'Geometric rate equations, similar-triangle substitutions, cones vs. cylinders, and 2023–2025 AP FRQs.',
     pages: 'Packet Pages 19–26',
+  },
+  {
+    id: 'webassign-hw',
+    shortTitle: 'HW: 4.4/4.5 WebAssign (9 Qs)',
+    fullTitle: 'WebAssign Homework — Lesson 4.4/4.5 Related Rates',
+    subtitle: 'All 9 Cengage WebAssign Related Rates homework problems (13 total points) with exact + rounded checking and step-by-step solutions.',
+    pages: 'Math HW.pdf • #1–#9 (13 Pts)',
   },
   {
     id: 'mock-test',

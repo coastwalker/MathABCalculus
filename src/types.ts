@@ -3,6 +3,7 @@ export type ModuleId =
   | 'lesson-4-2'
   | 'lesson-3-2'
   | 'lesson-4-4'
+  | 'webassign-hw'
   | 'mock-test';
 
 export type CalculatorPolicy = 'allowed' | 'non-calculator';
@@ -89,7 +90,9 @@ export type VisualDiagramId =
   | 'funnel-diagram'
   | 'conical-tank-diagram'
   | 'cylinder-barrel-diagram'
-  | 'unit-circle-diagram';
+  | 'unit-circle-diagram'
+  | 'plank-pulley-diagram'
+  | 'streetlamp-shadow-diagram';
 
 export interface Problem {
   id: string;

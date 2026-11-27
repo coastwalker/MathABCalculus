@@ -311,5 +311,80 @@ export const VisualDiagram: React.FC<{ id: VisualDiagramId }> = ({ id }) => {
     );
   }
 
+  if (id === 'plank-pulley-diagram') {
+    return (
+      <div className="my-4 flex justify-center">
+        <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 shadow-sm">
+          <svg viewBox="0 0 280 185" className="w-64 sm:w-72 h-auto select-none" role="img" aria-label="Worker pulling 5-meter plank up side of building">
+            {/* Ground */}
+            <line x1={25} y1={160} x2={260} y2={160} stroke="#94A3B8" strokeWidth={2.5} />
+            {/* Building Scaffolding */}
+            <rect x={45} y={40} width={55} height={120} fill="none" stroke="#64748B" strokeWidth={2.5} />
+            <line x1={45} y1={100} x2={100} y2={100} stroke="#64748B" strokeWidth={2} />
+            <line x1={45} y1={40} x2={100} y2={100} stroke="#64748B" strokeWidth={1.6} />
+            <line x1={100} y1={40} x2={45} y2={100} stroke="#64748B" strokeWidth={1.6} />
+            <line x1={45} y1={100} x2={100} y2={160} stroke="#64748B" strokeWidth={1.6} />
+            <line x1={100} y1={100} x2={45} y2={160} stroke="#64748B" strokeWidth={1.6} />
+            {/* Worker at top */}
+            <circle cx={92} cy={24} r={5} fill="#38BDF8" />
+            <line x1={92} y1={29} x2={92} y2={40} stroke="#38BDF8" strokeWidth={2.2} />
+            {/* Vertical Rope along wall */}
+            <line x1={102} y1={32} x2={102} y2={92} stroke="#F59E0B" strokeWidth={2} strokeDasharray="4,2" />
+            {/* Upward Velocity Arrow */}
+            <line x1={116} y1={82} x2={116} y2={52} stroke="#EF4444" strokeWidth={2.2} />
+            <polygon points="116,46 112,54 120,54" fill="#EF4444" />
+            <text x={123} y={68} className="fill-rose-500 dark:fill-rose-400 text-[10px] font-bold">
+              0.20 m/s
+            </text>
+            {/* 5m Plank from (100, 92) to (215, 160) */}
+            <line x1={100} y1={92} x2={215} y2={160} stroke="#A855F7" strokeWidth={4} strokeLinecap="round" />
+            <text x={162} y={118} className="fill-purple-600 dark:fill-purple-300 text-xs font-extrabold">
+              5 m
+            </text>
+            {/* Base distance x = 2.0 m */}
+            <text x={142} y={176} className="fill-emerald-600 dark:fill-emerald-400 text-[11px] font-bold">
+              x = 2.0 m
+            </text>
+          </svg>
+        </div>
+      </div>
+    );
+  }
+
+  if (id === 'streetlamp-shadow-diagram') {
+    return (
+      <div className="my-4 flex justify-center">
+        <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 shadow-sm">
+          <svg viewBox="0 0 320 175" className="w-72 sm:w-80 h-auto select-none" role="img" aria-label="6-ft student walking away from 15-ft streetlamp">
+            {/* Ground */}
+            <line x1={25} y1={145} x2={305} y2={145} stroke="#94A3B8" strokeWidth={2} />
+            {/* 15-ft Lamppost */}
+            <line x1={45} y1={145} x2={45} y2={30} stroke="#64748B" strokeWidth={3.5} />
+            <circle cx={45} cy={26} r={7} fill="#FBBF24" />
+            <text x={14} y={92} className="fill-amber-600 dark:fill-amber-400 text-[11px] font-bold">
+              15 ft
+            </text>
+            {/* Light ray from (45, 26) through top of student (145, 99) to tip (208, 145) */}
+            <line x1={45} y1={26} x2={212} y2={145} stroke="#FBBF24" strokeWidth={1.8} strokeDasharray="5,3" />
+            {/* 6-ft Student at x = 10 ft */}
+            <circle cx={145} cy={95} r={4.5} fill="#38BDF8" />
+            <line x1={145} y1={99} x2={145} y2={145} stroke="#38BDF8" strokeWidth={3} />
+            <text x={150} y={118} className="fill-sky-600 dark:fill-sky-400 text-[11px] font-bold">
+              6 ft
+            </text>
+            {/* Distance labels */}
+            <text x={82} y={162} className="fill-slate-600 dark:fill-slate-300 text-[11px] font-semibold">
+              x (dx/dt = 7 ft/s)
+            </text>
+            <line x1={145} y1={145} x2={212} y2={145} stroke="#10B981" strokeWidth={3.5} />
+            <text x={165} y={162} className="fill-emerald-600 dark:fill-emerald-400 text-[11px] font-bold">
+              s (shadow)
+            </text>
+          </svg>
+        </div>
+      </div>
+    );
+  }
+
   return null;
 };

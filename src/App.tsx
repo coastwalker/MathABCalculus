@@ -149,6 +149,7 @@ export const App: React.FC = () => {
       'lesson-4-2': calcForList(getProblemsForModule('lesson-4-2')),
       'lesson-3-2': calcForList(getProblemsForModule('lesson-3-2')),
       'lesson-4-4': calcForList(getProblemsForModule('lesson-4-4')),
+      'webassign-hw': calcForList(getProblemsForModule('webassign-hw')),
       'mock-test': calcForList(getProblemsForModule('mock-test')),
     };
 
