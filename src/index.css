@@ -4,7 +4,11 @@
 
 /* KaTeX typography refinements for crisp light & dark mode rendering */
 .katex {
-  font-size: 1.08em;
+  font-size: 1.1em;
+}
+
+.dark .katex {
+  color: #f8fafc;
 }
 
 .katex-display {
@@ -16,7 +20,7 @@
 }
 
 .math-option .katex {
-  font-size: 1.15em;
+  font-size: 1.2em;
 }
 
 /* Subtle custom scrollbars */

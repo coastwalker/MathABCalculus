@@ -19,7 +19,8 @@ import { Big4Banner } from './components/Big4Banner';
 import { CheatSheetDrawer } from './components/CheatSheetDrawer';
 import { MockExamBanner } from './components/MockExamBanner';
 
-const STORAGE_KEY = 'ap_calc_ab_unit4_portal_v1';
+const STORAGE_KEY = 'ap_calc_ab_unit4_portal_v2';
+const LEGACY_STORAGE_KEY = 'ap_calc_ab_unit4_portal_v1';
 
 const DEFAULT_PART_PROGRESS: PartProgress = {
   status: 'unattempted',
@@ -35,18 +36,30 @@ function loadInitialState(): PortalState {
     if (raw) {
       const parsed = JSON.parse(raw);
       return {
-        darkMode: typeof parsed.darkMode === 'boolean' ? parsed.darkMode : false,
+        darkMode: typeof parsed.darkMode === 'boolean' ? parsed.darkMode : true,
         activeModule: parsed.activeModule ?? 'lesson-4-1',
         drillMissedOnly: !!parsed.drillMissedOnly,
         cheatSheetOpen: false,
         partProgress: parsed.partProgress ?? {},
       };
     }
+    // Migrate progress from v1 while switching default theme to dark mode!
+    const legacyRaw = localStorage.getItem(LEGACY_STORAGE_KEY);
+    if (legacyRaw) {
+      const legacy = JSON.parse(legacyRaw);
+      return {
+        darkMode: true,
+        activeModule: legacy.activeModule ?? 'lesson-4-1',
+        drillMissedOnly: !!legacy.drillMissedOnly,
+        cheatSheetOpen: false,
+        partProgress: legacy.partProgress ?? {},
+      };
+    }
   } catch {
     // fallback to default
   }
   return {
-    darkMode: false, // Light mode default per UX spec
+    darkMode: true,
     activeModule: 'lesson-4-1',
     drillMissedOnly: false,
     cheatSheetOpen: false,
